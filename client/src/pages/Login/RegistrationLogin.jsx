@@ -13,7 +13,7 @@ const RegistrationLogin = () => {
   });
 
   return (
-    <div className="p-3 max-w-lg mx-auto mt-28 ">
+    <div className="p-3 max-w-lg mx-auto mt-12 md:mt-28 mb-16 md:mb-0">
       <div className="dark:bg-secondary-dark-bg bg-white drop-shadow-2xl p-6 mt-20 m-4 rounded-2xl">
         <h1 className="dark:text-gray-200 text-2xl sm:text-2xl text-center font-semibold mb-7">
           Login
