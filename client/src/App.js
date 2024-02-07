@@ -20,7 +20,7 @@ const App = () => {
           <main className="flex-grow bg-gray-100 dark:bg-main-dark-bg p-2">
             <Routes>
               {/* Login pages */}
-              <Route path="/" element={<Login />} />
+              <Route path="/" element={<AdminLogin />} />
               <Route path="/adminlogin" element={<AdminLogin />} />
               <Route
                 path="/registrationlogin"
