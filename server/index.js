@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
+import loginRoutes from "./routes/login.route.js";
 
 dotenv.config();
 
@@ -23,6 +24,8 @@ app.use(
   })
 );
 app.use(express.json());
+
+app.use("/server/login", loginRoutes);
 
 // Error handler middleware
 app.use((err, req, res, next) => {
