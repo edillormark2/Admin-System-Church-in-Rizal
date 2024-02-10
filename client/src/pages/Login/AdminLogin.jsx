@@ -20,7 +20,7 @@ const AdminLogin = () => {
   const handleChange = e => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
-    setLoginError(""); // Clear previous error when user starts typing
+    setLoginError(""); 
   };
 
   const handleSubmit = async e => {

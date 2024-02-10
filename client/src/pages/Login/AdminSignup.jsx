@@ -20,7 +20,7 @@ const AdminSignup = () => {
   const handleChange = e => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
-    setSignupError(""); // Clear previous error when user starts typing
+    setSignupError("");
   };
 
   const handleSubmit = async e => {
@@ -32,14 +32,14 @@ const AdminSignup = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/server/login/adminsignup", // Corrected endpoint
+        "http://localhost:3000/server/login/adminsignup",
         formData
       );
-      navigate("/adminlogin"); // Redirect to login page after successful signup
+      navigate("/adminlogin");
     } catch (error) {
       console.error("Error during admin signup:", error);
-      console.log("Error response data:", error.response.data); // Log error response data
-      setSignupError("Error signing up: " + error.message); // Set signup error with specific message
+      console.log("Error response data:", error.response.data);
+      setSignupError("Error signing up: " + error.message);
     }
   };
 
