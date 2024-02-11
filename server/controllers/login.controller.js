@@ -1,4 +1,5 @@
 import Admin from "../models/adminlogin.model.js";
+import Inventory from "../models/inventory.model.js";
 import Registration from "../models/registrationlogin.model.js";
 
 // Controller for admin login
@@ -39,16 +40,14 @@ export const registrationlogin = async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    // Check if admin exists with the provided username
     const registration = await Registration.findOne({ username });
 
     if (!registration) {
       return res
         .status(401)
-        .json({ success: false, message: "Admin not found" });
+        .json({ success: false, message: "User not found" });
     }
 
-    // Check if the password matches
     if (registration.password !== password) {
       return res
         .status(401)
@@ -58,9 +57,40 @@ export const registrationlogin = async (req, res) => {
     // If username and password match, return success
     return res
       .status(200)
-      .json({ success: true, message: "Admin logged in successfully" });
+      .json({ success: true, message: "User logged in successfully" });
   } catch (error) {
-    console.error("Error during admin login:", error);
+    console.error("Error during user login:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+// Controller for inventory departmant login
+export const inventorylogin = async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const inventory = await Inventory.findOne({ username });
+
+    if (!inventory) {
+      return res
+        .status(401)
+        .json({ success: false, message: "User not found" });
+    }
+
+    if (inventory.password !== password) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Incorrect password" });
+    }
+
+    // If username and password match, return success
+    return res
+      .status(200)
+      .json({ success: true, message: "User logged in successfully" });
+  } catch (error) {
+    console.error("Error during user login:", error);
     return res
       .status(500)
       .json({ success: false, message: "Internal Server Error" });

@@ -17,7 +17,7 @@ mongoose
     console.error("Error connecting to MongoDB Atlas:", error);
   });
 
-const registrationloginSchema = new mongoose.Schema(
+const inventoryloginSchema = new mongoose.Schema(
   {
     username: {
       type: String
@@ -29,6 +29,6 @@ const registrationloginSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Registration = mongoose.model("Registration", registrationloginSchema);
+const Inventory = mongoose.model("Inventory", inventoryloginSchema);
 
-export default Registration;
+export default Inventory;

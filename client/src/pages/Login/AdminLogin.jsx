@@ -21,6 +21,7 @@ const AdminLogin = () => {
     password: ""
   });
 
+  const { loading } = useSelector(state => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -113,7 +114,7 @@ const AdminLogin = () => {
             Forgot Your Password?
           </p>
           <button className="bg-primary text-white p-3 rounded-lg  hover:opacity-85 disabled:opacity-80 text-sm sm:text-base mt-4">
-            Login
+            {loading ? "Loading..." : "Login"}
           </button>
           <div className="bg-blue-100 p-2 rounded-md mt-4 text-sm">
             <p className="font-semibold text-blue-900">Login as Admin</p>

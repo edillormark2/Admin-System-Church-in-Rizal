@@ -32,11 +32,6 @@ const App = () => {
   const { currentUser } = useSelector(state => state.user);
   const isUserSignedIn = !!currentUser;
 
-  // Function to clear local storage
-  const clearLocalStorage = () => {
-    localStorage.clear();
-  };
-
   return (
     <div>
       <BrowserRouter>
@@ -48,6 +43,7 @@ const App = () => {
             </div>}
           <main className="flex-grow bg-gray-100 dark:bg-main-dark-bg p-2">
             <Routes>
+              {/*Default route */}
               <Route
                 path="/"
                 element={<LoginRoute element={<AdminLogin />} />}
