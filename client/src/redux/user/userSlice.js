@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   currentUser: null,
+  isAuthenticated: false, // Add isAuthenticated field
   loading: false,
   error: false
 };
@@ -15,6 +16,7 @@ const userSlice = createSlice({
     },
     signInSuccess: (state, action) => {
       state.currentUser = action.payload;
+      state.isAuthenticated = true; // Update isAuthenticated to true
       state.loading = false;
       state.error = false;
     },

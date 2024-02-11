@@ -1,19 +1,22 @@
+// App.js
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "./App.css";
-import Login from "./pages/Login/AdminSignup";
+import AdminDashboard from "./pages/AdminPages/AdminDashboard";
+import UserLogs from "./pages/AdminPages/UserLogs";
+import RegDashboard from "./pages/RegistrationPages/RegDashboard";
 import AdminLogin from "./pages/Login/AdminLogin";
 import RegistrationLogin from "./pages/Login/RegistrationLogin";
 import InventoryLogin from "./pages/Login/InventoryLogin";
 import ReportsLogin from "./pages/Login/ReportsLogin";
 import Navbar from "./components/Navbar";
 import AdminSignup from "./pages/Login/AdminSignup";
-import AdminDashboard from "./pages/AdminPages/AdminDashboard";
 import AdminRoute from "./components/AdminRoute";
 import LoginRoute from "./components/LoginRoute";
+import RegRoute from "./components/RegRoute";
 import { useSelector } from "react-redux";
-import UserLogs from "./pages/AdminPages/UserLogs";
+import NotAvailable from "./components/NotAvailable";
 
 const customToastStyle = {
   position: "top-right",
@@ -42,9 +45,14 @@ const App = () => {
           <main className="flex-grow bg-gray-100 dark:bg-main-dark-bg p-2">
             <Routes>
               {/* Admin routes */}
-              <Route path="/" element={<AdminRoute />}>
+              <Route path="/admin/*" element={<AdminRoute />}>
                 <Route index element={<AdminDashboard />} />
-                <Route path="/userlogs" element={<UserLogs />} />
+                <Route path="userlogs" element={<UserLogs />} />
+              </Route>
+
+              {/* Registration routes */}
+              <Route path="/registration/*" element={<RegRoute />}>
+                <Route index element={<RegDashboard />} />
               </Route>
 
               {/* Login routes */}
@@ -65,6 +73,9 @@ const App = () => {
                 element={<LoginRoute element={<ReportsLogin />} />}
               />
               <Route path="/adminsignup" element={<AdminSignup />} />
+
+              {/* Redirect any other routes to admin */}
+              <Route path="*" element={<NotAvailable />} />
             </Routes>
           </main>
         </div>

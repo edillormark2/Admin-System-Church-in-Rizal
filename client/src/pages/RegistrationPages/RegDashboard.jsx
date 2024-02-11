@@ -9,7 +9,7 @@ const RegDashboard = () => {
 
   const handleSignOut = () => {
     dispatch(signOut());
-    navigate("/adminlogin"); // Navigate to admin login page after signout
+    navigate("/registrationlogin"); // Navigate to admin login page after signout
   };
 
   return (
