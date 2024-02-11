@@ -1,4 +1,3 @@
-// AdminDashboard.jsx
 import React from "react";
 import { useDispatch } from "react-redux";
 import { signOut } from "../../redux/user/userSlice";
@@ -9,8 +8,14 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
 
   const handleSignOut = () => {
+    // Clear local storage
+    localStorage.clear();
+
+    // Dispatch signOut action
     dispatch(signOut());
-    navigate("/adminlogin"); // Navigate to admin login page after signout
+
+    // Navigate to admin login page after signout
+    navigate("/adminlogin");
   };
 
   return (

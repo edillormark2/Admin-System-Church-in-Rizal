@@ -8,8 +8,14 @@ const RegDashboard = () => {
   const navigate = useNavigate();
 
   const handleSignOut = () => {
+    // Clear local storage
+    localStorage.clear();
+
+    // Dispatch signOut action
     dispatch(signOut());
-    navigate("/registrationlogin"); // Navigate to admin login page after signout
+
+    // Navigate to admin login page after signout
+    navigate("/adminlogin");
   };
 
   return (
