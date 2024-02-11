@@ -52,7 +52,7 @@ const RegistrationLogin = () => {
         formData
       );
       const userData = response.data; // Assuming the response contains user data
-      userData.role = "reg"; // Add role information, assuming it's 'admin'
+      userData.role = "registration"; // Add role information, assuming it's 'admin'
       dispatch(signInSuccess(userData));
       navigate("/registration");
     } catch (error) {

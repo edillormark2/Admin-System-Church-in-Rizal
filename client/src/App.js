@@ -13,9 +13,11 @@ import Navbar from "./components/Navbar";
 import AdminSignup from "./pages/Login/AdminSignup";
 import AdminRoute from "./components/AdminRoute";
 import LoginRoute from "./components/LoginRoute";
+import InvRoute from "./components/InvRoute";
 import RegRoute from "./components/RegRoute";
 import { useSelector } from "react-redux";
 import NotAvailable from "./components/NotAvailable";
+import InvDashboard from "./pages/InventoryPages/InvDashboard";
 
 const customToastStyle = {
   position: "top-right",
@@ -58,6 +60,11 @@ const App = () => {
               {/* Registration routes */}
               <Route path="/registration/*" element={<RegRoute />}>
                 <Route index element={<RegDashboard />} />
+              </Route>
+
+              {/* Inventory routes */}
+              <Route path="/inventory/*" element={<InvRoute />}>
+                <Route index element={<InvDashboard />} />
               </Route>
 
               {/* Login routes */}

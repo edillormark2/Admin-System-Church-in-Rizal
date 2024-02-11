@@ -10,9 +10,10 @@ const LoginRoute = ({ element }) => {
       switch (currentUser.role) {
         case "admin":
           return "/admin";
-        case "reg":
+        case "registration":
           return "/registration";
-        // Add more cases for other login types if needed
+        case "inventory":
+          return "/inventory";
         default:
           return "/";
       }

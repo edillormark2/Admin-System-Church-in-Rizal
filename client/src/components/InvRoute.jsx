@@ -5,10 +5,10 @@ const RegRoute = () => {
   const { currentUser, isAuthenticated } = useSelector(state => state.user);
 
   // Check if user is authenticated and is an admin
-  const isRegLoggedIn =
-    isAuthenticated && currentUser && currentUser.role === "registration";
+  const isInvLoggedIn =
+    isAuthenticated && currentUser && currentUser.role === "inventory";
 
-  return isRegLoggedIn ? <Outlet /> : <Navigate to="/" replace={true} />;
+  return isInvLoggedIn ? <Outlet /> : <Navigate to="/" replace={true} />;
 };
 
 export default RegRoute;
