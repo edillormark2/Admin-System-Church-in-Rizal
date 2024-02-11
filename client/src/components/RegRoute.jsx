@@ -8,9 +8,7 @@ const RegRoute = () => {
   const isRegLoggedIn =
     isAuthenticated && currentUser && currentUser.role === "reg";
 
-  return isRegLoggedIn
-    ? <Outlet />
-    : <Navigate to="/registrationlogin" replace={true} />;
+  return isRegLoggedIn ? <Outlet /> : <Navigate to="/" replace={true} />;
 };
 
 export default RegRoute;

@@ -1,4 +1,3 @@
-// App.js
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -33,6 +32,11 @@ const App = () => {
   const { currentUser } = useSelector(state => state.user);
   const isUserSignedIn = !!currentUser;
 
+  // Function to clear local storage
+  const clearLocalStorage = () => {
+    localStorage.clear();
+  };
+
   return (
     <div>
       <BrowserRouter>
@@ -44,6 +48,11 @@ const App = () => {
             </div>}
           <main className="flex-grow bg-gray-100 dark:bg-main-dark-bg p-2">
             <Routes>
+              <Route
+                path="/"
+                element={<LoginRoute element={<AdminLogin />} />}
+              />
+
               {/* Admin routes */}
               <Route path="/admin/*" element={<AdminRoute />}>
                 <Route index element={<AdminDashboard />} />
@@ -73,9 +82,6 @@ const App = () => {
                 element={<LoginRoute element={<ReportsLogin />} />}
               />
               <Route path="/adminsignup" element={<AdminSignup />} />
-
-              {/* Redirect any other routes to admin */}
-              <Route path="*" element={<NotAvailable />} />
             </Routes>
           </main>
         </div>

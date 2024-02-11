@@ -7,10 +7,10 @@ const LoginRoute = ({ element }) => {
   // Check the user's login type and redirect accordingly
   const determineDashboard = () => {
     if (currentUser) {
-      switch (currentUser.loginType) {
+      switch (currentUser.role) {
         case "admin":
           return "/admin";
-        case "registration":
+        case "reg":
           return "/registration";
         // Add more cases for other login types if needed
         default:

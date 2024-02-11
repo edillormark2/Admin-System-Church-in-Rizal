@@ -5,9 +5,7 @@ const AdminRoute = () => {
   const { currentUser } = useSelector(state => state.user);
   const isAdminLoggedIn = currentUser && currentUser.role === "admin";
 
-  return isAdminLoggedIn
-    ? <Outlet />
-    : <Navigate to="/adminlogin" replace={true} />;
+  return isAdminLoggedIn ? <Outlet /> : <Navigate to="/" replace={true} />;
 };
 
 export default AdminRoute;
