@@ -2,6 +2,12 @@ import { useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure
+} from "../../redux/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,11 +22,12 @@ const AdminLogin = () => {
   });
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = e => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
-    setLoginError(""); 
+    setLoginError("");
   };
 
   const handleSubmit = async e => {
@@ -43,8 +50,10 @@ const AdminLogin = () => {
         "http://localhost:3000/server/login/adminlogin",
         formData
       );
-      navigate("/admindashboard");
+      dispatch(signInSuccess(response.data));
+      navigate("/");
     } catch (error) {
+      dispatch(signInFailure(error));
       if (error.response && error.response.status === 401) {
         setLoginError("Email or password is incorrect");
       } else if (error.response && error.response.status === 404) {
