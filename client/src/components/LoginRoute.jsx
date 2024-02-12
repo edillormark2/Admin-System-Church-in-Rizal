@@ -14,6 +14,8 @@ const LoginRoute = ({ element }) => {
           return "/registration";
         case "inventory":
           return "/inventory";
+        case "reports":
+          return "/reports";
         default:
           return "/";
       }

@@ -1,6 +1,7 @@
 import Admin from "../models/adminlogin.model.js";
 import Inventory from "../models/inventory.model.js";
 import Registration from "../models/registrationlogin.model.js";
+import Reports from "../models/reportslogin.model.js";
 
 // Controller for admin login
 export const adminlogin = async (req, res) => {
@@ -80,6 +81,37 @@ export const inventorylogin = async (req, res) => {
     }
 
     if (inventory.password !== password) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Incorrect password" });
+    }
+
+    // If username and password match, return success
+    return res
+      .status(200)
+      .json({ success: true, message: "User logged in successfully" });
+  } catch (error) {
+    console.error("Error during user login:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+// Controller for inventory departmant login
+export const reportslogin = async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const reports = await Reports.findOne({ username });
+
+    if (!reports) {
+      return res
+        .status(401)
+        .json({ success: false, message: "User not found" });
+    }
+
+    if (reports.password !== password) {
       return res
         .status(401)
         .json({ success: false, message: "Incorrect password" });

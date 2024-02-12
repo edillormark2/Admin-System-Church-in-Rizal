@@ -15,7 +15,7 @@ const InvDashboard = () => {
     dispatch(signOut());
 
     // Navigate to admin login page after signout
-    navigate("/adminlogin");
+    navigate("/inventorylogin");
   };
 
   return (

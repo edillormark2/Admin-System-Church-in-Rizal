@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { signOut } from "../../redux/user/userSlice";
 import { useNavigate } from "react-router-dom";
 
-const RegDashboard = () => {
+const ReportsDashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -15,12 +15,12 @@ const RegDashboard = () => {
     dispatch(signOut());
 
     // Navigate to admin login page after signout
-    navigate("/registrationlogin");
+    navigate("/reportslogin");
   };
 
   return (
     <div className="flex flex-col items-center mt-40">
-      <h1 className="mb-4">Welcome Registration Department</h1>
+      <h1 className="mb-4">Welcome Report Department</h1>
       <button
         className="p-2 bg-white rounded-lg border border-primary cursor-pointer hover:bg-primary hover:text-white"
         onClick={handleSignOut}
@@ -31,4 +31,4 @@ const RegDashboard = () => {
   );
 };
 
-export default RegDashboard;
+export default ReportsDashboard;
