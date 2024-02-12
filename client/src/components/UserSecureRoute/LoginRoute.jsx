@@ -9,7 +9,7 @@ const LoginRoute = ({ element }) => {
     if (currentUser) {
       switch (currentUser.role) {
         case "admin":
-          return "/admin";
+          return "/admin/dashboard";
         case "registration":
           return "/registration";
         case "inventory":

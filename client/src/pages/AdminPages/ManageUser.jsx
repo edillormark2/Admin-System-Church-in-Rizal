@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { signOut } from "../../redux/user/userSlice";
 import { useNavigate } from "react-router-dom";
 
-const AdminDashboard = () => {
+const ManageUser = () => {
   const { activeMenu } = useStateContext();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ const AdminDashboard = () => {
               <Sidebar />
             </div>}
         <div
-          className={` bg-white min-h-screen w-full  ${activeMenu
+          className={` bg-white min-h-screen w-full ${activeMenu
             ? "md:ml-60"
             : "flex-1"}`}
         >
@@ -43,13 +43,7 @@ const AdminDashboard = () => {
             <Navbar />
           </div>
           <div className="flex flex-col items-center mt-40">
-            <h1 className="mb-4">Welcome Admin</h1>
-            <button
-              className="p-2 bg-white rounded-lg border border-primary cursor-pointer hover:bg-primary hover:text-white"
-              onClick={handleSignOut}
-            >
-              Sign out
-            </button>
+            <h1 className="mb-4">ManageUser</h1>
           </div>
         </div>
       </div>
@@ -57,4 +51,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default ManageUser;

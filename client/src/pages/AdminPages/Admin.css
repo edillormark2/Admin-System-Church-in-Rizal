@@ -1,0 +1,20 @@
+.sidebar {
+  box-shadow: rgb(113 122 131 / 11%) 0px 7px 30px 0px;
+  z-index: 1000; /* Ensure sidebar is above content */
+}
+
+.nav-item,
+.navbar {
+  z-index: 1001; /* Ensure navbar is above content and sidebar */
+}
+
+@media screen and (max-width: 720px) {
+  .sidebar {
+    z-index: 10000000; /* Ensure sidebar is above everything on smaller screens */
+  }
+}
+
+.e-dlg-center-center,
+.e-quick-popup-wrapper.e-device {
+  z-index: 1000000 !important; /* Adjust other components as needed */
+}

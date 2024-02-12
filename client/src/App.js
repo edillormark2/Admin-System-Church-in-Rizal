@@ -9,17 +9,19 @@ import AdminLogin from "./pages/Login/AdminLogin";
 import RegistrationLogin from "./pages/Login/RegistrationLogin";
 import InventoryLogin from "./pages/Login/InventoryLogin";
 import ReportsLogin from "./pages/Login/ReportsLogin";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/Navbar/Navbar";
 import AdminSignup from "./pages/Login/AdminSignup";
-import AdminRoute from "./components/AdminRoute";
-import LoginRoute from "./components/LoginRoute";
-import InvRoute from "./components/InvRoute";
-import RegRoute from "./components/RegRoute";
+import AdminRoute from "./components/UserSecureRoute/AdminRoute";
+import LoginRoute from "./components/UserSecureRoute/LoginRoute";
+import InvRoute from "./components/UserSecureRoute/InvRoute";
+import RegRoute from "./components/UserSecureRoute/RegRoute";
 import { useSelector } from "react-redux";
 import NotAvailable from "./components/NotAvailable";
 import InvDashboard from "./pages/InventoryPages/InvDashboard";
 import ReportsDashboard from "./pages/ReportsPages/ReportsDashboard";
-import ReportsRoute from "./components/ReportsRoute";
+import ReportsRoute from "./components/UserSecureRoute/ReportsRoute";
+import ManageUser from "./pages/AdminPages/ManageUser";
+import BibleReadingReg from "./pages/AdminPages/Registration/BibleReadingReg";
 
 const customToastStyle = {
   position: "top-right",
@@ -42,10 +44,10 @@ const App = () => {
         <ToastContainer {...customToastStyle} />
         <div className="flex flex-col min-h-screen">
           {!isUserSignedIn &&
-            <div className="fixed bg-main-bg dark:bg-main-dark-bg navbar w-full z-50">
+            <div className="fixed bg-gray-50 dark:bg-main-dark-bg navbar w-full z-50">
               <Navbar />
             </div>}
-          <main className="flex-grow bg-gray-100 dark:bg-main-dark-bg p-2">
+          <main className="flex-grow bg-gray-50 dark:bg-main-dark-bg ">
             <Routes>
               {/*Default route */}
               <Route
@@ -55,8 +57,11 @@ const App = () => {
 
               {/* Admin routes */}
               <Route path="/admin/*" element={<AdminRoute />}>
-                <Route index element={<AdminDashboard />} />
                 <Route path="userlogs" element={<UserLogs />} />
+                <Route path="dashboard" element={<AdminDashboard />} />
+                <Route path="manage-user" element={<ManageUser />} />
+                {/*Reg pages */}
+                <Route path="reg/bible-reading" element={<BibleReadingReg />} />
               </Route>
 
               {/* Registration routes */}

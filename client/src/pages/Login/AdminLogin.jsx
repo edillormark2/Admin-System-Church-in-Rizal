@@ -54,7 +54,7 @@ const AdminLogin = () => {
       const userData = response.data; // Assuming the response contains user data
       userData.role = "admin"; // Add role information, assuming it's 'admin'
       dispatch(signInSuccess(userData));
-      navigate("/admin");
+      navigate("/admin/dashboard");
     } catch (error) {
       dispatch(signInFailure(error));
       if (error.response && error.response.status === 401) {
