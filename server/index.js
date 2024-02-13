@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import loginRoutes from "./routes/login.route.js";
+import userRoutes from "./routes/user.route.js";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -24,8 +26,10 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/server/login", loginRoutes);
+app.use("/server/user", userRoutes);
 
 // Error handler middleware
 app.use((err, req, res, next) => {

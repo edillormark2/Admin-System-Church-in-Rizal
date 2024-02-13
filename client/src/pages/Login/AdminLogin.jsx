@@ -49,11 +49,24 @@ const AdminLogin = () => {
     try {
       const response = await axios.post(
         "http://localhost:3000/server/login/adminlogin",
-        formData
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
       );
-      const userData = response.data; // Assuming the response contains user data
-      userData.role = "admin"; // Add role information, assuming it's 'admin'
+
+      // Ensure that the response data structure contains the necessary fields
+      const userData = {
+        ...response.data,
+        role: "admin" // Assuming role is always "admin" for this login endpoint
+      };
+      localStorage.setItem("access_token", response.data.access_token);
+
+      // Dispatch signInSuccess action with user data
       dispatch(signInSuccess(userData));
+
       navigate("/admin/dashboard");
     } catch (error) {
       dispatch(signInFailure(error));

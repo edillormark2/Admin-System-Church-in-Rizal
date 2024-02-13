@@ -43,10 +43,15 @@ const AdminSignup = () => {
     try {
       const response = await axios.post(
         "http://localhost:3000/server/login/adminsignup",
-        formData
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
       );
+      setLoading(false);
       toast.success("Account created successfully");
-      
     } catch (error) {
       setLoading(false);
       if (error.response && error.response.status === 409) {

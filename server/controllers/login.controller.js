@@ -2,6 +2,7 @@ import Admin from "../models/adminlogin.model.js";
 import Inventory from "../models/inventory.model.js";
 import Registration from "../models/registrationlogin.model.js";
 import Reports from "../models/reportslogin.model.js";
+import jwt from "jsonwebtoken";
 
 // Controller for admin login
 export const adminlogin = async (req, res) => {
@@ -24,10 +25,22 @@ export const adminlogin = async (req, res) => {
         .json({ success: false, message: "Incorrect password" });
     }
 
-    // If username and password match, return success
-    return res
+    // Generate JWT token without expiry
+    const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET);
+
+    const { password: hashedPassword, ...rest } = admin._doc;
+
+    res
+      .cookie("access_token", token, {
+        httpOnly: true,
+        sameSite: "None",
+        secure: process.env.NODE_ENV === "production"
+      })
       .status(200)
-      .json({ success: true, message: "Admin logged in successfully" });
+      .json({
+        ...rest,
+        access_token: token // Include access_token in the response
+      });
   } catch (error) {
     console.error("Error during admin login:", error);
     return res
@@ -144,7 +157,7 @@ export const adminsignup = async (req, res) => {
     }
 
     // Create a new admin
-    const newAdmin = new Admin({  name, role, username, password });
+    const newAdmin = new Admin({ name, role, username, password });
     await newAdmin.save();
 
     return res

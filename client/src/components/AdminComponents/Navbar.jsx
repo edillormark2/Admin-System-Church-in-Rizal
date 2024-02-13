@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
-import { useStateContext } from "../../redux/ContextProvider";
 import Tooltip from "@mui/material/Tooltip";
 import Fade from "@mui/material/Fade";
+import { useSelector } from "react-redux";
+import axios from "axios"; // Import Axios
 
 const NavButton = ({ customFunc, icon, color, dotColor }) =>
   <Tooltip arrow title="Menu" placement="bottom" TransitionComponent={Fade}>
@@ -21,7 +22,9 @@ const NavButton = ({ customFunc, icon, color, dotColor }) =>
   </Tooltip>;
 
 const Navbar = () => {
+  const [menuClicked, setMenuClicked] = useState("");
   const [screenSize, setScreenSize] = useState(window.innerWidth);
+  const { currentUser } = useSelector(state => state.user);
 
   useEffect(() => {
     const handleResize = () => setScreenSize(window.innerWidth);
@@ -30,24 +33,12 @@ const Navbar = () => {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  const { currentColor, activeMenu, setActiveMenu } = useStateContext();
-
-  useEffect(() => {
-    const handleResize = () => setScreenSize(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(
-    () => {
-      setActiveMenu(screenSize > 1250);
-    },
-    [screenSize, setActiveMenu]
-  );
 
   const handleActiveMenu = () => {
-    setActiveMenu(!activeMenu);
+    // Your setActiveMenu logic here
+  };
+  const handleMenuClick = menu => {
+    setMenuClicked(menu);
   };
 
   return (
@@ -55,7 +46,7 @@ const Navbar = () => {
       <NavButton
         title="Menu"
         customFunc={handleActiveMenu}
-        color={currentColor}
+        color="black" // You can set your color here
         icon={<AiOutlineMenu />}
       />
 
@@ -67,11 +58,13 @@ const Navbar = () => {
           TransitionComponent={Fade}
         >
           <div className="flex items-center gap-2 cursor-pointer p-2 rounded-xl hover:bg-gray-200">
-            <p>
-              <span className="text-gray-500 text-14">Hi,</span>{" "}
-              <span className="text-gray-500 font-bold ml-1 text-14">
-                Admin
-              </span>
+            <img
+              src={currentUser.profilePicture}
+              alt="profile"
+              className="h-8 w-8 rounded-full object-cover"
+            />
+            <p className="hidden md:block">
+              {currentUser.name}
             </p>
           </div>
         </Tooltip>
