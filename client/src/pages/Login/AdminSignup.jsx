@@ -2,6 +2,8 @@ import { useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AdminSignup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,10 +13,13 @@ const AdminSignup = () => {
 
   const [signupError, setSignupError] = useState("");
   const [formData, setFormData] = useState({
+    name: "",
+    role: "Admin", // Setting default value to "Admin"
     username: "",
     password: ""
   });
 
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = e => {
@@ -25,7 +30,12 @@ const AdminSignup = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    if (!formData.username || !formData.password) {
+    if (
+      !formData.name ||
+      !formData.role ||
+      !formData.username ||
+      !formData.password
+    ) {
       setSignupError("Please fill out all fields");
       return;
     }
@@ -35,11 +45,15 @@ const AdminSignup = () => {
         "http://localhost:3000/server/login/adminsignup",
         formData
       );
-      navigate("/adminlogin");
+      toast.success("Account created successfully");
+      
     } catch (error) {
-      console.error("Error during admin signup:", error);
-      console.log("Error response data:", error.response.data);
-      setSignupError("Error signing up: " + error.message);
+      setLoading(false);
+      if (error.response && error.response.status === 409) {
+        toast.error("Email already exists");
+      } else {
+        toast.error("Error submitting data");
+      }
     }
   };
 
@@ -54,6 +68,24 @@ const AdminSignup = () => {
           Signup
         </h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <p className="text-sm">Name</p>
+          <input
+            type="text"
+            placeholder=""
+            id="name"
+            onChange={handleChange}
+            value={formData.name}
+            className="form-control bg-slate-50 p-3 rounded-lg border border-gray-300 text-sm sm:text-base dark:bg-half-transparent dark:text-gray-200"
+          />
+          <p className="text-sm">Role</p>
+          <input
+            type="text"
+            placeholder=""
+            id="role"
+            value={formData.role} // Making it view-only
+            readOnly // Making it view-only
+            className="form-control bg-slate-50 p-3 rounded-lg border border-gray-300 text-sm sm:text-base dark:bg-half-transparent dark:text-gray-200"
+          />
           <p className="text-sm">Username</p>
           <input
             type="text"
@@ -82,8 +114,11 @@ const AdminSignup = () => {
                 : <AiFillEyeInvisible size={23} />}
             </div>
           </div>
-          <button className="bg-primary text-white p-3 rounded-lg  hover:opacity-85 disabled:opacity-80 text-sm sm:text-base mt-4">
-            Signup
+          <button
+            disabled={loading}
+            className="bg-primary text-white p-3 rounded-lg  hover:opacity-85 disabled:opacity-80 text-sm sm:text-base mt-4"
+          >
+            {loading ? "Loading..." : "Sign Up"}
           </button>
         </form>
       </div>

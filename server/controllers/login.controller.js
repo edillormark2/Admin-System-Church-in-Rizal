@@ -131,7 +131,7 @@ export const reportslogin = async (req, res) => {
 
 // Controller for admin signup
 export const adminsignup = async (req, res) => {
-  const { username, password } = req.body;
+  const { name, role, username, password } = req.body;
 
   try {
     // Check if admin already exists with the provided username
@@ -144,7 +144,7 @@ export const adminsignup = async (req, res) => {
     }
 
     // Create a new admin
-    const newAdmin = new Admin({ username, password });
+    const newAdmin = new Admin({  name, role, username, password });
     await newAdmin.save();
 
     return res

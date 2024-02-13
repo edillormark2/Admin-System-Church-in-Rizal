@@ -24,11 +24,22 @@ mongoose
 // Define Mongoose schema and model
 const adminloginSchema = new mongoose.Schema(
   {
+    name: {
+      type: String
+    },
+    role: {
+      type: String
+    },
     username: {
       type: String
     },
     password: {
       type: String
+    },
+    profilePicture: {
+      type: String,
+      default:
+        "https://qph.cf2.quoracdn.net/main-qimg-6d72b77c81c9841bd98fc806d702e859-lq"
     }
   },
   { timestamps: true }
