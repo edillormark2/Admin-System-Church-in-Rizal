@@ -59,9 +59,9 @@ const Sidebar = () => {
             <Link
               to="/admin/dashboard"
               onClick={handleCloseSideBar}
-              className="items-center gap-1 ml-16 mt-8 flex text-xl font-extrabold tracking-tight text-slate-900"
+              className="items-center gap-1 ml-20 mt-8 flex text-xl font-extrabold tracking-tight text-slate-900"
             >
-              <span>Logo</span>
+              <span>Admin</span>
             </Link>
             <button
               type="button"

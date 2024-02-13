@@ -3,7 +3,9 @@ import { AiOutlineMenu } from "react-icons/ai";
 import Tooltip from "@mui/material/Tooltip";
 import Fade from "@mui/material/Fade";
 import { useSelector } from "react-redux";
-import axios from "axios"; // Import Axios
+import { useStateContext } from "../../redux/ContextProvider";
+import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
+import PopupBody from "./PopupBody"; // Import your PopupBody component here
 
 const NavButton = ({ customFunc, icon, color, dotColor }) =>
   <Tooltip arrow title="Menu" placement="bottom" TransitionComponent={Fade}>
@@ -25,21 +27,41 @@ const Navbar = () => {
   const [menuClicked, setMenuClicked] = useState("");
   const [screenSize, setScreenSize] = useState(window.innerWidth);
   const { currentUser } = useSelector(state => state.user);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [placement, setPlacement] = React.useState("bottom-end");
 
   useEffect(() => {
     const handleResize = () => setScreenSize(window.innerWidth);
-
     window.addEventListener("resize", handleResize);
-
+    handleResize();
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const { currentColor, activeMenu, setActiveMenu } = useStateContext();
+
+  useEffect(
+    () => {
+      setActiveMenu(screenSize > 1250);
+    },
+    [screenSize, setActiveMenu]
+  );
+
   const handleActiveMenu = () => {
-    // Your setActiveMenu logic here
+    setActiveMenu(!activeMenu);
   };
-  const handleMenuClick = menu => {
-    setMenuClicked(menu);
+
+  const handleClick = event => {
+    setAnchor(anchor ? null : event.currentTarget);
   };
+
+  const handleClose = () => {
+    setAnchor(null);
+  };
+
+  const [anchor, setAnchor] = React.useState(null);
+
+  const open = Boolean(anchor);
+  const id = open ? "simple-popper" : undefined;
 
   return (
     <div className="flex justify-between p-2 relative bg-white   drop-shadow-xl rounded-lg px-1 md:px-8">
@@ -51,24 +73,30 @@ const Navbar = () => {
       />
 
       <div className="flex drop-shadow-sm">
-        <Tooltip
-          arrow
-          title="Account"
-          placement="bottom"
-          TransitionComponent={Fade}
+        <div
+          onClick={handleClick}
+          className="flex items-center gap-2 cursor-pointer p-2 rounded-xl hover:bg-gray-200"
         >
-          <div className="flex items-center gap-2 cursor-pointer p-2 rounded-xl hover:bg-gray-200">
-            <img
-              src={currentUser.profilePicture}
-              alt="profile"
-              className="h-8 w-8 rounded-full object-cover"
-            />
-            <p className="hidden md:block">
-              {currentUser.name}
-            </p>
-          </div>
-        </Tooltip>
+          <img
+            src={currentUser.profilePicture}
+            alt="profile"
+            className="h-8 w-8 rounded-full object-cover"
+          />
+          <p className="hidden md:block">
+            {currentUser.name}
+          </p>
+        </div>
       </div>
+
+      <BasePopup
+        id={id}
+        open={Boolean(anchor)}
+        anchor={anchor}
+        placement={placement}
+        offset={4}
+      >
+        <PopupBody closePopup={handleClose} />
+      </BasePopup>
     </div>
   );
 };
