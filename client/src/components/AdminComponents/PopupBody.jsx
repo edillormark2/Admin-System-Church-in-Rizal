@@ -24,7 +24,7 @@ const PopupBody = ({ closePopup }) => {
   };
 
   return (
-    <div className="bg-white p-4 rounded-xl drop-shadow-xl border mt-0 border-gray-300 w-72 relative">
+    <div className="bg-white p-4 rounded-xl drop-shadow-xl border mt-3 border-gray-300 w-72 relative md:mt-0">
       <div className="flex items-center justify-center mb-4">
         <div className="relative">
           <img

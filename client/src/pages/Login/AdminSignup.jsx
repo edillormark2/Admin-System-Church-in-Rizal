@@ -28,6 +28,7 @@ const AdminSignup = () => {
     setSignupError("");
   };
 
+  // Your existing handleSubmit function with modifications
   const handleSubmit = async e => {
     e.preventDefault();
     if (

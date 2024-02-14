@@ -3,5 +3,5 @@ import { getUserAdmin } from "../controllers/user.controller.js";
 
 const router = express.Router();
 
-router.post("/useradmin/:id", getUserAdmin);
+router.get("/useradmin/users", getUserAdmin);
 export default router;

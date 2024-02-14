@@ -20,9 +20,10 @@ import NotAvailable from "./components/NotAvailable";
 import InvDashboard from "./pages/InventoryPages/InvDashboard";
 import ReportsDashboard from "./pages/ReportsPages/ReportsDashboard";
 import ReportsRoute from "./components/UserSecureRoute/ReportsRoute";
-import ManageUser from "./pages/AdminPages/ManageUser";
+import ManageUser from "./pages/AdminPages/ManageUser/ManageUser";
 import ProfileSettings from "./pages/AdminPages/ProfileSettings";
 import BibleReadingReg from "./pages/AdminPages/Registration/BibleReadingReg";
+import ManageAdmin from "./pages/AdminPages/ManageUser/ManageAdmin";
 
 const customToastStyle = {
   position: "top-right",
@@ -67,6 +68,8 @@ const App = () => {
                 />
                 {/*Reg pages */}
                 <Route path="reg/bible-reading" element={<BibleReadingReg />} />
+                {/*Manage User pages */}
+                <Route path="manage-user/admin" element={<ManageAdmin />} />
               </Route>
 
               {/* Registration routes */}

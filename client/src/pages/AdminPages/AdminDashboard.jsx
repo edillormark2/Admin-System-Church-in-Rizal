@@ -3,26 +3,9 @@ import "./Admin.css";
 import Navbar from "../../components/AdminComponents/Navbar";
 import Sidebar from "../../components/AdminComponents/Sidebar";
 import { useStateContext } from "../../redux/ContextProvider";
-import { Routes, Route, Navigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { signOut } from "../../redux/user/userSlice";
-import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
   const { activeMenu } = useStateContext();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const handleSignOut = () => {
-    // Clear local storage
-    localStorage.clear();
-
-    // Dispatch signOut action
-    dispatch(signOut());
-
-    // Navigate to admin login page after signout
-    navigate("/adminlogin");
-  };
 
   return (
     <div className="bg-gray-200 min-h-screen">
@@ -44,12 +27,6 @@ const AdminDashboard = () => {
           </div>
           <div className="flex flex-col items-center mt-40">
             <h1 className="mb-4">Welcome Admin</h1>
-            <button
-              className="p-2 bg-white rounded-lg border border-primary cursor-pointer hover:bg-primary hover:text-white"
-              onClick={handleSignOut}
-            >
-              Sign out
-            </button>
           </div>
         </div>
       </div>

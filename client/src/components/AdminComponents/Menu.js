@@ -15,9 +15,11 @@ export const links = [
       }
     ]
   },
+
   {
     title: "Pages",
     links: [
+      /*
       {
         name: "Registration",
         icon: <FaRegAddressCard />,
@@ -32,15 +34,16 @@ export const links = [
           }
         ]
       },
-      {
-        name: "User Logs",
-        url: "/admin/userlogs",
-        icon: <MdOutlineFormatListBulleted />
-      },
+      */
       {
         name: "Manage User",
         url: "/admin/manage-user",
         icon: <RiContactsLine />
+      },
+      {
+        name: "User Logs",
+        url: "/admin/userlogs",
+        icon: <MdOutlineFormatListBulleted />
       }
     ]
   }

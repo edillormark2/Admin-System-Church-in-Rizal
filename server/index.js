@@ -29,7 +29,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/server/login", loginRoutes);
-app.use("/server/user", userRoutes);
+app.use("/server/users", userRoutes);
 
 // Error handler middleware
 app.use((err, req, res, next) => {
