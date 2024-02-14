@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../Admin.css";
 import Navbar from "../../../components/AdminComponents/Navbar";
 import Sidebar from "../../../components/AdminComponents/Sidebar";
@@ -12,11 +12,28 @@ import { FaClipboardList } from "react-icons/fa";
 import { MdInventory } from "react-icons/md";
 import { ImStatsBars } from "react-icons/im";
 import Breadcrumbs from "../../../components/Breadcrumbs";
+import axios from "axios";
 
 const ManageUser = () => {
   const { activeMenu } = useStateContext();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [adminCount, setAdminCount] = useState(0);
+
+  useEffect(() => {
+    fetchAdminCount();
+  }, []);
+
+  const fetchAdminCount = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/server/users/useradmin/count"
+      );
+      setAdminCount(response.data.count);
+    } catch (error) {
+      console.error("Error fetching admin count:", error);
+    }
+  };
 
   const handleSignOut = () => {
     // Clear local storage
@@ -74,7 +91,7 @@ const ManageUser = () => {
                     </div>
                   </div>
                   <p className="text-4xl flex-shrink-0 ml-auto font-semibold">
-                    2
+                    {adminCount}
                   </p>
                 </div>
                 <Link to="/admin/manage-user/admin">

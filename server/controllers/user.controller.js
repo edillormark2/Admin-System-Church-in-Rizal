@@ -20,3 +20,18 @@ export const getUserAdmin = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+// Fetching user admin count
+export const getAdminCount = async (req, res) => {
+  try {
+    // Get the count of admin users from the database
+    const count = await Admin.countDocuments();
+
+    // Send the count in the response
+    res.status(200).json({ count });
+  } catch (error) {
+    // If an error occurs, send a 500 response with the error message
+    console.error("Error fetching admin count:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

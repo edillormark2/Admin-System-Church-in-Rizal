@@ -19,7 +19,7 @@ mongoose
 
 const adminloginSchema = new mongoose.Schema({
   userID: {
-    type: String,
+    type: Number,
     unique: true
   },
   name: {
@@ -27,8 +27,7 @@ const adminloginSchema = new mongoose.Schema({
     required: true
   },
   role: {
-    type: String,
-    required: true
+    type: String
   },
   username: {
     type: String,
