@@ -44,8 +44,13 @@ const adminloginSchema = new mongoose.Schema({
       "https://qph.cf2.quoracdn.net/main-qimg-6d72b77c81c9841bd98fc806d702e859-lq"
   },
   dateCreated: {
-    type: Date,
-    default: Date.now
+    type: String,
+    default: () =>
+      new Date().toLocaleDateString("en-US", {
+        month: "short",
+        day: "2-digit",
+        year: "numeric"
+      })
   }
 });
 
@@ -55,15 +60,6 @@ adminloginSchema.pre("save", async function(next) {
   const count = await Admin.countDocuments();
   this.userID = (count + 1000).toString();
   next();
-});
-
-// Virtual property to format dateCreated
-adminloginSchema.virtual("formattedDateCreated").get(function() {
-  return this.dateCreated.toLocaleDateString("en-US", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric"
-  });
 });
 
 const Admin = mongoose.model("Admin", adminloginSchema);

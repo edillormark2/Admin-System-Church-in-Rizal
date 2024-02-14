@@ -5,11 +5,14 @@ import Sidebar from "../../../components/AdminComponents/Sidebar";
 import { useStateContext } from "../../../redux/ContextProvider";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import { DataGrid } from "@mui/x-data-grid";
+import { TextField } from "@mui/material"; // Import TextField component
 import axios from "axios";
+import { IoMdSearch } from "react-icons/io";
 
 const ManageAdmin = () => {
   const { activeMenu } = useStateContext();
   const [adminData, setAdminData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
 
   useEffect(() => {
     fetchAdminData();
@@ -31,6 +34,18 @@ const ManageAdmin = () => {
     }
   };
 
+  const handleSearchChange = e => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredAdminData = adminData.filter(admin =>
+    Object.values(admin).some(
+      value =>
+        typeof value === "string" &&
+        value.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  );
+
   const breadcrumbLinks = [
     { to: "/admin/dashboard", label: "Home" },
     { to: "/admin/manage-user", label: "Manage User" },
@@ -38,36 +53,36 @@ const ManageAdmin = () => {
   ];
 
   const columns = [
-    { field: "userID", headerName: "User ID", width: 90 },
+    { field: "userID", headerName: "User ID", width: 150 },
     {
       field: "name",
       headerName: "Name",
       width: 150,
-      editable: true
+      editable: false
     },
     {
       field: "username",
       headerName: "Username",
       width: 150,
-      editable: true
+      editable: false
     },
     {
       field: "password",
       headerName: "Password",
-      width: 110,
-      editable: true
+      width: 150,
+      editable: false
     },
     {
       field: "role",
       headerName: "Role",
-      width: 110,
-      editable: true
+      width: 150,
+      editable: false
     },
     {
       field: "dateCreated",
       headerName: "Date Created",
-      width: 150, // Adjust width as needed
-      editable: true
+      width: 150,
+      editable: false
     }
   ];
 
@@ -96,14 +111,32 @@ const ManageAdmin = () => {
               </h1>
               <Breadcrumbs links={breadcrumbLinks} />
             </div>
-            <div>
-              <DataGrid
-                rows={adminData}
-                columns={columns}
-                pageSize={5}
-                checkboxSelection
-                disableSelectionOnClick
-              />
+            <div className="bg-white p-4 rounded-lg shadow-xl relative">
+              <div className="absolute top-0 right-0 mt-4 mr-4">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    className="form-control bg-white p-2 rounded-lg border border-gray-300 text-sm dark:bg-half-transparent dark:text-gray-200"
+                  />
+                  <div className="absolute inset-y-0 right-2 flex items-center pr-2 cursor-pointer text-gray-500 ">
+                    <IoMdSearch />
+                  </div>
+                </div>
+              </div>
+              <div
+                className={`mt-12 ${filteredAdminData.length === 0
+                  ? "h-44"
+                  : ""}`}
+              >
+                <DataGrid
+                  rows={filteredAdminData}
+                  columns={columns}
+                  pageSize={5}
+                />
+              </div>
             </div>
           </div>
         </div>
