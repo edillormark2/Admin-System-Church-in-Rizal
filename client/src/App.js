@@ -21,6 +21,7 @@ import InvDashboard from "./pages/InventoryPages/InvDashboard";
 import ReportsDashboard from "./pages/ReportsPages/ReportsDashboard";
 import ReportsRoute from "./components/UserSecureRoute/ReportsRoute";
 import ManageUser from "./pages/AdminPages/ManageUser";
+import ProfileSettings from "./pages/AdminPages/ProfileSettings";
 import BibleReadingReg from "./pages/AdminPages/Registration/BibleReadingReg";
 
 const customToastStyle = {
@@ -60,6 +61,10 @@ const App = () => {
                 <Route path="userlogs" element={<UserLogs />} />
                 <Route path="dashboard" element={<AdminDashboard />} />
                 <Route path="manage-user" element={<ManageUser />} />
+                <Route
+                  path="user-profile-settings"
+                  element={<ProfileSettings />}
+                />
                 {/*Reg pages */}
                 <Route path="reg/bible-reading" element={<BibleReadingReg />} />
               </Route>

@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { useStateContext } from "../../redux/ContextProvider";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
 import PopupBody from "./PopupBody"; // Import your PopupBody component here
+import ClickAwayListener from "@mui/material/ClickAwayListener"; // Import ClickAwayListener
 
 const NavButton = ({ customFunc, icon, color, dotColor }) =>
   <Tooltip arrow title="Menu" placement="bottom" TransitionComponent={Fade}>
@@ -27,8 +28,12 @@ const Navbar = () => {
   const [menuClicked, setMenuClicked] = useState("");
   const [screenSize, setScreenSize] = useState(window.innerWidth);
   const { currentUser } = useSelector(state => state.user);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [anchor, setAnchor] = useState(null);
   const [placement, setPlacement] = React.useState("bottom-end");
+
+  const open = Boolean(anchor);
+  const id = open ? "simple-popper" : undefined;
 
   useEffect(() => {
     const handleResize = () => setScreenSize(window.innerWidth);
@@ -51,24 +56,20 @@ const Navbar = () => {
   };
 
   const handleClick = event => {
-    setAnchor(anchor ? null : event.currentTarget);
+    setIsPopupOpen(prev => !prev);
+    setAnchor(event.currentTarget);
   };
 
   const handleClose = () => {
-    setAnchor(null);
+    setIsPopupOpen(false);
   };
-
-  const [anchor, setAnchor] = React.useState(null);
-
-  const open = Boolean(anchor);
-  const id = open ? "simple-popper" : undefined;
 
   return (
     <div className="flex justify-between p-2 relative bg-white   drop-shadow-xl rounded-lg px-1 md:px-8">
       <NavButton
         title="Menu"
         customFunc={handleActiveMenu}
-        color="black" // You can set your color here
+        color={currentColor}
         icon={<AiOutlineMenu />}
       />
 
@@ -87,16 +88,19 @@ const Navbar = () => {
           </p>
         </div>
       </div>
-
-      <BasePopup
-        id={id}
-        open={Boolean(anchor)}
-        anchor={anchor}
-        placement={placement}
-        offset={4}
-      >
-        <PopupBody closePopup={handleClose} />
-      </BasePopup>
+      {isPopupOpen &&
+        <ClickAwayListener onClickAway={handleClose}>
+          <BasePopup
+            id={id}
+            open={Boolean(anchor)}
+            anchor={anchor}
+            placement={placement}
+            offset={4}
+            onClose={handleClose}
+          >
+            <PopupBody closePopup={handleClose} />
+          </BasePopup>
+        </ClickAwayListener>}
     </div>
   );
 };
