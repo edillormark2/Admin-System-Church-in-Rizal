@@ -69,7 +69,10 @@ const App = () => {
                 {/*Reg pages */}
                 <Route path="reg/bible-reading" element={<BibleReadingReg />} />
                 {/*Manage User pages */}
-                <Route path="manage-user/admin" element={<ManageAdmin />} />
+                <Route
+                  path="manage-user/admin-user"
+                  element={<ManageAdmin />}
+                />
               </Route>
 
               {/* Registration routes */}

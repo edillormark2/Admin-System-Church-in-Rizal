@@ -3,22 +3,30 @@ import "../Admin.css";
 import Navbar from "../../../components/AdminComponents/Navbar";
 import Sidebar from "../../../components/AdminComponents/Sidebar";
 import { useStateContext } from "../../../redux/ContextProvider";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { signOut } from "../../../redux/user/userSlice";
-import { useNavigate } from "react-router-dom";
 import { MdAdminPanelSettings } from "react-icons/md";
 import { FaClipboardList } from "react-icons/fa";
 import { MdInventory } from "react-icons/md";
 import { ImStatsBars } from "react-icons/im";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import axios from "axios";
+import { GoKebabHorizontal } from "react-icons/go";
+import UserPopup from "../../../components/AdminComponents/UserPopup";
+import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 
 const ManageUser = () => {
   const { activeMenu } = useStateContext();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [adminCount, setAdminCount] = useState(0);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [anchor, setAnchor] = useState(null);
+  const [adminPopupOpen, setAdminPopupOpen] = useState(false);
+  const [regPopupOpen, setRegPopupOpen] = useState(false);
+  const [inventoryPopupOpen, setInventoryPopupOpen] = useState(false);
+  const [reportsPopupOpen, setReportsPopupOpen] = useState(false);
+  const [placement, setPlacement] = React.useState("bottom-end");
+
+  const open = Boolean(anchor);
+  const id = open ? "simple-popper" : undefined;
 
   useEffect(() => {
     fetchAdminCount();
@@ -34,16 +42,13 @@ const ManageUser = () => {
       console.error("Error fetching admin count:", error);
     }
   };
+  const handleClick = (event, popupSetter) => {
+    popupSetter(true);
+    setAnchor(event.currentTarget);
+  };
 
-  const handleSignOut = () => {
-    // Clear local storage
-    localStorage.clear();
-
-    // Dispatch signOut action
-    dispatch(signOut());
-
-    // Navigate to admin login page after signout
-    navigate("/adminlogin");
+  const handleClose = popupSetter => {
+    popupSetter(false);
   };
 
   const breadcrumbLinks = [
@@ -76,8 +81,15 @@ const ManageUser = () => {
             </div>
             <div className="flex flex-col md:flex-row gap-2 mx-0 md:mx-2 lg:mx-4 xl:mx-16">
               {/*Admin card */}
-              <div className="flex flex-col bg-white drop-shadow-xl rounded-md p-4 m-2 w-full border border-gray-300  hover:border-blue-300 hover:bg-blue-50">
-                <div className="flex items-center ">
+              <div className="flex flex-col bg-white drop-shadow-xl rounded-md px-4 py-2 m-2 w-full border border-gray-300  hover:border-blue-300 hover:bg-blue-50">
+                <div className="flex justify-end">
+                  <GoKebabHorizontal
+                    onClick={event => handleClick(event, setAdminPopupOpen)}
+                    size={37}
+                    className="cursor-pointer  hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
+                  />
+                </div>
+                <div className="flex items-center mb-4 ">
                   <div className="flex items-center justify-start">
                     <MdAdminPanelSettings
                       size={60}
@@ -90,20 +102,40 @@ const ManageUser = () => {
                       <p className="text-sm text-slate-500">Active User</p>
                     </div>
                   </div>
-                  <p className="text-4xl flex-shrink-0 ml-auto font-semibold">
+                  <p className="text-4xl flex-shrink-0 ml-auto font-semibold p-2">
                     {adminCount}
                   </p>
                 </div>
-                <Link to="/admin/manage-user/admin">
-                  <div className="bg-white border border-primary p-1 rounded-md text-black hover:bg-primary hover:text-white mt-8 text-center">
-                    View User
-                  </div>
-                </Link>
+                {adminPopupOpen &&
+                  <ClickAwayListener
+                    onClickAway={() => handleClose(setAdminPopupOpen)}
+                  >
+                    <BasePopup
+                      id={id}
+                      open={Boolean(anchor)}
+                      anchor={anchor}
+                      placement={placement}
+                      offset={4}
+                      onClose={() => handleClose(setAdminPopupOpen)}
+                    >
+                      <UserPopup
+                        onClose={() => handleClose(setAdminPopupOpen)}
+                        buttonLink="/admin/manage-user/admin-user"
+                      />
+                    </BasePopup>
+                  </ClickAwayListener>}
               </div>
 
               {/* Registration card */}
               <div className="flex flex-col bg-white drop-shadow-xl rounded-md p-4 m-2 w-full  border border-gray-300 hover:border-blue-300  hover:bg-blue-50">
-                <div className="flex items-center ">
+                <div className="flex justify-end">
+                  <GoKebabHorizontal
+                    onClick={event => handleClick(event, setRegPopupOpen)}
+                    size={37}
+                    className="cursor-pointer  hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
+                  />
+                </div>
+                <div className="flex items-center mb-4">
                   <div className="flex items-center justify-start">
                     <FaClipboardList
                       size={60}
@@ -116,20 +148,42 @@ const ManageUser = () => {
                       <p className="text-sm text-slate-500">Active User</p>
                     </div>
                   </div>
-                  <p className="text-4xl flex-shrink-0 ml-auto font-semibold">
+                  <p className="text-4xl flex-shrink-0 ml-auto font-semibold p-2">
                     7
                   </p>
                 </div>
-                <button className="bg-white border border-primary p-1 rounded-md text-black hover:bg-primary hover:text-white mt-8">
-                  View User
-                </button>
+                {regPopupOpen &&
+                  <ClickAwayListener
+                    onClickAway={() => handleClose(setRegPopupOpen)}
+                  >
+                    <BasePopup
+                      id={id}
+                      open={Boolean(anchor)}
+                      anchor={anchor}
+                      placement={placement}
+                      offset={4}
+                      onClose={() => handleClose(setRegPopupOpen)}
+                    >
+                      <UserPopup
+                        closePopup={() => handleClose(setRegPopupOpen)}
+                        buttonLink="/admin/manage-user/registration-user"
+                      />
+                    </BasePopup>
+                  </ClickAwayListener>}
               </div>
             </div>
 
             <div className="flex flex-col md:flex-row gap-2 mx-0 md:mx-2 lg:mx-4 xl:mx-16">
               {/* Inventory card */}
               <div className="flex flex-col bg-white drop-shadow-xl rounded-md p-4 m-2 w-full  border border-gray-300 hover:border-blue-300  hover:bg-blue-50">
-                <div className="flex items-center ">
+                <div className="flex justify-end">
+                  <GoKebabHorizontal
+                    onClick={event => handleClick(event, setInventoryPopupOpen)}
+                    size={37}
+                    className="cursor-pointer  hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
+                  />
+                </div>
+                <div className="flex items-center mb-4">
                   <div className="flex items-center justify-start">
                     <MdInventory
                       size={60}
@@ -142,17 +196,39 @@ const ManageUser = () => {
                       <p className="text-sm text-slate-500">Active User</p>
                     </div>
                   </div>
-                  <p className="text-4xl flex-shrink-0 ml-auto font-semibold">
+                  <p className="text-4xl flex-shrink-0 ml-auto font-semibold p-2">
                     5
                   </p>
                 </div>
-                <button className="bg-white border border-primary p-1 rounded-md text-black hover:bg-primary hover:text-white mt-8">
-                  View User
-                </button>
+                {inventoryPopupOpen &&
+                  <ClickAwayListener
+                    onClickAway={() => handleClose(setInventoryPopupOpen)}
+                  >
+                    <BasePopup
+                      id={id}
+                      open={Boolean(anchor)}
+                      anchor={anchor}
+                      placement={placement}
+                      offset={4}
+                      onClose={() => handleClose(setInventoryPopupOpen)}
+                    >
+                      <UserPopup
+                        onClose={() => handleClose(setInventoryPopupOpen)}
+                        buttonLink="/admin/manage-user/inventory-user"
+                      />
+                    </BasePopup>
+                  </ClickAwayListener>}
               </div>
 
               {/* Reports card */}
               <div className="flex flex-col bg-white drop-shadow-xl rounded-md p-4 m-2 w-full border border-gray-300  hover:border-blue-300 hover:bg-blue-50">
+                <div className="flex justify-end">
+                  <GoKebabHorizontal
+                    onClick={event => handleClick(event, setReportsPopupOpen)}
+                    size={37}
+                    className="cursor-pointer  hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
+                  />
+                </div>
                 <div className="flex items-center ">
                   <div className="flex items-center justify-start">
                     <ImStatsBars
@@ -166,13 +242,28 @@ const ManageUser = () => {
                       <p className="text-sm text-slate-500">Active User</p>
                     </div>
                   </div>
-                  <p className="text-4xl flex-shrink-0 ml-auto font-semibold">
+                  <p className="text-4xl flex-shrink-0 ml-auto font-semibold p-2">
                     5
                   </p>
                 </div>
-                <button className="bg-white border border-primary p-1 rounded-md text-black hover:bg-primary hover:text-white mt-8">
-                  View User
-                </button>
+                {reportsPopupOpen &&
+                  <ClickAwayListener
+                    onClickAway={() => handleClose(setReportsPopupOpen)}
+                  >
+                    <BasePopup
+                      id={id}
+                      open={Boolean(anchor)}
+                      anchor={anchor}
+                      placement={placement}
+                      offset={4}
+                      onClose={() => handleClose(setReportsPopupOpen)}
+                    >
+                      <UserPopup
+                        onClose={() => handleClose(setReportsPopupOpen)}
+                        buttonLink="/admin/manage-user/reports-user"
+                      />
+                    </BasePopup>
+                  </ClickAwayListener>}
               </div>
             </div>
           </div>

@@ -5,8 +5,8 @@ import Fade from "@mui/material/Fade";
 import { useSelector } from "react-redux";
 import { useStateContext } from "../../redux/ContextProvider";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
-import PopupBody from "./PopupBody"; // Import your PopupBody component here
-import ClickAwayListener from "@mui/material/ClickAwayListener"; // Import ClickAwayListener
+import PopupBody from "./PopupBody"; 
+import ClickAwayListener from "@mui/material/ClickAwayListener"; 
 
 const NavButton = ({ customFunc, icon, color, dotColor }) =>
   <Tooltip arrow title="Menu" placement="bottom" TransitionComponent={Fade}>

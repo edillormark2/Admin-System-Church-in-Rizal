@@ -10,6 +10,9 @@ import axios from "axios";
 import { IoMdSearch } from "react-icons/io";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import { gridClasses } from "@mui/x-data-grid";
+import { TiUserAdd } from "react-icons/ti";
+import Tooltip from "@mui/material/Tooltip";
+import Fade from "@mui/material/Fade";
 
 const ManageAdmin = () => {
   const { activeMenu } = useStateContext();
@@ -186,11 +189,23 @@ const ManageAdmin = () => {
             <Navbar />
           </div>
           <div className="my-20 md:my-16 mx-4 md:mx-16 ">
-            <div className="mb-12">
+            <div className="mb-4">
               <h1 className="text-2xl font-semibold mb-2 ">
                 Manage User Admin
               </h1>
               <Breadcrumbs links={breadcrumbLinks} />
+            </div>
+            <div className="flex justify-end mr-0 xl:mr-20 mb-8 ">
+              <Tooltip
+                arrow
+                title="Add User Admin"
+                placement="bottom"
+                TransitionComponent={Fade}
+              >
+                <div className=" bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70">
+                  <TiUserAdd size={22} className="text-white" />
+                </div>
+              </Tooltip>
             </div>
             <div className="bg-white p-4 rounded-lg shadow-xl relative min-w-[50%] max-w-[100%] xl:max-w-[95%]">
               <div className="absolute top-0 right-0 mt-4 mr-4">
@@ -223,7 +238,7 @@ const ManageAdmin = () => {
                   }}
                   rows={filteredAdminData}
                   columns={columns}
-                  pageSize={5}
+                  pageSize={10}
                 />
               </div>
             </div>
