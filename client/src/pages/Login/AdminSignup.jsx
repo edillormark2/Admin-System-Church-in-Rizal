@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -20,7 +19,6 @@ const AdminSignup = () => {
   });
 
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   const handleChange = e => {
     const { id, value } = e.target;

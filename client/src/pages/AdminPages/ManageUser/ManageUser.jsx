@@ -67,14 +67,14 @@ const ManageUser = () => {
               <Sidebar />
             </div>}
         <div
-          className={` bg-white min-h-screen w-full ${activeMenu
+          className={` bg-gray-50 min-h-screen w-full ${activeMenu
             ? "md:ml-60"
             : "flex-1"}`}
         >
           <div className="fixed md:static navbar w-full md:w-11/12 mx-auto rounded-md">
             <Navbar />
           </div>
-          <div className="my-20 md:my-16 mx-10 md:mx-16 ">
+          <div className="my-28 md:my-16 mx-10 md:mx-16 ">
             <div className="mb-12">
               <h1 className="text-2xl font-semibold mb-2 ">Manage User</h1>
               <Breadcrumbs links={breadcrumbLinks} />
@@ -86,7 +86,7 @@ const ManageUser = () => {
                   <GoKebabHorizontal
                     onClick={event => handleClick(event, setAdminPopupOpen)}
                     size={37}
-                    className="cursor-pointer  hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
+                    className="cursor-pointer text-gray-500 hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
                   />
                 </div>
                 <div className="flex items-center mb-4 ">
@@ -132,7 +132,7 @@ const ManageUser = () => {
                   <GoKebabHorizontal
                     onClick={event => handleClick(event, setRegPopupOpen)}
                     size={37}
-                    className="cursor-pointer  hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
+                    className="cursor-pointer text-gray-500 hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
                   />
                 </div>
                 <div className="flex items-center mb-4">
@@ -180,7 +180,7 @@ const ManageUser = () => {
                   <GoKebabHorizontal
                     onClick={event => handleClick(event, setInventoryPopupOpen)}
                     size={37}
-                    className="cursor-pointer  hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
+                    className="cursor-pointer text-gray-500 hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
                   />
                 </div>
                 <div className="flex items-center mb-4">
@@ -226,7 +226,7 @@ const ManageUser = () => {
                   <GoKebabHorizontal
                     onClick={event => handleClick(event, setReportsPopupOpen)}
                     size={37}
-                    className="cursor-pointer  hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
+                    className="cursor-pointer text-gray-500 hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
                   />
                 </div>
                 <div className="flex items-center ">

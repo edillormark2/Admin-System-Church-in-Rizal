@@ -24,6 +24,7 @@ import ManageUser from "./pages/AdminPages/ManageUser/ManageUser";
 import ProfileSettings from "./pages/AdminPages/ProfileSettings";
 import BibleReadingReg from "./pages/AdminPages/Registration/BibleReadingReg";
 import ManageAdmin from "./pages/AdminPages/ManageUser/ManageAdmin";
+import EditAdmin from "./pages/AdminPages/ManageUser/EditAdmin";
 
 const customToastStyle = {
   position: "top-right",
@@ -72,6 +73,10 @@ const App = () => {
                 <Route
                   path="manage-user/admin-user"
                   element={<ManageAdmin />}
+                />
+                <Route
+                  path="manage-user/admin-user/:userID"
+                  element={<EditAdmin />}
                 />
               </Route>
 
