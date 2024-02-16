@@ -153,7 +153,7 @@ const EditAdmin = () => {
             ? "md:ml-60"
             : "flex-1"}`}
         >
-          <div className="fixed md:static navbar w-full md:w-11/12 mx-auto rounded-md">
+          <div className="fixed md:static navbar w-full md:w-11/12 mx-auto rounded-md z-10">
             <Navbar />
           </div>
           <div className="my-28 md:my-16 mx-4 md:mx-16 ">
@@ -161,7 +161,7 @@ const EditAdmin = () => {
               <h1 className="text-2xl font-semibold mb-2 ">Edit Admin User</h1>
               <Breadcrumbs links={breadcrumbLinks} />
             </div>
-            <div className="flex flex-col md:w-full max-w-screen-xl mx-8 md:mx-4 items-center mt-4">
+            <div className="flex flex-col w-full mx-8 md:mx-4 items-center mt-4">
               <div className="relative">
                 <input
                   type="file"
@@ -177,7 +177,7 @@ const EditAdmin = () => {
                       : currentUser && currentUser.profilePicture
                   }
                   alt="profile"
-                  className="flex items-center w-36 h-36 cursor-pointer rounded-full object-cover"
+                  className="flex items-center w-36 h-36 rounded-full object-cover"
                   key={formData.profilePicture || Math.random()} // Change the key dynamically
                 />
 

@@ -1,16 +1,18 @@
 import { useState } from "react";
 import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
+import Modal from '@mui/joy/Modal';
 import ModalClose from "@mui/joy/ModalClose";
 import Divider from "@mui/material/Divider";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useMediaQuery } from "@mui/material";
 
 const CreateAdminPopup = props => {
   const { openCreatePopup, setOpenCreatePopup, onUserCreated } = props;
   const [showPassword, setShowPassword] = useState(false);
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -31,7 +33,6 @@ const CreateAdminPopup = props => {
     setSignupError("");
   };
 
-  // Your existing handleSubmit function with modifications
   const handleSubmit = async e => {
     e.preventDefault();
     if (
@@ -67,20 +68,26 @@ const CreateAdminPopup = props => {
       }
     }
   };
+
   const handleClosePopup = () => {
     setOpenCreatePopup(false);
   };
-  const isMobile = window.innerWidth <= 768 && window.innerHeight <= 1024;
+
+  // Check if screen size is mobile
+  const isMobile = useMediaQuery("(max-width:600px)");
+
+  // Dynamic styles for modal
   const dynamicPopupStyle = {
     position: "absolute",
-    top: isMobile ? "48%" : "40%",
+    top: "50%",
     left: "50%",
-    width: "min(90%, 600px)", // Adjust the maximum width as needed (600px in this example)
-    height: isMobile ? "83%" : "min(68%, 75%)", // Adjust the maximum height as needed (1500px in this example)
     transform: "translate(-50%, -50%)",
     overflowY: "auto",
-    p: 4
+    p: 4,
+    width: "auto",
+    width: "min(90%, 600px)"
   };
+
   return (
     <div>
       <Modal open={openCreatePopup} onClose={handleClosePopup}>

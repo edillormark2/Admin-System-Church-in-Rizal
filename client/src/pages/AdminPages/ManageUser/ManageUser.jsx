@@ -67,7 +67,7 @@ const ManageUser = () => {
               <Sidebar />
             </div>}
         <div
-          className={` bg-gray-50 min-h-screen w-full ${activeMenu
+          className={` bg-gray-100 min-h-screen w-full md:flex-1 md:overflow-hidden ${activeMenu
             ? "md:ml-60"
             : "flex-1"}`}
         >

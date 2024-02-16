@@ -208,9 +208,9 @@ const ManageAdmin = ({ userID }) => {
               <Sidebar />
             </div>}
         <div
-          className={`bg-gray-100 min-h-screen w-full md:flex-1 md:overflow-hidden ${activeMenu
-            ? "md:ml-64"
-            : ""}`}
+          className={` bg-gray-100 min-h-screen w-full md:flex-1 md:overflow-hidden ${activeMenu
+            ? "md:ml-60"
+            : "flex-1"}`}
         >
           <div className="fixed md:static navbar w-full md:w-11/12 mx-auto rounded-md z-10">
             <Navbar />
