@@ -5,8 +5,8 @@ import Fade from "@mui/material/Fade";
 import { useSelector } from "react-redux";
 import { useStateContext } from "../../redux/ContextProvider";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
-import PopupBody from "./PopupBody"; 
-import ClickAwayListener from "@mui/material/ClickAwayListener"; 
+import PopupBody from "./PopupBody";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 
 const NavButton = ({ customFunc, icon, color, dotColor }) =>
   <Tooltip arrow title="Menu" placement="bottom" TransitionComponent={Fade}>
@@ -46,7 +46,7 @@ const Navbar = () => {
 
   useEffect(
     () => {
-      setActiveMenu(screenSize > 1350);
+      setActiveMenu(screenSize > 1180);
     },
     [screenSize, setActiveMenu]
   );

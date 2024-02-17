@@ -17,7 +17,7 @@ import UserDeletePopup from "../../../components/AdminComponents/UserDeletePopup
 import { Link } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
 
-const ManageAdmin = ({ userID }) => {
+const ManageAdmin = () => {
   const { activeMenu, currentColor } = useStateContext();
   const [adminData, setAdminData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -60,7 +60,7 @@ const ManageAdmin = ({ userID }) => {
     setTimeout(async () => {
       await fetchAdminData();
       setIsLoading(false);
-    }, 1500);
+    }, 1000);
   };
 
   const handleUserDeleted = async () => {
@@ -68,7 +68,7 @@ const ManageAdmin = ({ userID }) => {
     setTimeout(async () => {
       await fetchAdminData();
       setIsLoading(false);
-    }, 1500);
+    }, 1000);
   };
 
   const handleSearchChange = e => {
@@ -177,7 +177,7 @@ const ManageAdmin = ({ userID }) => {
             <Link to={`/admin/manage-user/admin-user/${params.row.userID}`}>
               <button
                 style={{
-                  backgroundColor: "#03C9D7",
+                  backgroundColor: "#1A97F5",
                   display: "inline-flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -239,7 +239,7 @@ const ManageAdmin = ({ userID }) => {
             </div>}
         <div
           className={` bg-gray-100 min-h-screen w-full md:flex-1 md:overflow-hidden ${activeMenu
-            ? "md:ml-60"
+            ? "lg:ml-60"
             : "flex-1"}`}
         >
           <div className="fixed md:static navbar w-full md:w-11/12 mx-auto rounded-md z-10">

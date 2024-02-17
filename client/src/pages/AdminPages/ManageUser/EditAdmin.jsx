@@ -74,7 +74,7 @@ const EditAdmin = () => {
           setLoading(false);
           setTimeout(() => {
             setShowLoader(false);
-          }, 1500);
+          }, 1000);
         }
       };
 
@@ -158,7 +158,7 @@ const EditAdmin = () => {
             </div>}
         <div
           className={` bg-gray-100 min-h-screen w-full ${activeMenu
-            ? "md:ml-60"
+            ? "lg:ml-60"
             : "flex-1"}`}
         >
           <div className="fixed md:static navbar w-full md:w-11/12 mx-auto rounded-md z-10">
@@ -180,7 +180,7 @@ const EditAdmin = () => {
                   <p>Loading</p>
                 </div>
               : <div>
-                  <div className="mb-4">
+                  <div className="mb-12 md:mb-4">
                     <h1 className="text-2xl font-semibold mb-2 ">
                       Edit Admin User
                     </h1>
@@ -211,7 +211,7 @@ const EditAdmin = () => {
                     </div>
                     <p className="text-sm self-center mt-4">
                       {imageError
-                        ? <span className="text-red-700">
+                        ? <span className="text-red-500">
                             Error uploading image (file size must be less than 3
                             MB)
                           </span>
@@ -222,22 +222,22 @@ const EditAdmin = () => {
                                 className="block h-1 bg-blue-500"
                                 style={{
                                   width: `${imagePercent}%`,
-                                  transition: "width 0.3s ease-out" // Smooth transition effect
+                                  transition: "width 0.3s ease-out"
                                 }}
                               />
                             </span>
                           : imagePercent === 100 &&
                             image &&
                             image.size <= 3 * 1024 * 1024
-                            ? <span className="text-green-700 font-semibold">
+                            ? <span className="text-green-500 font-semibold">
                                 Image uploaded successfully
                               </span>
                             : null}
                     </p>
 
-                    <div className="my-8 w-full md:w-5/6">
+                    <div className="my-8 w-full lg:w-1/2 mx-auto">
                       <form onSubmit={handleSubmit}>
-                        <div className="flex flex-col md:flex-row gap-4 mb-4">
+                        <div className="flex flex-col gap-4 mb-4">
                           <div className="w-full">
                             <p className="text-sm mb-2">Name</p>
                             <input
@@ -261,7 +261,7 @@ const EditAdmin = () => {
                             />
                           </div>
                         </div>
-                        <div className="flex flex-col md:flex-row gap-4 mb-4">
+                        <div className="flex flex-col gap-4 mb-4">
                           <div className="w-full">
                             <p className="text-sm mb-2">Username</p>
                             <input
@@ -295,10 +295,10 @@ const EditAdmin = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="flex justify-center">
+                        <div className="flex justify-center ">
                           <button
                             disabled={loading}
-                            className="bg-primary text-white p-3 rounded-lg w-52  hover:opacity-85 disabled:opacity-80 text-sm sm:text-base mt-4"
+                            className="bg-primary w-full text-white p-3 rounded-lg w-52  hover:opacity-85 disabled:opacity-80 text-sm sm:text-base mt-4"
                           >
                             {loading ? "Loading..." : "Update"}
                           </button>

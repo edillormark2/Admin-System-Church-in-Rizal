@@ -8,7 +8,7 @@
   z-index: 1001; /* Ensure navbar is above content and sidebar */
 }
 
-@media screen and (max-width: 720px) {
+@media screen and (max-width: 850px) {
   .sidebar {
     z-index: 10000000; /* Ensure sidebar is above everything on smaller screens */
   }
