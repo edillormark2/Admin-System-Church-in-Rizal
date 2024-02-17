@@ -101,3 +101,25 @@ export const getUserAdminByID = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+// Delete admin user by userID
+export const deleteUserAdmin = async (req, res) => {
+  try {
+    const { userID } = req.params; // Get userID from request parameters
+
+    // Find the admin user by userID and delete it
+    const deletedAdmin = await Admin.findOneAndDelete({ userID: userID });
+
+    // If admin user with given userID is not found, send 404 response
+    if (!deletedAdmin) {
+      return res.status(404).json({ message: "Admin user not found" });
+    }
+
+    // If admin user is found and deleted successfully, send success message in the response
+    res.status(200).json({ message: "Admin user deleted successfully" });
+  } catch (error) {
+    // If an error occurs, send a 500 response with the error message
+    console.error("Error deleting admin user:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

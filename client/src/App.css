@@ -1,8 +1,10 @@
 @import url("https://cdn.syncfusion.com/ej2/material.css");
 @import url('https://fonts.cdnfonts.com/css/ds-digital');
 
+/* Vertical scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
+  height: 8px;
 }
 ::-webkit-scrollbar-thumb {
   background-color: rgb(175, 175, 175);

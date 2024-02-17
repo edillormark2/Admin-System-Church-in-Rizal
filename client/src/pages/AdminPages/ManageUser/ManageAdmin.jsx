@@ -13,13 +13,20 @@ import { TiUserAdd } from "react-icons/ti";
 import Tooltip from "@mui/material/Tooltip";
 import Fade from "@mui/material/Fade";
 import CreateAdminPopup from "../../../components/AdminComponents/CreateAdminPopup";
+import UserDeletePopup from "../../../components/AdminComponents/UserDeletePopup";
 import { Link } from "react-router-dom";
+import { ThreeDots } from "react-loader-spinner";
 
 const ManageAdmin = ({ userID }) => {
-  const { activeMenu } = useStateContext();
+  const { activeMenu, currentColor } = useStateContext();
   const [adminData, setAdminData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [openCreatePopup, setOpenCreatePopup] = useState(false);
+  const [openDeleteUserPopup, setOpenDeleteUserPopup] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [showLoader, setShowLoader] = useState(true);
 
   useEffect(() => {
     fetchAdminData();
@@ -30,19 +37,38 @@ const ManageAdmin = ({ userID }) => {
       const response = await axios.get(
         "http://localhost:3000/server/users/useradmin/users"
       );
-      // Map the admin data to include the userID as the id
       const formattedAdminData = response.data.map(admin => ({
         ...admin,
         id: admin.userID
       }));
       setAdminData(formattedAdminData);
+      setLoading(false);
+      setTimeout(() => {
+        setShowLoader(false);
+      }, 1000);
     } catch (error) {
       console.error("Error fetching admin data:", error);
+      setLoading(false);
+      setTimeout(() => {
+        setShowLoader(false);
+      }, 1000);
     }
   };
 
-  const handleUserCreated = () => {
-    fetchAdminData();
+  const handleUserCreated = async () => {
+    setIsLoading(true);
+    setTimeout(async () => {
+      await fetchAdminData();
+      setIsLoading(false);
+    }, 1500);
+  };
+
+  const handleUserDeleted = async () => {
+    setIsLoading(true);
+    setTimeout(async () => {
+      await fetchAdminData();
+      setIsLoading(false);
+    }, 1500);
   };
 
   const handleSearchChange = e => {
@@ -65,6 +91,11 @@ const ManageAdmin = ({ userID }) => {
 
   const handleOpenCreate = () => {
     setOpenCreatePopup(true);
+  };
+
+  const handleDeleteUserPopup = userID => {
+    setSelectedUser(userID);
+    setOpenDeleteUserPopup(true);
   };
 
   const columns = [
@@ -159,7 +190,6 @@ const ManageAdmin = ({ userID }) => {
                 }}
               >
                 <AiOutlineEdit
-                  title="Edit"
                   style={{
                     color: "white",
                     fontSize: "18px"
@@ -175,6 +205,9 @@ const ManageAdmin = ({ userID }) => {
             TransitionComponent={Fade}
           >
             <button
+              onClick={() => {
+                handleDeleteUserPopup(params.row.userID);
+              }}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -187,10 +220,7 @@ const ManageAdmin = ({ userID }) => {
                 backgroundColor: "#DE3163"
               }}
             >
-              <AiOutlineDelete
-                title="Delete"
-                style={{ color: "white", fontSize: "18px" }}
-              />
+              <AiOutlineDelete style={{ color: "white", fontSize: "18px" }} />
             </button>
           </Tooltip>
         </div>
@@ -216,72 +246,109 @@ const ManageAdmin = ({ userID }) => {
             <Navbar />
           </div>
           <div className="my-28 md:my-16 mx-4 md:mx-16 overflow-x-auto">
-            <div className="mb-4">
-              <h1 className="text-2xl font-semibold mb-2">Manage User Admin</h1>
-              <Breadcrumbs links={breadcrumbLinks} />
-            </div>
-            <div className="flex justify-end mb-8">
-              <Tooltip
-                arrow
-                title="Add User Admin"
-                placement="bottom"
-                TransitionComponent={Fade}
-              >
-                <div
-                  onClick={handleOpenCreate}
-                  className=" bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70"
-                >
-                  <TiUserAdd size={22} className="text-white" />
+            {showLoader
+              ? <div className="p-16 mt-60 flex flex-col items-center">
+                  <ThreeDots
+                    visible={true}
+                    height="80"
+                    width="80"
+                    color="#85929E"
+                    radius="9"
+                    ariaLabel="three-dots-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                  />
+                  <p>Loading</p>
                 </div>
-              </Tooltip>
-            </div>
-            <CreateAdminPopup
-              openCreatePopup={openCreatePopup}
-              setOpenCreatePopup={setOpenCreatePopup}
-              onUserCreated={handleUserCreated}
-            />
-            <div>
-              <div className="bg-white p-4  rounded-xl drop-shadow-xl">
-                <div className="absolute top-0 right-0 mt-4 mr-4">
-                  <div className="relative">
-                    <input
-                      type="text"
-                      placeholder="Search..."
-                      value={searchQuery}
-                      onChange={handleSearchChange}
-                      className="form-control bg-white p-2 rounded-lg border border-gray-300 text-sm dark:bg-half-transparent dark:text-gray-200"
-                    />
-                    <div className="absolute inset-y-0 right-2 flex items-center pr-2 cursor-pointer text-gray-500">
-                      <IoMdSearch />
+              : <div>
+                  <div className="mb-4">
+                    <h1 className="text-2xl font-semibold mb-2">
+                      Manage User Admin
+                    </h1>
+                    <Breadcrumbs links={breadcrumbLinks} />
+                  </div>
+                  <div className="flex justify-end mb-8">
+                    <Tooltip
+                      arrow
+                      title="Add User Admin"
+                      placement="bottom"
+                      TransitionComponent={Fade}
+                    >
+                      <div
+                        onClick={handleOpenCreate}
+                        className=" bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70"
+                      >
+                        <TiUserAdd size={22} className="text-white" />
+                      </div>
+                    </Tooltip>
+                  </div>
+                  <CreateAdminPopup
+                    openCreatePopup={openCreatePopup}
+                    setOpenCreatePopup={setOpenCreatePopup}
+                    onUserCreated={handleUserCreated}
+                  />
+                  <UserDeletePopup
+                    openDeleteUserPopup={openDeleteUserPopup}
+                    setOpenDeleteUserPopup={setOpenDeleteUserPopup}
+                    userID={selectedUser}
+                    onUserDeleted={handleUserDeleted}
+                  />
+                  <div>
+                    <div className="bg-white p-4  rounded-xl drop-shadow-xl">
+                      <div className="absolute top-0 right-0 mt-4 mr-4">
+                        <div className="relative">
+                          <input
+                            type="text"
+                            placeholder="Search..."
+                            value={searchQuery}
+                            onChange={handleSearchChange}
+                            className="form-control bg-white p-2 md:p-2 rounded-lg border border-gray-300 text-xs md:text-sm dark:bg-half-transparent dark:text-gray-200"
+                          />
+                          <div className="absolute inset-y-0 right-2 flex items-center pr-2 cursor-pointer text-gray-500">
+                            <IoMdSearch />
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        className={`max-w-full overflow-x-auto mt-12 ${filteredAdminData.length ===
+                        0
+                          ? "h-44"
+                          : ""}`}
+                      >
+                        {isLoading
+                          ? <div className="p-16 flex flex-col items-center">
+                              <ThreeDots
+                                visible={true}
+                                height="80"
+                                width="80"
+                                color="#85929E"
+                                radius="9"
+                                ariaLabel="three-dots-loading"
+                                wrapperStyle={{}}
+                                wrapperClass=""
+                              />
+                            </div>
+                          : <DataGrid
+                              sx={{
+                                [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]: {
+                                  outline: "none"
+                                },
+                                [`& .${gridClasses.columnHeader}:focus, & .${gridClasses.columnHeader}:focus-within`]: {
+                                  outline: "none"
+                                }
+                              }}
+                              initialState={{
+                                ...filteredAdminData.initialState,
+                                pagination: { paginationModel: { pageSize: 6 } }
+                              }}
+                              rows={filteredAdminData}
+                              columns={columns}
+                              pageSizeOptions={[6, 20, 50]}
+                            />}
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div
-                  className={`max-w-full overflow-x-auto mt-12 ${filteredAdminData.length ===
-                  0
-                    ? "h-44"
-                    : ""}`}
-                >
-                  <DataGrid
-                    sx={{
-                      [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]: {
-                        outline: "none"
-                      },
-                      [`& .${gridClasses.columnHeader}:focus, & .${gridClasses.columnHeader}:focus-within`]: {
-                        outline: "none"
-                      }
-                    }}
-                    initialState={{
-                      ...filteredAdminData.initialState,
-                      pagination: { paginationModel: { pageSize: 6 } }
-                    }}
-                    rows={filteredAdminData}
-                    columns={columns}
-                    pageSizeOptions={[6, 20, 50]}
-                  />
-                </div>
-              </div>
-            </div>
+                </div>}
           </div>
         </div>
       </div>

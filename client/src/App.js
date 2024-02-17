@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { Flip } from "react-toastify";
 import "./App.css";
 import AdminDashboard from "./pages/AdminPages/AdminDashboard";
 import UserLogs from "./pages/AdminPages/UserLogs";
@@ -34,7 +35,8 @@ const customToastStyle = {
   pauseOnHover: true,
   draggable: true,
   progress: undefined,
-  theme: "colored"
+  theme: "colored",
+  transition: Flip
 };
 
 const App = () => {
