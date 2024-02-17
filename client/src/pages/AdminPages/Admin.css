@@ -18,3 +18,14 @@
 .e-quick-popup-wrapper.e-device {
   z-index: 1000000 !important; /* Adjust other components as needed */
 }
+
+.h5-after {
+  content: "";
+  height: 30px;
+  width: 3px;
+  position: absolute;
+  left: -20px; /* Adjusted left position */
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); /* Center vertically */
+  border-radius: 0 3px 3px 0;
+}

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Box from "@mui/material/Box";
-import Modal from '@mui/joy/Modal';
+import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
 import Divider from "@mui/material/Divider";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
@@ -59,6 +59,13 @@ const CreateAdminPopup = props => {
       toast.success("Account created successfully");
       props.onUserCreated();
       setOpenCreatePopup(false);
+      // Reset form data to empty values
+      setFormData({
+        name: "",
+        role: "Admin",
+        username: "",
+        password: ""
+      });
     } catch (error) {
       setLoading(false);
       if (error.response && error.response.status === 409) {
@@ -141,7 +148,7 @@ const CreateAdminPopup = props => {
                 <p className="text-sm font-semibold">Password</p>
                 <div className="relative">
                   <input
-                    type={showPassword ? "text" : "password"}
+                    type="text"
                     placeholder=""
                     id="password"
                     onChange={handleChange}
@@ -151,11 +158,7 @@ const CreateAdminPopup = props => {
                   <div
                     className="absolute inset-y-0 right-2 flex items-center pr-2 cursor-pointer text-gray-500 "
                     onClick={togglePasswordVisibility}
-                  >
-                    {showPassword
-                      ? <AiFillEye size={23} />
-                      : <AiFillEyeInvisible size={23} />}
-                  </div>
+                  />
                 </div>
                 <div className="flex justify-end gap-2 mt-4">
                   <button

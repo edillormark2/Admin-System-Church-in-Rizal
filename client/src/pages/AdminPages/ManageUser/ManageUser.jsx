@@ -44,13 +44,13 @@ const ManageUser = () => {
       setLoading(false);
       setTimeout(() => {
         setShowLoader(false);
-      }, 1000);
+      }, 800);
     } catch (error) {
       console.error("Error fetching admin count:", error);
       setLoading(false);
       setTimeout(() => {
         setShowLoader(false);
-      }, 1000);
+      }, 800);
     }
   };
 

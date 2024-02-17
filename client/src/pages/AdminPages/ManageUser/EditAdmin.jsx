@@ -20,6 +20,7 @@ import { app } from "../../../firebase";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUserSuccess } from "../../../redux/user/userSlice";
 import { ThreeDots } from "react-loader-spinner";
+import { Divider } from "@mui/material";
 
 const EditAdmin = () => {
   const { activeMenu } = useStateContext();
@@ -164,7 +165,7 @@ const EditAdmin = () => {
           <div className="fixed md:static navbar w-full md:w-11/12 mx-auto rounded-md z-10">
             <Navbar />
           </div>
-          <div className="my-28 md:my-16 mx-4 md:mx-16 ">
+          <div className="mt-28 md:mt-16 mx-4 md:mx-16 ">
             {showLoader // Conditional rendering to show loader spinner or the edit page
               ? <div className="p-16 mt-60 flex flex-col items-center">
                   <ThreeDots
@@ -186,59 +187,71 @@ const EditAdmin = () => {
                     </h1>
                     <Breadcrumbs links={breadcrumbLinks} />
                   </div>
-                  <div className="flex flex-col  mx-8 md:mx-4 items-center mt-4">
-                    <div className="relative">
-                      <input
-                        type="file"
-                        ref={fileRef}
-                        hidden
-                        accept="image/*"
-                        onChange={e => setImage(e.target.files[0])}
-                      />
-                      <img
-                        src={formData.profilePicture}
-                        alt="profile"
-                        className="flex items-center w-36 h-36 rounded-full object-cover"
-                        key={formData.profilePicture} // Change the key dynamically
-                      />
+                  <div className="flex flex-col lg:flex-row  mx-8 md:mx-4 mt-8">
+                    <div className="flex flex-col ml-0 lg:ml-20 mt-8 items-center drop-shadow-xl ">
+                      <div className="relative">
+                        <input
+                          type="file"
+                          ref={fileRef}
+                          hidden
+                          accept="image/*"
+                          onChange={e => setImage(e.target.files[0])}
+                        />
+                        <img
+                          src={formData.profilePicture}
+                          alt="profile"
+                          className="flex items-center w-48 h-48 rounded-full object-cover"
+                          key={formData.profilePicture} // Change the key dynamically
+                        />
 
-                      <button
-                        onClick={() => fileRef.current.click()}
-                        className="absolute bottom-1 right-1 bg-gray-300 rounded-full p-2 text-gray-600 hover:bg-primary hover:text-white cursor-pointer"
-                      >
-                        <FaCamera size={20} />
-                      </button>
-                    </div>
-                    <p className="text-sm self-center mt-4">
-                      {imageError
-                        ? <span className="text-red-500">
-                            Error uploading image (file size must be less than 3
-                            MB)
-                          </span>
-                        : imagePercent > 0 && imagePercent < 100
-                          ? <span className="text-slate-700 dark:text-gray-200">
-                              Uploading: {imagePercent}%
-                              <span
-                                className="block h-1 bg-blue-500"
-                                style={{
-                                  width: `${imagePercent}%`,
-                                  transition: "width 0.3s ease-out"
-                                }}
-                              />
+                        <button
+                          onClick={() => fileRef.current.click()}
+                          className="absolute drop-shadow-lg bottom-1 right-3 bg-gray-300 rounded-full p-2 text-gray-600 hover:bg-primary hover:text-white cursor-pointer"
+                        >
+                          <FaCamera size={20} />
+                        </button>
+                      </div>
+                      <div className="text-sm self-center mt-4">
+                        {imageError
+                          ? <span className="text-red-500">
+                              Error uploading image (file size must be less than
+                              3 MB)
                             </span>
-                          : imagePercent === 100 &&
-                            image &&
-                            image.size <= 3 * 1024 * 1024
-                            ? <span className="text-green-500 font-semibold">
-                                Image uploaded successfully
+                          : imagePercent > 0 && imagePercent < 100
+                            ? <span className="text-slate-700 dark:text-gray-200">
+                                Uploading: {imagePercent}%
+                                <span
+                                  className="block h-1 bg-blue-500"
+                                  style={{
+                                    width: `${imagePercent}%`,
+                                    transition: "width 0.3s ease-out"
+                                  }}
+                                />
                               </span>
-                            : null}
-                    </p>
-
-                    <div className="my-8 w-full lg:w-1/2 mx-auto">
+                            : imagePercent === 100 &&
+                              image &&
+                              image.size <= 3 * 1024 * 1024
+                              ? <span className="text-green-500 font-semibold">
+                                  Image uploaded successfully
+                                </span>
+                              : null}
+                      </div>
+                      <div className="flex justify-center font-semibold mt-4">
+                        {formData.name}
+                      </div>
+                      <div className="flex justify-center text-sm text-gray-600 ">
+                        {formData.role}
+                      </div>
+                    </div>
+                    <div className="my-8 w-full lg:w-4/6 ml-0 lg:ml-32  ">
                       <form onSubmit={handleSubmit}>
-                        <div className="flex flex-col gap-4 mb-4">
-                          <div className="w-full">
+                        <h5 className="text-xl relative  font-semibold mb-2">
+                          User Information
+                          <span className="h5-after bg-primary" />
+                        </h5>
+                        <Divider />
+                        <div className="flex flex-col  gap-4 mt-4 mb-4">
+                          <div className="w-full ">
                             <p className="text-sm mb-2">Name</p>
                             <input
                               type="text"
@@ -297,8 +310,9 @@ const EditAdmin = () => {
                         </div>
                         <div className="flex justify-center ">
                           <button
+                            type="submit"
                             disabled={loading}
-                            className="bg-primary w-full text-white p-3 rounded-lg w-52  hover:opacity-85 disabled:opacity-80 text-sm sm:text-base mt-4"
+                            className="bg-primary w-full text-white p-3 rounded-lg hover:opacity-85 disabled:opacity-80 text-sm sm:text-base mt-4"
                           >
                             {loading ? "Loading..." : "Update"}
                           </button>
