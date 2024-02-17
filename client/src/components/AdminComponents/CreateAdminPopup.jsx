@@ -69,7 +69,7 @@ const CreateAdminPopup = props => {
     } catch (error) {
       setLoading(false);
       if (error.response && error.response.status === 409) {
-        toast.error("Email already exists");
+        toast.error("Username already exists");
       } else {
         toast.error("Error submitting data");
       }

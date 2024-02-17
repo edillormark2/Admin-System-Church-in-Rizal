@@ -187,9 +187,9 @@ const EditAdmin = () => {
                     </h1>
                     <Breadcrumbs links={breadcrumbLinks} />
                   </div>
-                  <div className="flex flex-col lg:flex-row  mx-8 md:mx-4 mt-8">
-                    <div className="flex flex-col ml-0 lg:ml-20 mt-8 items-center drop-shadow-xl ">
-                      <div className="relative">
+                  <div className="flex flex-col lg:flex-row  mx-8 md:mx-0 mt-8">
+                    <div className="flex flex-col ml-0 mt-8 items-center bg-none lg:bg-white w-full lg:w-2/6 shadow-none lg:shadow-lg h-auto mb-4 rounded-xl ">
+                      <div className="relative my-8">
                         <input
                           type="file"
                           ref={fileRef}
@@ -200,7 +200,7 @@ const EditAdmin = () => {
                         <img
                           src={formData.profilePicture}
                           alt="profile"
-                          className="flex items-center w-48 h-48 rounded-full object-cover"
+                          className="flex items-center w-44 h-44 rounded-full object-cover"
                           key={formData.profilePicture} // Change the key dynamically
                         />
 
@@ -243,7 +243,7 @@ const EditAdmin = () => {
                         {formData.role}
                       </div>
                     </div>
-                    <div className="my-8 w-full lg:w-4/6 ml-0 lg:ml-32  ">
+                    <div className="my-8 w-full lg:w-4/6 ml-0 lg:ml-12  ">
                       <form onSubmit={handleSubmit}>
                         <h5 className="text-xl relative  font-semibold mb-2">
                           User Information

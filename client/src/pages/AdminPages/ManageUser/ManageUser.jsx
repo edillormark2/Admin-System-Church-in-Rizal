@@ -59,8 +59,8 @@ const ManageUser = () => {
     setAnchor(event.currentTarget);
   };
 
-  const handleClose = popupSetter => {
-    popupSetter(false);
+  const handleClose = () => {
+    setAdminPopupOpen(false);
   };
 
   const breadcrumbLinks = [
@@ -139,19 +139,21 @@ const ManageUser = () => {
                         </p>
                       </div>
                       {adminPopupOpen &&
-                        <BasePopup
-                          id={id}
-                          open={Boolean(anchor)}
-                          anchor={anchor}
-                          placement={placement}
-                          offset={4}
-                          onClose={() => handleClose(setAdminPopupOpen)}
-                        >
-                          <UserPopup
-                            onClose={() => handleClose(setAdminPopupOpen)}
-                            buttonLink="/admin/manage-user/admin-user"
-                          />
-                        </BasePopup>}
+                        <ClickAwayListener onClickAway={handleClose}>
+                          <BasePopup
+                            id={id}
+                            open={Boolean(anchor)}
+                            anchor={anchor}
+                            placement={placement}
+                            offset={4}
+                            onClose={handleClose}
+                          >
+                            <UserPopup
+                              onClose={handleClose}
+                              buttonLink="/admin/manage-user/admin-user"
+                            />
+                          </BasePopup>
+                        </ClickAwayListener>}
                     </div>
 
                     {/* Registration card */}
