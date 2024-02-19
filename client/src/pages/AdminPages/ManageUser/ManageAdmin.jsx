@@ -129,6 +129,14 @@ const ManageAdmin = () => {
       minWidth: 120
     },
     {
+      field: "locality",
+      headerName: "Locality",
+      width: 150,
+      editable: false,
+      flex: 1,
+      minWidth: 120
+    },
+    {
       field: "username",
       headerName: "Username",
       width: 150,

@@ -18,7 +18,6 @@ import {
 } from "firebase/storage";
 import { app } from "../../../firebase";
 import { useSelector, useDispatch } from "react-redux";
-import { updateUserSuccess } from "../../../redux/user/userSlice";
 import { ThreeDots } from "react-loader-spinner";
 import { Divider } from "@mui/material";
 
@@ -32,6 +31,7 @@ const EditAdmin = () => {
   const [isImageChanged, setIsImageChanged] = useState(false);
   const { currentUser } = useSelector(state => state.user);
   const dispatch = useDispatch();
+  const [isDataChanged, setIsDataChanged] = useState(false);
 
   const breadcrumbLinks = [
     { to: "/admin/dashboard", label: "Home" },
@@ -47,7 +47,8 @@ const EditAdmin = () => {
 
   const [signupError, setSignupError] = useState("");
   const [formData, setFormData] = useState({
-    name: "",
+    name: currentUser?.name || "",
+    locality: "",
     role: "Admin",
     username: "",
     password: ""
@@ -56,33 +57,31 @@ const EditAdmin = () => {
   const [loading, setLoading] = useState(true);
   const [showLoader, setShowLoader] = useState(true);
 
-  useEffect(
-    () => {
-      const fetchUserData = async () => {
-        try {
-          const response = await axios.get(
-            `http://localhost:3000/server/users/useradmin/${userID}`
-          );
-          const userData = response.data;
-          setFormData(userData);
-          setLoading(false);
+  const fetchUserData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3000/server/users/useradmin/${userID}`);
+      setFormData({
+        ...formData,
+        name: response.data.name,
+        locality: response.data.locality,
+        profilePicture: response.data.profilePicture,
+        role: response.data.role,
+        dateCreated: response.data.dateCreated,
+        username: response.data.username,
+        password: response.data.password,
+      });
+      setLoading(false);
           setTimeout(() => {
             setShowLoader(false);
           }, 1000);
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-          toast.error("Failed to fetch user data. Please try again later.");
-          setLoading(false);
-          setTimeout(() => {
-            setShowLoader(false);
-          }, 1000);
-        }
-      };
+    } catch (error) {
+      console.error("Error fetching user data: ", error);
+    }
+  };
 
-      fetchUserData(); // Start fetching data as soon as the component mounts
-    },
-    [userID]
-  );
+  useEffect(() => {
+    fetchUserData();
+  }, []);
 
   useEffect(
     () => {
@@ -121,24 +120,39 @@ const EditAdmin = () => {
     );
   };
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { id, value } = e.target;
+
+    // Only set isDataChanged to true if the value is different from the original value
+    if (formData[id] !== value) {
+      setIsDataChanged(true);
+    }
+
     setFormData({ ...formData, [id]: value });
-    setSignupError("");
   };
 
+  
   const handleSubmit = async e => {
     e.preventDefault();
 
+     // Check if data or image has changed
+     if (!isDataChanged && !isImageChanged) {
+      toast.info("You haven't changed anything.");
+      return;
+    }
+
     try {
       setLoading(true);
+      const updateData = { ...formData };
       const response = await axios.put(
         `http://localhost:3000/server/users/useradmin/update/${userID}`,
-        formData
+        updateData
       );
       if (response.status === 200) {
+
         toast.success("User data updated successfully!");
       }
+      await fetchUserData();
       setLoading(false);
     } catch (error) {
       console.error("Error updating user data:", error);
@@ -146,6 +160,9 @@ const EditAdmin = () => {
       setLoading(false);
     }
   };
+
+  
+  
 
   return (
     <div className="bg-gray-200 min-h-screen">
@@ -250,7 +267,7 @@ const EditAdmin = () => {
                           <span className="h5-after bg-primary" />
                         </h5>
                         <Divider />
-                        <div className="flex flex-col  gap-4 mt-4 mb-4">
+                        <div className="flex flex-row  gap-4 mt-4 mb-4">
                           <div className="w-full ">
                             <p className="text-sm mb-2">Name</p>
                             <input
@@ -258,11 +275,24 @@ const EditAdmin = () => {
                               placeholder=""
                               id="name"
                               onChange={handleChange}
-                              value={formData.name}
+                              value={formData.name || ""}
                               className="form-control bg-slate-50 p-3 rounded-lg border border-gray-300 text-sm sm:text-base dark:bg-half-transparent dark:text-gray-200"
                             />
                           </div>
-                          <div className="w-full">
+                          <div className="w-full ">
+                            <p className="text-sm mb-2">Locality</p>
+                            <input
+                              type="text"
+                              placeholder=""
+                              id="locality"
+                              onChange={handleChange}
+                              value={formData.locality}
+                              className="form-control bg-slate-50 p-3 rounded-lg border border-gray-300 text-sm sm:text-base dark:bg-half-transparent dark:text-gray-200"
+                            />
+                          </div>          
+                        </div>
+                        <div className="flex flex-row gap-4 mt-4 mb-4">
+                        <div className="w-full">
                             <p className="text-sm mb-2">Role</p>
                             <input
                               type="text"
@@ -270,7 +300,19 @@ const EditAdmin = () => {
                               id="role"
                               value={formData.role} // Making it view-only
                               readOnly // Making it view-only
-                              className="form-control bg-slate-50 p-3 rounded-lg border border-gray-300 text-sm sm:text-base dark:bg-half-transparent dark:text-gray-200"
+                              className="form-read-only bg-slate-50 p-3 rounded-lg border border-gray-300 text-sm sm:text-base text-gray-500"
+                            />
+                          </div>
+                          <div className="w-full ">
+                            <p className="text-sm mb-2">Account Created</p>
+                            <input
+                              type="text"
+                              placeholder=""
+                              id="dateCreated"
+                              onChange={handleChange}
+                              value={formData.dateCreated}
+                              readOnly 
+                              className="form-read-only bg-slate-50 p-3 rounded-lg border  border-gray-300 text-sm sm:text-base text-gray-500 "
                             />
                           </div>
                         </div>

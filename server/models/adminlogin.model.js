@@ -26,6 +26,10 @@ const adminloginSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  locality: {
+    type: String,
+    required: true
+  },
   role: {
     type: String
   },

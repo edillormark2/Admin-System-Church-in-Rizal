@@ -20,6 +20,7 @@ const CreateAdminPopup = props => {
   const [signupError, setSignupError] = useState("");
   const [formData, setFormData] = useState({
     name: "",
+    locality: "",
     role: "Admin", // Setting default value to "Admin"
     username: "",
     password: ""
@@ -37,6 +38,7 @@ const CreateAdminPopup = props => {
     e.preventDefault();
     if (
       !formData.name ||
+      !formData.locality ||
       !formData.role ||
       !formData.username ||
       !formData.password
@@ -62,6 +64,7 @@ const CreateAdminPopup = props => {
       // Reset form data to empty values
       setFormData({
         name: "",
+        locality: "",
         role: "Admin",
         username: "",
         password: ""
@@ -125,6 +128,15 @@ const CreateAdminPopup = props => {
                   id="name"
                   onChange={handleChange}
                   value={formData.name}
+                  className="form-control bg-white p-3 rounded-lg border border-gray-300 text-sm sm:text-base "
+                />
+                <p className="text-sm font-semibold">Locality</p>
+                <input
+                  type="text"
+                  placeholder=""
+                  id="locality"
+                  onChange={handleChange}
+                  value={formData.locality}
                   className="form-control bg-white p-3 rounded-lg border border-gray-300 text-sm sm:text-base "
                 />
                 <p className="text-sm font-semibold">Role</p>

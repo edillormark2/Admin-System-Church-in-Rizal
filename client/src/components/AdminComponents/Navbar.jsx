@@ -31,6 +31,8 @@ const Navbar = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const [placement, setPlacement] = React.useState("bottom-end");
+  const [userData, setUserData] = useState({});
+  const { profilePicture, name } = userData;
 
   const open = Boolean(anchor);
   const id = open ? "simple-popper" : undefined;
@@ -41,6 +43,30 @@ const Navbar = () => {
     handleResize();
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(
+    () => {
+      // Fetch user data when component mounts
+      fetchUserData(currentUser.userID);
+    },
+    [currentUser.userID]
+  );
+
+  const fetchUserData = async userID => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/server/users/useradmin/${userID}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch user data");
+      }
+      const userData = await response.json();
+      setUserData(userData);
+    } catch (error) {
+      console.error(error);
+      // Handle error
+    }
+  };
 
   const { currentColor, activeMenu, setActiveMenu } = useStateContext();
 
@@ -79,12 +105,12 @@ const Navbar = () => {
           className="flex items-center gap-2 cursor-pointer p-2 rounded-xl hover:bg-gray-200"
         >
           <img
-            src={currentUser.profilePicture}
+            src={profilePicture}
             alt="profile"
             className="h-8 w-8 rounded-full object-cover"
           />
           <p className="hidden md:block">
-            {currentUser.name}
+            {name}
           </p>
         </div>
       </div>

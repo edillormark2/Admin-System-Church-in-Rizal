@@ -40,7 +40,7 @@ export const getAdminCount = async (req, res) => {
 export const updateUserAdmin = async (req, res) => {
   try {
     const { userID } = req.params; // Get userID from request parameters
-    const { name, username, password, profilePicture } = req.body; // Get updated data from request body
+    const { name, locality, username, password, profilePicture } = req.body; // Get updated data from request body
 
     // Check if userID is provided
     if (!userID) {
@@ -59,6 +59,7 @@ export const updateUserAdmin = async (req, res) => {
       { userID: userID },
       {
         name: name,
+        locality: locality,
         username: username,
         password: password,
         profilePicture: profilePicture

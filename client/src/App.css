@@ -17,7 +17,6 @@
 .form-control {
   display: block;
   width: 100%;
-  color: #293240;
   background-clip: padding-box;
   border: 1px solid #bfc9ca;
   -webkit-appearance: none;
@@ -31,4 +30,22 @@
   border-color: #3498db;
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+.form-read-only {
+  display: block;
+  width: 100%;
+  background-clip: padding-box;
+  border: 1px solid #bfc9ca;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 6px;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-read-only:focus {
+  border-color: #bfc9ca;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
 }
