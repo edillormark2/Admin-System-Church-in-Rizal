@@ -44,7 +44,7 @@ const Navbar = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(
+  /*useEffect(
     () => {
       // Fetch user data when component mounts
       fetchUserData(currentUser.userID);
@@ -52,7 +52,7 @@ const Navbar = () => {
     [currentUser.userID]
   );
 
-  const fetchUserData = async userID => {
+ const fetchUserData = async userID => {
     try {
       const response = await fetch(
         `http://localhost:3000/server/users/useradmin/${userID}`
@@ -66,7 +66,7 @@ const Navbar = () => {
       console.error(error);
       // Handle error
     }
-  };
+  };*/
 
   const { currentColor, activeMenu, setActiveMenu } = useStateContext();
 
@@ -105,12 +105,12 @@ const Navbar = () => {
           className="flex items-center gap-2 cursor-pointer p-2 rounded-xl hover:bg-gray-200"
         >
           <img
-            src={profilePicture}
+            src={currentUser.profilePicture}
             alt="profile"
             className="h-8 w-8 rounded-full object-cover"
           />
           <p className="hidden md:block">
-            {name}
+            {currentUser.name}
           </p>
         </div>
       </div>
