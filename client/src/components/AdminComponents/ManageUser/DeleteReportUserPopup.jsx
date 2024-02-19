@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
-const DeletePopup = props => {
+const DeleteReportUserPopup = props => {
   const {
     openDeleteUserPopup,
     setOpenDeleteUserPopup,
@@ -28,7 +28,7 @@ const DeletePopup = props => {
     try {
       // Make DELETE request to delete user based on userID
       await axios.delete(
-        `http://localhost:3000/server/users/useradmin/delete/${userID}`
+        `http://localhost:3000/server/users/userreport/delete/${userID}`
       );
       toast.success("User deleted successfully");
       setOpenDeleteUserPopup(false);
@@ -40,7 +40,7 @@ const DeletePopup = props => {
   };
 
   return (
-    <div className="bg-white dark-bg-[#42464D]">
+    <div className="bg-white">
       <Modal open={openDeleteUserPopup} onClose={handleClosePopup}>
         <ModalDialog variant="outlined" role="alertdialog">
           <DialogTitle style={{ justifyContent: "center" }}>
@@ -72,4 +72,4 @@ const DeletePopup = props => {
   );
 };
 
-export default DeletePopup;
+export default DeleteReportUserPopup;

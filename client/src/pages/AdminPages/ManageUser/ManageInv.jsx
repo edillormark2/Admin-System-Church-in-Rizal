@@ -12,12 +12,12 @@ import { gridClasses } from "@mui/x-data-grid";
 import { TiUserAdd } from "react-icons/ti";
 import Tooltip from "@mui/material/Tooltip";
 import Fade from "@mui/material/Fade";
-import CreateAdminPopup from "../../../components/AdminComponents/ManageUser/CreateAdminPopup";
-import UserDeletePopup from "../../../components/AdminComponents/ManageUser/DeleteAdminUserPopup";
 import { Link } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
+import CreateInvPopup from "../../../components/AdminComponents/ManageUser/CreateInvPopup";
+import DeleteInvUserPopup from "../../../components/AdminComponents/ManageUser/DeleteInvUserPopup";
 
-const ManageAdmin = () => {
+const ManageInv = () => {
   const { activeMenu, currentColor } = useStateContext();
   const [adminData, setAdminData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -35,7 +35,7 @@ const ManageAdmin = () => {
   const fetchAdminData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/server/users/useradmin/users"
+        "http://localhost:3000/server/users/userinv/users"
       );
       const formattedAdminData = response.data.map(admin => ({
         ...admin,
@@ -86,7 +86,7 @@ const ManageAdmin = () => {
   const breadcrumbLinks = [
     { to: "/admin/dashboard", label: "Home" },
     { to: "/admin/manage-user", label: "Manage User" },
-    { to: "", label: "Admin User" }
+    { to: "", label: "Inventory User" }
   ];
 
   const handleOpenCreate = () => {
@@ -182,7 +182,7 @@ const ManageAdmin = () => {
             placement="top"
             TransitionComponent={Fade}
           >
-            <Link to={`/admin/manage-user/admin-user/${params.row.userID}`}>
+            <Link to={`/admin/manage-user/inventory-user/${params.row.userID}`}>
               <button
                 style={{
                   backgroundColor: "#1A97F5",
@@ -271,7 +271,7 @@ const ManageAdmin = () => {
               : <div>
                   <div className="mb-4">
                     <h1 className="text-2xl font-semibold mb-2">
-                      Manage User Admin
+                      Manage User Inventory
                     </h1>
                     <Breadcrumbs links={breadcrumbLinks} />
                   </div>
@@ -290,12 +290,12 @@ const ManageAdmin = () => {
                       </div>
                     </Tooltip>
                   </div>
-                  <CreateAdminPopup
+                  <CreateInvPopup
                     openCreatePopup={openCreatePopup}
                     setOpenCreatePopup={setOpenCreatePopup}
                     onUserCreated={handleUserCreated}
                   />
-                  <UserDeletePopup
+                  <DeleteInvUserPopup
                     openDeleteUserPopup={openDeleteUserPopup}
                     setOpenDeleteUserPopup={setOpenDeleteUserPopup}
                     userID={selectedUser}
@@ -364,4 +364,4 @@ const ManageAdmin = () => {
   );
 };
 
-export default ManageAdmin;
+export default ManageInv;

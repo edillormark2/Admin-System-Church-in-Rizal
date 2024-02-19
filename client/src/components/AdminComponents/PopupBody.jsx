@@ -50,7 +50,7 @@ const PopupBody = ({ closePopup }) => {
       <Divider />
 
       <Link to="/admin/user-profile-settings">
-        <div className="flex items-center w-full p-2 bg-white hover:bg-gray-100 rounded-lg mb-1 mt-4 cursor-pointer">
+        <div className="flex items-center w-full p-2 bg-white hover:bg-gray-100 rounded-full mb-1 mt-4 cursor-pointer">
           <div className="p-2 bg-gray-300 rounded-full w-10 flex justify-center items-center">
             <IoSettingsOutline size={22} /> {/* Adjusted size of the icon */}
           </div>
@@ -60,7 +60,7 @@ const PopupBody = ({ closePopup }) => {
 
       <div
         onClick={handleSignOut}
-        className="flex items-center w-full p-2 bg-white hover:bg-gray-100 rounded-lg mb-1 cursor-pointer"
+        className="flex items-center w-full p-2 bg-white hover:bg-gray-100 rounded-full mb-1 cursor-pointer"
       >
         <div className="p-2 bg-gray-300 rounded-full w-10 flex justify-center items-center">
           <VscSignOut size={22} /> {/* Adjusted size of the icon */}

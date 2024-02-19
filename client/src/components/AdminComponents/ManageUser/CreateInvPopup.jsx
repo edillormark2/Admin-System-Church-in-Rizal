@@ -3,13 +3,12 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
 import Divider from "@mui/material/Divider";
-import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useMediaQuery } from "@mui/material";
 
-const CreateAdminPopup = props => {
+const CreateInvPopup = props => {
   const { openCreatePopup, setOpenCreatePopup, onUserCreated } = props;
   const [showPassword, setShowPassword] = useState(false);
 
@@ -21,7 +20,7 @@ const CreateAdminPopup = props => {
   const [formData, setFormData] = useState({
     name: "",
     locality: "",
-    role: "Admin", // Setting default value to "Admin"
+    role: "Inventory Dept", // Setting default value to "Admin"
     username: "",
     password: ""
   });
@@ -49,7 +48,7 @@ const CreateAdminPopup = props => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/server/login/adminsignup",
+        "http://localhost:3000/server/login/invsignup",
         formData,
         {
           headers: {
@@ -65,7 +64,7 @@ const CreateAdminPopup = props => {
       setFormData({
         name: "",
         locality: "",
-        role: "Admin",
+        role: "Inventory Dept",
         username: "",
         password: ""
       });
@@ -128,6 +127,7 @@ const CreateAdminPopup = props => {
                   id="name"
                   onChange={handleChange}
                   value={formData.name}
+                  autoComplete="off"
                   className="form-control bg-white p-3 rounded-lg border border-gray-300 text-sm sm:text-base "
                 />
                 <p className="text-sm font-semibold">Locality</p>
@@ -137,6 +137,7 @@ const CreateAdminPopup = props => {
                   id="locality"
                   onChange={handleChange}
                   value={formData.locality}
+                  autoComplete="off"
                   className="form-control bg-white p-3 rounded-lg border border-gray-300 text-sm sm:text-base "
                 />
                 <p className="text-sm font-semibold">Role</p>
@@ -146,7 +147,7 @@ const CreateAdminPopup = props => {
                   id="role"
                   value={formData.role} // Making it view-only
                   readOnly // Making it view-only
-                  className="form-control bg-white p-3 rounded-lg border border-gray-300 text-sm sm:text-base "
+                  className="form-read-only bg-white p-3 rounded-lg border border-gray-300 text-sm sm:text-base  text-gray-500"
                 />
                 <p className="text-sm font-semibold">Username</p>
                 <input
@@ -155,6 +156,7 @@ const CreateAdminPopup = props => {
                   id="username"
                   onChange={handleChange}
                   value={formData.username}
+                  autoComplete="off"
                   className="form-control bg-white p-3 rounded-lg border border-gray-300 text-sm sm:text-base "
                 />
                 <p className="text-sm font-semibold">Password</p>
@@ -165,6 +167,7 @@ const CreateAdminPopup = props => {
                     id="password"
                     onChange={handleChange}
                     value={formData.password}
+                    autoComplete="off"
                     className="form-control bg-white p-3  rounded-lg border border-gray-300 pr-10 text-sm sm:text-base "
                   />
                   <div
@@ -195,4 +198,4 @@ const CreateAdminPopup = props => {
   );
 };
 
-export default CreateAdminPopup;
+export default CreateInvPopup;

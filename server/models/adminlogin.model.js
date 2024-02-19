@@ -59,9 +59,23 @@ const adminloginSchema = new mongoose.Schema({
 
 // Middleware to generate userID before saving
 adminloginSchema.pre("save", async function(next) {
-  // Generate userID based on existing count + 1000
-  const count = await Admin.countDocuments();
-  this.userID = (count + 1000).toString();
+  if (!this.isNew) {
+    // If the document is not new (i.e., an update), skip generating the userID
+    return next();
+  }
+
+  // Find the maximum userID in the collection
+  const maxUserIDDoc = await Admin.findOne({}, {}, { sort: { userID: -1 } });
+
+  let maxUserID = 10000; // Default starting userID
+  if (maxUserIDDoc) {
+    // If there are existing documents, set the maximum userID
+    maxUserID = maxUserIDDoc.userID;
+  }
+
+  // Generate the new userID
+  this.userID = maxUserID + 1;
+
   next();
 });
 

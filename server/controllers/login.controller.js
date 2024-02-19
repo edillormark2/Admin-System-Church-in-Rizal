@@ -170,3 +170,106 @@ export const adminsignup = async (req, res) => {
       .json({ success: false, message: "Internal Server Error" });
   }
 };
+
+// Controller for registration signup
+export const regsignup = async (req, res) => {
+  const { name, locality, role, username, password } = req.body;
+
+  try {
+    // Check if admin already exists with the provided username
+    const existingReg = await Registration.findOne({ username });
+
+    if (existingReg) {
+      return res
+        .status(409)
+        .json({ success: false, message: "Username already exists" });
+    }
+
+    // Create a new user
+    const newReg = new Registration({
+      name,
+      locality,
+      role,
+      username,
+      password
+    });
+    await newReg.save();
+
+    return res
+      .status(201)
+      .json({ success: true, message: "User registered successfully" });
+  } catch (error) {
+    console.error("Error during reg signup:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+// Controller for inventory signup
+export const invsignup = async (req, res) => {
+  const { name, locality, role, username, password } = req.body;
+
+  try {
+    const existingInv = await Inventory.findOne({ username });
+
+    if (existingInv) {
+      return res
+        .status(409)
+        .json({ success: false, message: "Username already exists" });
+    }
+
+    // Create a new user
+    const newInv = new Inventory({
+      name,
+      locality,
+      role,
+      username,
+      password
+    });
+    await newInv.save();
+
+    return res
+      .status(201)
+      .json({ success: true, message: "User registered successfully" });
+  } catch (error) {
+    console.error("Error during inv signup:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+// Controller for report signup
+export const reportsignup = async (req, res) => {
+  const { name, locality, role, username, password } = req.body;
+
+  try {
+    const existingRep = await Reports.findOne({ username });
+
+    if (existingRep) {
+      return res
+        .status(409)
+        .json({ success: false, message: "Username already exists" });
+    }
+
+    // Create a new user
+    const newRep = new Reports({
+      name,
+      locality,
+      role,
+      username,
+      password
+    });
+    await newRep.save();
+
+    return res
+      .status(201)
+      .json({ success: true, message: "User registered successfully" });
+  } catch (error) {
+    console.error("Error during inv signup:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};

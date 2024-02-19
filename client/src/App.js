@@ -26,6 +26,12 @@ import ProfileSettings from "./pages/AdminPages/ProfileSettings";
 import BibleReadingReg from "./pages/AdminPages/Registration/BibleReadingReg";
 import ManageAdmin from "./pages/AdminPages/ManageUser/ManageAdmin";
 import EditAdmin from "./pages/AdminPages/ManageUser/EditAdmin";
+import ManageReg from "./pages/AdminPages/ManageUser/ManageReg";
+import EditReg from "./pages/AdminPages/ManageUser/EditReg";
+import ManageInv from "./pages/AdminPages/ManageUser/ManageInv";
+import EditInv from "./pages/AdminPages/ManageUser/EditInv";
+import ManageReport from "./pages/AdminPages/ManageUser/ManageReport";
+import EditReport from "./pages/AdminPages/ManageUser/EditReport";
 
 const customToastStyle = {
   position: "top-right",
@@ -77,8 +83,32 @@ const App = () => {
                   element={<ManageAdmin />}
                 />
                 <Route
+                  path="manage-user/registration-user"
+                  element={<ManageReg />}
+                />
+                <Route
+                  path="manage-user/inventory-user"
+                  element={<ManageInv />}
+                />
+                <Route
+                  path="manage-user/report-user"
+                  element={<ManageReport />}
+                />
+                <Route
                   path="manage-user/admin-user/:userID"
                   element={<EditAdmin />}
+                />
+                <Route
+                  path="manage-user/registration-user/:userID"
+                  element={<EditReg />}
+                />
+                <Route
+                  path="manage-user/inventory-user/:userID"
+                  element={<EditInv />}
+                />
+                <Route
+                  path="manage-user/report-user/:userID"
+                  element={<EditReport />}
                 />
               </Route>
 
