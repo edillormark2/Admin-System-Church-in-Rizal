@@ -2,6 +2,7 @@ import Admin from "../models/adminlogin.model.js";
 import Registration from "../models/registrationlogin.model.js";
 import Inventory from "../models/inventory.model.js";
 import Reports from "../models/reportslogin.model.js";
+import bcrypt from "bcryptjs"; // Import bcrypt for password hashing
 import jwt from "jsonwebtoken";
 
 // Fetching user admin data
@@ -411,5 +412,51 @@ export const getUserCounts = async (req, res) => {
   } catch (error) {
     console.error("Error fetching user counts:", error);
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+//Fetching current user data
+export const getCurrentUserData = async (req, res, next) => {
+  try {
+    const admin = await Admin.findById(req.params.id);
+
+    if (!admin) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(admin);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Updating current user profile
+export const updateCurrentUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    // Update the user
+    const updatedUser = await Admin.findOneAndUpdate(
+      { _id: id },
+      { $set: req.body },
+      { new: true } // Return the updated document
+    );
+
+    // Check if the user exists
+    if (!updatedUser) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    // Exclude password from the response
+    const { password, ...rest } = updatedUser._doc;
+
+    // Send success response with updated user data
+    res
+      .status(200)
+      .json({ success: true, message: "Updated successfully", user: rest });
+  } catch (error) {
+    next(error);
   }
 };

@@ -7,6 +7,7 @@ import { useStateContext } from "../../redux/ContextProvider";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
 import PopupBody from "./PopupBody";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
+import axios from "axios";
 
 const NavButton = ({ customFunc, icon, color, dotColor }) =>
   <Tooltip arrow title="Menu" placement="bottom" TransitionComponent={Fade}>
@@ -68,6 +69,39 @@ const Navbar = () => {
     }
   };*/
 
+  const [formData, setFormData] = useState({
+    name: currentUser?.name || "",
+    locality: currentUser?.locality || "",
+    role: currentUser?.role || "",
+    username: currentUser?.username || "",
+    password: currentUser?.password || ""
+  });
+
+
+  const fetchUserData = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/server/users/userCurrentUser/${currentUser._id}`
+      );
+      setFormData({
+        ...formData,
+        name: response.data.name,
+        locality: response.data.locality,
+        profilePicture: response.data.profilePicture,
+        role: response.data.role,
+        dateCreated: response.data.dateCreated,
+        username: response.data.username,
+        password: response.data.password
+      });
+    } catch (error) {
+      console.error("Error fetching user data: ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
   const { currentColor, activeMenu, setActiveMenu } = useStateContext();
 
   useEffect(
@@ -105,12 +139,12 @@ const Navbar = () => {
           className="flex items-center gap-2 cursor-pointer p-2 rounded-xl hover:bg-gray-200"
         >
           <img
-            src={currentUser.profilePicture}
+            src={formData.profilePicture }
             alt="profile"
             className="h-8 w-8 rounded-full object-cover"
           />
           <p className="hidden md:block">
-            {currentUser.name}
+            {formData.name }
           </p>
         </div>
       </div>

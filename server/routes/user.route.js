@@ -1,6 +1,8 @@
 import express from "express";
 import {
   getUserCounts,
+  getCurrentUserData,
+  updateCurrentUser,
   getUserAdmin,
   updateUserAdmin,
   getUserAdminByID,
@@ -18,9 +20,12 @@ import {
   updateUserReport,
   deleteUserReport
 } from "../controllers/user.controller.js";
+import { verifyToken } from "../utils/verifyUser.js";
 
 const router = express.Router();
 router.get("/userCounts", getUserCounts);
+router.get("/userCurrentUser/:id", getCurrentUserData);
+router.put("/userUpdateCurrentUser/:id", verifyToken, updateCurrentUser);
 router.get("/useradmin/users", getUserAdmin);
 router.get("/useradmin/:userID", getUserAdminByID);
 router.put("/useradmin/update/:userID", updateUserAdmin);

@@ -72,7 +72,7 @@ const App = () => {
                 <Route path="dashboard" element={<AdminDashboard />} />
                 <Route path="manage-user" element={<ManageUser />} />
                 <Route
-                  path="user-profile-settings"
+                  path="user-profile-settings/:userID"
                   element={<ProfileSettings />}
                 />
                 {/*Reg pages */}

@@ -152,6 +152,7 @@ const EditAdmin = () => {
 
         toast.success("User data updated successfully!");
       }
+      
       await fetchUserData();
       setLoading(false);
     } catch (error) {
@@ -183,7 +184,7 @@ const EditAdmin = () => {
             <Navbar />
           </div>
           <div className="mt-28 md:mt-16 mx-4 md:mx-16 ">
-            {showLoader // Conditional rendering to show loader spinner or the edit page
+            {showLoader
               ? <div className="p-16 mt-60 flex flex-col items-center">
                   <ThreeDots
                     visible={true}
@@ -220,7 +221,6 @@ const EditAdmin = () => {
                           className="flex items-center w-44 h-44 rounded-full object-cover"
                           key={formData.profilePicture} // Change the key dynamically
                         />
-
                         <button
                           onClick={() => fileRef.current.click()}
                           className="absolute drop-shadow-lg bottom-1 right-3 bg-gray-300 rounded-full p-2 text-gray-600 hover:bg-primary hover:text-white cursor-pointer"
