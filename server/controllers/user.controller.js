@@ -37,29 +37,33 @@ export const updateUserAdmin = async (req, res) => {
     }
 
     // Check if any of the required fields are missing
-    if (!name || !username || !password) {
+    if (!name || !username) {
       return res
         .status(400)
-        .json({ message: "Name, username, and password are required" });
+        .json({ message: "Name and username are required" });
     }
 
     // Find the admin user by userID
-    const admin = await Admin.findOneAndUpdate(
-      { userID: userID },
-      {
-        name: name,
-        locality: locality,
-        username: username,
-        password: password,
-        profilePicture: profilePicture
-      },
-      { new: true } // Return the updated document
-    );
+    let admin = await Admin.findOne({ userID });
 
     // If admin user with given userID is not found, send 404 response
     if (!admin) {
       return res.status(404).json({ message: "Admin user not found" });
     }
+
+    // Update password field if provided
+    if (password) {
+      admin.password = password;
+    }
+
+    // Update other fields if provided
+    admin.name = name;
+    admin.locality = locality;
+    admin.username = username;
+    admin.profilePicture = profilePicture;
+
+    // Save the updated admin user
+    await admin.save();
 
     // If admin user is found and updated successfully, send the updated admin user in the response
     res.status(200).json(admin);
@@ -425,37 +429,6 @@ export const getCurrentUserData = async (req, res, next) => {
     }
 
     res.status(200).json(admin);
-  } catch (error) {
-    next(error);
-  }
-};
-
-// Updating current user profile
-export const updateCurrentUser = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-
-    // Update the user
-    const updatedUser = await Admin.findOneAndUpdate(
-      { _id: id },
-      { $set: req.body },
-      { new: true } // Return the updated document
-    );
-
-    // Check if the user exists
-    if (!updatedUser) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
-    }
-
-    // Exclude password from the response
-    const { password, ...rest } = updatedUser._doc;
-
-    // Send success response with updated user data
-    res
-      .status(200)
-      .json({ success: true, message: "Updated successfully", user: rest });
   } catch (error) {
     next(error);
   }

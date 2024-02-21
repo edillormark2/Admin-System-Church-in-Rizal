@@ -45,7 +45,7 @@ const AdminLogin = () => {
       setLoginError("Password is required");
       return;
     }
-
+    dispatch(signInStart());
     try {
       const response = await axios.post(
         "http://localhost:3000/server/login/adminlogin",
@@ -57,16 +57,8 @@ const AdminLogin = () => {
         }
       );
 
-      // Ensure that the response data structure contains the necessary fields
-      const userData = {
-        ...response.data,
-        role: "admin" // Assuming role is always "admin" for this login endpoint
-      };
       localStorage.setItem("access_token", response.data.access_token);
-
-      // Dispatch signInSuccess action with user data
-      dispatch(signInSuccess(userData));
-
+      dispatch(signInSuccess(response.data));
       navigate("/admin/dashboard");
     } catch (error) {
       dispatch(signInFailure(error));

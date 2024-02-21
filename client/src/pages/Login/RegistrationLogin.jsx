@@ -45,16 +45,21 @@ const RegistrationLogin = () => {
       setLoginError("Password is required");
       return;
     }
-
+    dispatch(signInStart());
     try {
       const response = await axios.post(
         "http://localhost:3000/server/login/registrationlogin",
-        formData
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
       );
-      const userData = response.data; // Assuming the response contains user data
-      userData.role = "registration"; // Add role information, assuming it's 'admin'
-      dispatch(signInSuccess(userData));
-      navigate("/registration");
+
+      localStorage.setItem("access_token", response.data.access_token);
+      dispatch(signInSuccess(response.data));
+      navigate("/registration/dashboard");
     } catch (error) {
       dispatch(signInFailure(error));
       if (error.response && error.response.status === 401) {

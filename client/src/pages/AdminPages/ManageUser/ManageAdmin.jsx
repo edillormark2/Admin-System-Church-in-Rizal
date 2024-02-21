@@ -16,6 +16,7 @@ import CreateAdminPopup from "../../../components/AdminComponents/ManageUser/Cre
 import UserDeletePopup from "../../../components/AdminComponents/ManageUser/DeleteAdminUserPopup";
 import { Link } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
+import { HiDotsHorizontal } from "react-icons/hi";
 
 const ManageAdmin = () => {
   const { activeMenu, currentColor } = useStateContext();
@@ -150,7 +151,8 @@ const ManageAdmin = () => {
       width: 150,
       editable: false,
       flex: 1,
-      minWidth: 140
+      minWidth: 140,
+      renderCell: params => <span className="text-base">••••••••••••••</span>
     },
     {
       field: "role",

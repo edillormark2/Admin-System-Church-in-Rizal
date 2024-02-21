@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import "./Admin.css";
+import "./Reg.css";
 import {
   getDownloadURL,
   getStorage,
@@ -7,8 +7,8 @@ import {
   uploadBytesResumable
 } from "firebase/storage";
 import { app } from "../../firebase";
-import Navbar from "../../components/AdminComponents/Navbar";
-import Sidebar from "../../components/AdminComponents/Sidebar";
+import Navbar from "../../components/RegComponents/Navbar";
+import Sidebar from "../../components/RegComponents/Sidebar";
 import { useStateContext } from "../../redux/ContextProvider";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -24,7 +24,7 @@ import {
 } from "../../redux/user/userSlice";
 import { ThreeDots } from "react-loader-spinner";
 
-const ProfileSettings = () => {
+const RegProfileSettings = () => {
   const token = localStorage.getItem("access_token");
   const { activeMenu } = useStateContext();
 
@@ -67,7 +67,7 @@ const ProfileSettings = () => {
   const fetchUserData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/server/users/useradmin/${userID}`
+        `http://localhost:3000/server/users/userreg/${userID}`
       );
       setFormData({
         ...formData,
@@ -180,7 +180,7 @@ const ProfileSettings = () => {
       dispatch(updateUserStart());
       const updateData = { ...formData };
       const response = await axios.put(
-        `http://localhost:3000/server/users/useradmin/update/${userID}`,
+        `http://localhost:3000/server/users/userreg/update/${userID}`,
         updateData
       );
       if (response.status === 200) {
@@ -236,7 +236,7 @@ const ProfileSettings = () => {
       dispatch(updateUserStart());
       const updateData = { ...formData, password: formData.newPassword };
       const response = await axios.put(
-        `http://localhost:3000/server/users/useradmin/update/${userID}`,
+        `http://localhost:3000/server/users/userreg/update/${userID}`,
         updateData
       );
       if (response.status === 200) {
@@ -555,4 +555,4 @@ const ProfileSettings = () => {
   );
 };
 
-export default ProfileSettings;
+export default RegProfileSettings;

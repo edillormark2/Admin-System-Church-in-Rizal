@@ -68,10 +68,22 @@ export const registrationlogin = async (req, res) => {
         .json({ success: false, message: "Incorrect password" });
     }
 
-    // If username and password match, return success
-    return res
+    // Generate JWT token without expiry
+    const token = jwt.sign({ id: registration._id }, process.env.JWT_SECRET);
+
+    const { password: hashedPassword, ...rest } = registration._doc;
+
+    res
+      .cookie("access_token", token, {
+        httpOnly: true,
+        sameSite: "None",
+        secure: process.env.NODE_ENV === "production"
+      })
       .status(200)
-      .json({ success: true, message: "User logged in successfully" });
+      .json({
+        ...rest,
+        access_token: token // Include access_token in the response
+      });
   } catch (error) {
     console.error("Error during user login:", error);
     return res

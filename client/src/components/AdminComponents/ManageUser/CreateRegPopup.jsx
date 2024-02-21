@@ -20,7 +20,7 @@ const CreateRegPopup = props => {
   const [formData, setFormData] = useState({
     name: "",
     locality: "",
-    role: "Reg Coor", // Setting default value to "Admin"
+    role: "Registration Dept", // Setting default value to "Admin"
     username: "",
     password: ""
   });
@@ -64,7 +64,7 @@ const CreateRegPopup = props => {
       setFormData({
         name: "",
         locality: "",
-        role: "Reg Coor",
+        role: "Registration Dept",
         username: "",
         password: ""
       });

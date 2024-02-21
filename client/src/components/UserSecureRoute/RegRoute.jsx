@@ -6,7 +6,7 @@ const RegRoute = () => {
 
   // Check if user is authenticated and is an admin
   const isRegLoggedIn =
-    isAuthenticated && currentUser && currentUser.role === "registration";
+    isAuthenticated && currentUser && currentUser.role === "Registration Dept";
 
   return isRegLoggedIn ? <Outlet /> : <Navigate to="/" replace={true} />;
 };

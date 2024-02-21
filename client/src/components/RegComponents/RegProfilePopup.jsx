@@ -8,7 +8,7 @@ import { useNavigate, Link, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 
-const PopupBody = ({ closePopup }) => {
+const RegProfilePopup = ({ closePopup }) => {
   const { currentUser } = useSelector(state => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ const PopupBody = ({ closePopup }) => {
     dispatch(signOut());
 
     // Navigate to admin login page after signout
-    navigate("/adminlogin");
+    navigate("/registrationlogin");
   };
 
   return (
@@ -50,7 +50,9 @@ const PopupBody = ({ closePopup }) => {
 
       <Divider />
 
-      <Link to={`/admin/user-profile-settings/${currentUser.userID}`}>
+      <Link
+        to={`/registration/user-reg-profile-settings/${currentUser.userID}`}
+      >
         <div className="flex items-center w-full p-2 bg-white hover:bg-gray-100 rounded-full mb-1 mt-4 cursor-pointer">
           <div className="p-2 bg-gray-300 rounded-full w-10 flex justify-center items-center">
             <IoSettingsOutline size={22} /> {/* Adjusted size of the icon */}
@@ -72,4 +74,4 @@ const PopupBody = ({ closePopup }) => {
   );
 };
 
-export default PopupBody;
+export default RegProfilePopup;

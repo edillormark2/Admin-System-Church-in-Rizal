@@ -8,10 +8,10 @@ const LoginRoute = ({ element }) => {
   const determineDashboard = () => {
     if (currentUser) {
       switch (currentUser.role) {
-        case "admin":
+        case "Admin":
           return "/admin/dashboard";
-        case "registration":
-          return "/registration";
+        case "Registration Dept":
+          return "/registration/dashboard";
         case "inventory":
           return "/inventory";
         case "reports":

@@ -165,7 +165,7 @@ const EditInv = () => {
   
 
   return (
-    <div className="bg-gray-200 min-h-screen">
+    <div className="bg-gray-200 mb-16">
       <div className="flex relative ">
         {activeMenu
           ? <div className="w-64 fixed sidebar drop-shadow-xl bg-gray-100">
@@ -206,7 +206,7 @@ const EditInv = () => {
                   </div>
                   <div className="flex flex-col lg:flex-row  mx-8 md:mx-0 mt-8">
                     <div className="flex flex-col ml-0 mt-8 items-center bg-none lg:bg-white w-full lg:w-2/6 shadow-none lg:shadow-lg h-auto mb-4 rounded-xl ">
-                      <div className="relative my-8">
+                      <div className="relative my-0 md:my-8">
                         <input
                           type="file"
                           ref={fileRef}

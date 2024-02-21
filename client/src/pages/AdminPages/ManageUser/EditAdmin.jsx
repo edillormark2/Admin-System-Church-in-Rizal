@@ -166,8 +166,8 @@ const EditAdmin = () => {
   
 
   return (
-    <div className="bg-gray-200 min-h-screen">
-      <div className="flex relative ">
+    <div className="bg-gray-200 ">
+      <div className="flex relative mb-16">
         {activeMenu
           ? <div className="w-64 fixed sidebar drop-shadow-xl bg-gray-100">
               <Sidebar />
@@ -176,14 +176,14 @@ const EditAdmin = () => {
               <Sidebar />
             </div>}
         <div
-          className={` bg-gray-100 min-h-screen w-full ${activeMenu
+          className={` bg-gray-100 w-full ${activeMenu
             ? "lg:ml-60"
             : "flex-1"}`}
         >
           <div className="fixed md:static navbar w-full md:w-11/12 mx-auto rounded-md z-10">
             <Navbar />
           </div>
-          <div className="mt-28 md:mt-16 mx-4 md:mx-16 ">
+          <div className="mt-28 md:mt-16 mx-2 md:mx-16">
             {showLoader
               ? <div className="p-16 mt-60 flex flex-col items-center">
                   <ThreeDots
@@ -207,7 +207,7 @@ const EditAdmin = () => {
                   </div>
                   <div className="flex flex-col lg:flex-row  mx-8 md:mx-0 mt-8">
                     <div className="flex flex-col ml-0 mt-8 items-center bg-none lg:bg-white w-full lg:w-2/6 shadow-none lg:shadow-lg h-auto mb-4 rounded-xl ">
-                      <div className="relative my-8">
+                      <div className="relative my-0 md:my-8">
                         <input
                           type="file"
                           ref={fileRef}

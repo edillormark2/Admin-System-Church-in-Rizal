@@ -150,7 +150,8 @@ const ManageReg = () => {
       width: 150,
       editable: false,
       flex: 1,
-      minWidth: 140
+      minWidth: 140,
+      renderCell: params => <span className="text-base">••••••••••••••</span>
     },
     {
       field: "role",
