@@ -8,10 +8,15 @@ import DeletePopup from "./DeletePopup";
 const ActionPopup = ({
   onClose,
   selectedAnnouncementId,
-  handlePostCreated
+  handlePostCreated,
+  pinAnnouncement
 }) => {
   const [openEditPopup, setOpenEditPopup] = useState(false);
   const [openDeletePopup, setOpenDeletePopup] = useState(false);
+
+  const handlePin = () => {
+    pinAnnouncement(selectedAnnouncementId); // Call pinAnnouncement function with selectedAnnouncementId
+  };
 
   const handleOpenEdit = () => {
     setOpenEditPopup(true);
@@ -23,7 +28,10 @@ const ActionPopup = ({
   return (
     <div className="bg-white p-1 rounded-lg drop-shadow-lg border mt-1 border-gray-300 w-48 relative md:mt-0 ">
       <div className="flex items-center w-full p-2 rounded-lg cursor-pointer my-1 hover:bg-gray-200">
-        <div className="  w-10 flex justify-center items-center">
+        <div
+          onClick={handlePin}
+          className="  w-10 flex justify-center items-center"
+        >
           <BsPinAngleFill size={22} className="text-gray-700" />
         </div>
         <span className="ml-2 text-sm">Pin Post</span>

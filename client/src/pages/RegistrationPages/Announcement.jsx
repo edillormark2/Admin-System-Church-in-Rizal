@@ -7,6 +7,7 @@ import Breadcrumbs from "../../components/Breadcrumbs";
 import { ThreeDots } from "react-loader-spinner";
 import { GrAnnounce } from "react-icons/gr";
 import announcement from "../../assets/mgp.png";
+import noannouncement from "../../assets/empty.png";
 import { useSelector } from "react-redux";
 import CreatePopup from "../../components/RegComponents/Announcement/CreatePopup";
 import { Divider } from "@mui/material";
@@ -66,18 +67,16 @@ const Announcement = () => {
   };
 
   const open = Boolean(anchor);
-  const id = open ? "simple-popup" : undefined;
+  const id = open ? "simple-popper" : undefined;
 
-  const handleClick = (event, popupSetter) => {
+  const handleClick = (event, popupSetter, announcementId) => {
     popupSetter(true);
     setAnchor(event.currentTarget);
-    setSelectedAnnouncementId(id);
+    setSelectedAnnouncementId(announcementId); // Set the clicked announcement id
   };
 
   const handleClose = () => {
-    if (actionPopupOpen) {
-      setActionPopupOpen(false);
-    }
+    setActionPopupOpen(false);
   };
 
   return (
@@ -109,7 +108,6 @@ const Announcement = () => {
                         alt="announcement"
                         className="object-cover w-24 h-24 drop-shadow-2xl p-2 ml-4"
                       />
-
                       <p className="text-3xl md:text-4xl font-semibold text-white ">
                         Announcement
                       </p>
@@ -145,63 +143,74 @@ const Announcement = () => {
                       />
                       <p>Loading</p>
                     </div>
-                  : <div>
-                      <div className="w-full md:w-4/5 mx-auto mt-8">
-                        <p className="font-semibold mb-2">
-                          Published Announcement
+                  : announcements.length === 0
+                    ? <div className="flex flex-col justify-center items-center mx-auto my-8">
+                        <img
+                          src={noannouncement}
+                          alt="noannouncement"
+                          className="object-contain w-1/2 h-80"
+                        />
+                        <p className="text-md my-4 ">
+                          No announcements have been posted
                         </p>
                       </div>
+                    : <div>
+                        <div className="w-full md:w-4/5 mx-auto mt-8">
+                          <p className="font-semibold mb-2">
+                            Published Announcement
+                          </p>
+                        </div>
 
-                      {announcements.map(announcement =>
-                        <div
-                          className="w-full md:w-4/5 mx-auto mt-4"
-                          key={announcement._id}
-                        >
-                          <div className="bg-white shadow-sm p-4 rounded-xl border border-gray-200">
-                            <div className="flex flex-row justify-between">
-                              <div className="flex flex-row gap-4 mb-4">
-                                <img
-                                  src={announcement.profilePicture}
-                                  alt="profile"
-                                  className="h-12 w-12 rounded-full object-cover"
-                                />
-                                <div>
-                                  <p className="font-semibold">
-                                    {announcement.name}
-                                  </p>
-                                  <div className="flex flex-row text-sm text-gray-500 gap-1">
-                                    <p>{announcement.role}</p>•
-                                    <p>{announcement.dateCreated}</p>
+                        {announcements.map(announcement =>
+                          <div
+                            className="w-full md:w-4/5 mx-auto mt-4"
+                            key={announcement._id}
+                          >
+                            <div className="bg-white shadow-sm p-4 rounded-xl border border-gray-200">
+                              <div className="flex flex-row justify-between">
+                                <div className="flex flex-row gap-4 mb-4">
+                                  <img
+                                    src={announcement.profilePicture}
+                                    alt="profile"
+                                    className="h-12 w-12 rounded-full object-cover"
+                                  />
+                                  <div>
+                                    <p className="font-semibold">
+                                      {announcement.name}
+                                    </p>
+                                    <div className="flex flex-row text-sm text-gray-500 gap-1">
+                                      <p>{announcement.role}</p>•
+                                      <p>{announcement.dateCreated}</p>
+                                    </div>
                                   </div>
                                 </div>
+                                <div>
+                                  <GoKebabHorizontal
+                                    onClick={event =>
+                                      handleClick(
+                                        event,
+                                        setActionPopupOpen,
+                                        announcement._id
+                                      )}
+                                    size={37}
+                                    className="cursor-pointer text-gray-600 hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
+                                  />
+                                </div>
                               </div>
-                              <div>
-                                <GoKebabHorizontal
-                                  onClick={event =>
-                                    handleClick(
-                                      event,
-                                      setActionPopupOpen,
-                                      announcement._id
-                                    )}
-                                  size={37}
-                                  className="cursor-pointer text-gray-600 hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
-                                />
-                              </div>
-                            </div>
 
-                            <Divider />
-                            <div className="my-4">
-                              <p className="font-semibold mb-2">
-                                {announcement.title}
-                              </p>
-                              <p>
-                                {announcement.description}
-                              </p>
+                              <Divider />
+                              <div className="my-4">
+                                <p className="font-semibold mb-2">
+                                  {announcement.title}
+                                </p>
+                                <p>
+                                  {announcement.description}
+                                </p>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )}
-                    </div>}
+                        )}
+                      </div>}
               </div>
             </div>
           </div>
