@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 
 const announcementSchema = new mongoose.Schema({
   userID: {
@@ -29,6 +28,10 @@ const announcementSchema = new mongoose.Schema({
         day: "2-digit",
         year: "numeric"
       })
+  },
+  pinned: {
+    type: Boolean,
+    default: false // Set default value to false
   }
 });
 

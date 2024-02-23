@@ -95,3 +95,39 @@ export const deleteAnnouncementByID = async (req, res, next) => {
     next(error);
   }
 };
+
+// Controller for pinning announcement by ID
+export const pinAnnouncementByID = async (req, res, next) => {
+  try {
+    const announcement = await Announcement.findById(req.params.id);
+
+    if (!announcement) {
+      return res.status(404).json({ message: "Announcement not found" });
+    }
+
+    announcement.pinned = true; // Set pinned to true
+    await announcement.save();
+
+    res.status(200).json({ message: "Announcement pinned successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Controller for unpinning announcement by ID
+export const unpinAnnouncementByID = async (req, res, next) => {
+  try {
+    const announcement = await Announcement.findById(req.params.id);
+
+    if (!announcement) {
+      return res.status(404).json({ message: "Announcement not found" });
+    }
+
+    announcement.pinned = false;
+    await announcement.save();
+
+    res.status(200).json({ message: "Announcement pinned successfully" });
+  } catch (error) {
+    next(error);
+  }
+};

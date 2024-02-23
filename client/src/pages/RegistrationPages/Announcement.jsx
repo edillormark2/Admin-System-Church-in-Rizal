@@ -15,6 +15,8 @@ import axios from "axios";
 import { GoKebabHorizontal } from "react-icons/go";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import ActionPopup from "../../components/RegComponents/Announcement/ActionPopup";
 
 const Announcement = () => {
@@ -50,10 +52,6 @@ const Announcement = () => {
     }
   };
 
-  useEffect(() => {
-    fetchAnnouncements();
-  }, []);
-
   const handlePostCreated = async () => {
     setShowLoader(true);
     setTimeout(async () => {
@@ -78,6 +76,26 @@ const Announcement = () => {
   const handleClose = () => {
     setActionPopupOpen(false);
   };
+
+  const pinAnnouncement = async announcementId => {
+    try {
+      const announcementToUpdate = announcements.find(announcement => announcement._id === announcementId);
+      if (announcementToUpdate) {
+        let updatedPinnedStatus = !announcementToUpdate.pinned; // Toggle the pinned status
+        await axios.put(
+          `http://localhost:3000/server/announcement/announcement-pin/${announcementId}`,
+          { pinned: updatedPinnedStatus }
+        );
+        toast.success(updatedPinnedStatus ? "Announcement has been pinned" : "Announcement has been unpinned");
+        handlePostCreated(); // Refresh announcements after pinning or unpinning
+      } else {
+        console.error("Announcement not found for id:", announcementId);
+      }
+    } catch (error) {
+      console.error("Error updating announcement pinned status:", error);
+    }
+  };
+  
 
   return (
     <div className="bg-gray-200 min-h-screen">
@@ -160,56 +178,119 @@ const Announcement = () => {
                             Published Announcement
                           </p>
                         </div>
-
-                        {announcements.map(announcement =>
-                          <div
-                            className="w-full md:w-4/5 mx-auto mt-4"
-                            key={announcement._id}
-                          >
-                            <div className="bg-white shadow-sm p-4 rounded-xl border border-gray-200">
-                              <div className="flex flex-row justify-between">
-                                <div className="flex flex-row gap-4 mb-4">
-                                  <img
-                                    src={announcement.profilePicture}
-                                    alt="profile"
-                                    className="h-12 w-12 rounded-full object-cover"
-                                  />
-                                  <div>
-                                    <p className="font-semibold">
-                                      {announcement.name}
-                                    </p>
-                                    <div className="flex flex-row text-sm text-gray-500 gap-1">
-                                      <p>{announcement.role}</p>•
-                                      <p>{announcement.dateCreated}</p>
+                        <div className="w-full md:w-4/5 mx-auto mt-8">
+                          <p className="font-semibold mb-2">
+                            Pinned Announcements
+                          </p>
+                          {announcements
+                            .filter(announcement => announcement.pinned)
+                            .map(announcement =>
+                              <div
+                                className="w-full md:w-4/5 mx-auto mt-4"
+                                key={announcement._id}
+                              >
+                                <div className="bg-white shadow-sm p-4 rounded-xl border border-gray-200">
+                                  <div className="flex flex-row justify-between">
+                                    <div className="flex flex-row gap-4 mb-4">
+                                      <img
+                                        src={announcement.profilePicture}
+                                        alt="profile"
+                                        className="h-12 w-12 rounded-full object-cover"
+                                      />
+                                      <div>
+                                        <p className="font-semibold">
+                                          {announcement.name}
+                                        </p>
+                                        <div className="flex flex-row text-sm text-gray-500 gap-1">
+                                          <p>{announcement.role}</p>•
+                                          <p>{announcement.dateCreated}</p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <GoKebabHorizontal
+                                        onClick={event =>
+                                          handleClick(
+                                            event,
+                                            setActionPopupOpen,
+                                            announcement._id
+                                          )}
+                                        size={37}
+                                        className="cursor-pointer text-gray-600 hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
+                                      />
                                     </div>
                                   </div>
-                                </div>
-                                <div>
-                                  <GoKebabHorizontal
-                                    onClick={event =>
-                                      handleClick(
-                                        event,
-                                        setActionPopupOpen,
-                                        announcement._id
-                                      )}
-                                    size={37}
-                                    className="cursor-pointer text-gray-600 hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
-                                  />
-                                </div>
-                              </div>
 
-                              <Divider />
-                              <div className="my-4">
-                                <p className="font-semibold mb-2">
-                                  {announcement.title}
-                                </p>
-                                <p>
-                                  {announcement.description}
-                                </p>
+                                  <Divider />
+                                  <div className="my-4">
+                                    <p className="font-semibold mb-2">
+                                      {announcement.title}
+                                    </p>
+                                    <p>
+                                      {announcement.description}
+                                    </p>
+                                  </div>
+                                </div>
                               </div>
-                            </div>
-                          </div>
-                        )}
+                            )}
+                        </div>
+
+                        <div className="w-full md:w-4/5 mx-auto mt-8">
+                          <p className="font-semibold mb-2">
+                            Other Announcements
+                          </p>
+                          {announcements
+                            .filter(announcement => !announcement.pinned)
+                            .map(announcement =>
+                              <div
+                                className="w-full md:w-4/5 mx-auto mt-4"
+                                key={announcement._id}
+                              >
+                                <div className="bg-white shadow-sm p-4 rounded-xl border border-gray-200">
+                                  <div className="flex flex-row justify-between">
+                                    <div className="flex flex-row gap-4 mb-4">
+                                      <img
+                                        src={announcement.profilePicture}
+                                        alt="profile"
+                                        className="h-12 w-12 rounded-full object-cover"
+                                      />
+                                      <div>
+                                        <p className="font-semibold">
+                                          {announcement.name}
+                                        </p>
+                                        <div className="flex flex-row text-sm text-gray-500 gap-1">
+                                          <p>{announcement.role}</p>•
+                                          <p>{announcement.dateCreated}</p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <GoKebabHorizontal
+                                        onClick={event =>
+                                          handleClick(
+                                            event,
+                                            setActionPopupOpen,
+                                            announcement._id
+                                          )}
+                                        size={37}
+                                        className="cursor-pointer text-gray-600 hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
+                                      />
+                                    </div>
+                                  </div>
+
+                                  <Divider />
+                                  <div className="my-4">
+                                    <p className="font-semibold mb-2">
+                                      {announcement.title}
+                                    </p>
+                                    <p>
+                                      {announcement.description}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                        </div>
                       </div>}
               </div>
             </div>
@@ -230,6 +311,10 @@ const Announcement = () => {
               onClose={handleClose}
               selectedAnnouncementId={selectedAnnouncementId}
               handlePostCreated={handlePostCreated}
+              pinAnnouncement={pinAnnouncement}
+              isPinned={announcements.find(
+                announcement => announcement._id === selectedAnnouncementId
+              )?.pinned}
             />
           </BasePopup>
         </ClickAwayListener>}
