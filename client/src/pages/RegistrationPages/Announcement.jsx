@@ -20,7 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ActionPopup from "../../components/RegComponents/Announcement/ActionPopup";
 
 const Announcement = () => {
-  const { currentUser } = useSelector(state => state.user);
+  const { currentUser } = useSelector((state) => state.user);
   const { activeMenu, setActiveMenu } = useStateContext();
   const [openCreatePopup, setOpenCreatePopup] = useState(false);
   const [announcements, setAnnouncements] = useState([]);
@@ -77,16 +77,22 @@ const Announcement = () => {
     setActionPopupOpen(false);
   };
 
-  const pinAnnouncement = async announcementId => {
+  const pinAnnouncement = async (announcementId) => {
     try {
-      const announcementToUpdate = announcements.find(announcement => announcement._id === announcementId);
+      const announcementToUpdate = announcements.find(
+        (announcement) => announcement._id === announcementId
+      );
       if (announcementToUpdate) {
         let updatedPinnedStatus = !announcementToUpdate.pinned; // Toggle the pinned status
         await axios.put(
           `http://localhost:3000/server/announcement/announcement-pin/${announcementId}`,
           { pinned: updatedPinnedStatus }
         );
-        toast.success(updatedPinnedStatus ? "Announcement has been pinned" : "Announcement has been unpinned");
+        toast.success(
+          updatedPinnedStatus
+            ? "Announcement has been pinned"
+            : "Announcement has been unpinned"
+        );
         handlePostCreated(); // Refresh announcements after pinning or unpinning
       } else {
         console.error("Announcement not found for id:", announcementId);
@@ -95,22 +101,23 @@ const Announcement = () => {
       console.error("Error updating announcement pinned status:", error);
     }
   };
-  
 
   return (
     <div className="bg-gray-200 min-h-screen">
       <div className="flex relative ">
-        {activeMenu
-          ? <div className="w-64 fixed sidebar drop-shadow-xl bg-gray-100">
-              <Sidebar />
-            </div>
-          : <div className="w-0 drop-shadow-xl bg-gray-100">
-              <Sidebar />
-            </div>}
+        {activeMenu ? (
+          <div className="w-64 fixed sidebar drop-shadow-xl bg-gray-100">
+            <Sidebar />
+          </div>
+        ) : (
+          <div className="w-0 drop-shadow-xl bg-gray-100">
+            <Sidebar />
+          </div>
+        )}
         <div
-          className={` bg-gray-100 min-h-screen w-full md:flex-1 md:overflow-hidden ${activeMenu
-            ? "lg:ml-60"
-            : "flex-1"}`}
+          className={` bg-gray-100 min-h-screen w-full md:flex-1 md:overflow-hidden ${
+            activeMenu ? "lg:ml-60" : "flex-1"
+          }`}
         >
           <div className="fixed md:static navbar w-full md:w-11/12 mx-auto rounded-md z-10">
             <Navbar />
@@ -147,157 +154,150 @@ const Announcement = () => {
                     </div>
                   </div>
                 </div>
-                {showLoader
-                  ? <div className="p-16 mt-20 flex flex-col items-center">
-                      <ThreeDots
-                        visible={true}
-                        height={80}
-                        width={80}
-                        color="#85929E"
-                        radius={9}
-                        ariaLabel="three-dots-loading"
-                        wrapperStyle={{}}
-                        wrapperClass=""
-                      />
-                      <p>Loading</p>
-                    </div>
-                  : announcements.length === 0
-                    ? <div className="flex flex-col justify-center items-center mx-auto my-8">
-                        <img
-                          src={noannouncement}
-                          alt="noannouncement"
-                          className="object-contain w-1/2 h-80"
-                        />
-                        <p className="text-md my-4 ">
-                          No announcements have been posted
-                        </p>
+                {showLoader ? (
+                  <div className="p-16 mt-20 flex flex-col items-center">
+                    <ThreeDots
+                      visible={true}
+                      height={80}
+                      width={80}
+                      color="#85929E"
+                      radius={9}
+                      ariaLabel="three-dots-loading"
+                      wrapperStyle={{}}
+                      wrapperClass=""
+                    />
+                    <p>Loading</p>
+                  </div>
+                ) : announcements.length === 0 ? (
+                  <div className="flex flex-col justify-center items-center mx-auto my-8">
+                    <img
+                      src={noannouncement}
+                      alt="noannouncement"
+                      className="object-contain w-1/2 h-80"
+                    />
+                    <p className="text-md my-4 ">
+                      No announcements have been posted
+                    </p>
+                  </div>
+                ) : (
+                  <div>
+                    {announcements.some((announcement) => announcement.pinned) && ( 
+                      <div className="w-full md:w-4/5 mx-auto mt-8">
+                        <p className="font-semibold text-gray-500">Pinned Announcements</p>
+                        {announcements
+                          .filter((announcement) => announcement.pinned)
+                          .map((announcement) => (
+                            <div  className="mt-4" key={announcement._id}>
+                              <div className="bg-white shadow-sm p-4 rounded-xl border border-gray-200">
+                                <div className="flex flex-row justify-between">
+                                  <div className="flex flex-row gap-4 mb-4">
+                                    <img
+                                      src={announcement.profilePicture}
+                                      alt="profile"
+                                      className="h-12 w-12 rounded-full object-cover"
+                                    />
+                                    <div>
+                                      <p className="font-semibold">
+                                        {announcement.name}
+                                      </p>
+                                      <div className="flex flex-row text-sm text-gray-500 gap-1">
+                                        <p>{announcement.role}</p>•
+                                        <p>{announcement.dateCreated}</p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  {currentUser.userID === announcement.userID && ( // Check if the currentUser's userID matches the announcement's userID
+                                    <div>
+                                      <GoKebabHorizontal
+                                        onClick={(event) =>
+                                          handleClick(
+                                            event,
+                                            setActionPopupOpen,
+                                            announcement._id
+                                          )
+                                        }
+                                        size={37}
+                                        className="cursor-pointer text-gray-600 hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
+                                      />
+                                    </div>
+                                  )}
+                                </div>
+                                <Divider />
+                                <div className="my-4">
+                                  <p className="font-semibold mb-2">
+                                    {announcement.title}
+                                  </p>
+                                  <p>{announcement.description}</p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
                       </div>
-                    : <div>
-                        <div className="w-full md:w-4/5 mx-auto mt-8">
-                          <p className="font-semibold mb-2">
-                            Published Announcement
-                          </p>
-                        </div>
-                        <div className="w-full md:w-4/5 mx-auto mt-8">
-                          <p className="font-semibold mb-2">
-                            Pinned Announcements
-                          </p>
-                          {announcements
-                            .filter(announcement => announcement.pinned)
-                            .map(announcement =>
-                              <div
-                                className="w-full md:w-4/5 mx-auto mt-4"
-                                key={announcement._id}
-                              >
-                                <div className="bg-white shadow-sm p-4 rounded-xl border border-gray-200">
-                                  <div className="flex flex-row justify-between">
-                                    <div className="flex flex-row gap-4 mb-4">
-                                      <img
-                                        src={announcement.profilePicture}
-                                        alt="profile"
-                                        className="h-12 w-12 rounded-full object-cover"
-                                      />
-                                      <div>
-                                        <p className="font-semibold">
-                                          {announcement.name}
-                                        </p>
-                                        <div className="flex flex-row text-sm text-gray-500 gap-1">
-                                          <p>{announcement.role}</p>•
-                                          <p>{announcement.dateCreated}</p>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <GoKebabHorizontal
-                                        onClick={event =>
-                                          handleClick(
-                                            event,
-                                            setActionPopupOpen,
-                                            announcement._id
-                                          )}
-                                        size={37}
-                                        className="cursor-pointer text-gray-600 hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
-                                      />
-                                    </div>
-                                  </div>
-
-                                  <Divider />
-                                  <div className="my-4">
-                                    <p className="font-semibold mb-2">
-                                      {announcement.title}
+                    )}
+                    <div className="w-full md:w-4/5 mx-auto mt-8">
+                      {announcements.some((announcement) => announcement.pinned) && ( // Conditionally render based on the presence of other announcements
+                        <p className="font-semibold  text-gray-500">Other Announcements</p>
+                      )}
+                      {announcements
+                        .filter((announcement) => !announcement.pinned)
+                        .map((announcement) => (
+                          <div
+                            className="mt-4"
+                            key={announcement._id}
+                          >
+                            <div className="bg-white shadow-sm p-4 rounded-xl border border-gray-200">
+                              <div className="flex flex-row justify-between">
+                                <div className="flex flex-row gap-4 mb-4">
+                                  <img
+                                    src={announcement.profilePicture}
+                                    alt="profile"
+                                    className="h-12 w-12 rounded-full object-cover"
+                                  />
+                                  <div>
+                                    <p className="font-semibold">
+                                      {announcement.name}
                                     </p>
-                                    <p>
-                                      {announcement.description}
-                                    </p>
+                                    <div className="flex flex-row text-sm text-gray-500 gap-1">
+                                      <p>{announcement.role}</p>•
+                                      <p>{announcement.dateCreated}</p>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            )}
-                        </div>
-
-                        <div className="w-full md:w-4/5 mx-auto mt-8">
-                          <p className="font-semibold mb-2">
-                            Other Announcements
-                          </p>
-                          {announcements
-                            .filter(announcement => !announcement.pinned)
-                            .map(announcement =>
-                              <div
-                                className="w-full md:w-4/5 mx-auto mt-4"
-                                key={announcement._id}
-                              >
-                                <div className="bg-white shadow-sm p-4 rounded-xl border border-gray-200">
-                                  <div className="flex flex-row justify-between">
-                                    <div className="flex flex-row gap-4 mb-4">
-                                      <img
-                                        src={announcement.profilePicture}
-                                        alt="profile"
-                                        className="h-12 w-12 rounded-full object-cover"
-                                      />
-                                      <div>
-                                        <p className="font-semibold">
-                                          {announcement.name}
-                                        </p>
-                                        <div className="flex flex-row text-sm text-gray-500 gap-1">
-                                          <p>{announcement.role}</p>•
-                                          <p>{announcement.dateCreated}</p>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <GoKebabHorizontal
-                                        onClick={event =>
-                                          handleClick(
-                                            event,
-                                            setActionPopupOpen,
-                                            announcement._id
-                                          )}
-                                        size={37}
-                                        className="cursor-pointer text-gray-600 hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
-                                      />
-                                    </div>
+                                {currentUser.userID === announcement.userID && ( // Check if the currentUser's userID matches the announcement's userID
+                                  <div>
+                                    <GoKebabHorizontal
+                                      onClick={(event) =>
+                                        handleClick(
+                                          event,
+                                          setActionPopupOpen,
+                                          announcement._id
+                                        )
+                                      }
+                                      size={37}
+                                      className="cursor-pointer text-gray-600 hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
+                                    />
                                   </div>
-
-                                  <Divider />
-                                  <div className="my-4">
-                                    <p className="font-semibold mb-2">
-                                      {announcement.title}
-                                    </p>
-                                    <p>
-                                      {announcement.description}
-                                    </p>
-                                  </div>
-                                </div>
+                                )}
                               </div>
-                            )}
-                        </div>
-                      </div>}
+                              <Divider />
+                              <div className="my-4">
+                                <p className="font-semibold mb-2">
+                                  {announcement.title}
+                                </p>
+                                <p>{announcement.description}</p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
-      {actionPopupOpen &&
+      {actionPopupOpen && (
         <ClickAwayListener onClickAway={handleClose}>
           <BasePopup
             id={id}
@@ -313,11 +313,12 @@ const Announcement = () => {
               handlePostCreated={handlePostCreated}
               pinAnnouncement={pinAnnouncement}
               isPinned={announcements.find(
-                announcement => announcement._id === selectedAnnouncementId
+                (announcement) => announcement._id === selectedAnnouncementId
               )?.pinned}
             />
           </BasePopup>
-        </ClickAwayListener>}
+        </ClickAwayListener>
+      )}
       <CreatePopup
         openCreatePopup={openCreatePopup}
         setOpenCreatePopup={setOpenCreatePopup}
