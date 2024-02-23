@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-
-
 const announcementSchema = new mongoose.Schema({
   userID: {
     type: Number
