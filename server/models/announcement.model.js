@@ -1,26 +1,11 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-dotenv.config();
 
-const MONGO_URI = process.env.MONGO_URI + "/announcement";
-
-mongoose
-  .connect(MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
-  .then(() => {
-    console.log("Connected to MongoDB Atlas");
-  })
-  .catch(error => {
-    console.error("Error connecting to MongoDB Atlas:", error);
-  });
 
 const announcementSchema = new mongoose.Schema({
   userID: {
-    type: Number,
-    unique: true
+    type: Number
   },
   name: {
     type: String,
@@ -49,6 +34,7 @@ const announcementSchema = new mongoose.Schema({
   }
 });
 
+// Specify the collection name as 'Announcement' and export the model
 const Announcement = mongoose.model("Announcement", announcementSchema);
 
 export default Announcement;

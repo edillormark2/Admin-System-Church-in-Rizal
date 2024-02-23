@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import loginRoutes from "./routes/login.route.js";
 import userRoutes from "./routes/user.route.js";
+import AnnouncementRoutes from "./routes/announcement.route.js";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -31,6 +32,7 @@ app.use(cookieParser());
 
 app.use("/server/login", loginRoutes);
 app.use("/server/users", userRoutes);
+app.use("/server/announcement", AnnouncementRoutes);
 
 // Error handler middleware
 app.use((err, req, res, next) => {

@@ -6,21 +6,17 @@ import Divider from "@mui/material/Divider";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useSelector } from "react-redux";
 import { useMediaQuery } from "@mui/material";
 
 const CreatePopup = props => {
-  const { openCreatePopup, setOpenCreatePopup, onUserCreated } = props;
-  const [showPassword, setShowPassword] = useState(false);
+  const { currentUser } = useSelector(state => state.user);
+  const { openCreatePopup, setOpenCreatePopup } = props;
   const [formData, setFormData] = useState({
-    tile: "",
+    title: "",
     description: ""
   });
-
   const [loading, setLoading] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
 
   const handleClosePopup = () => {
     setOpenCreatePopup(false);
@@ -31,10 +27,46 @@ const CreatePopup = props => {
     setFormData({ ...formData, [id]: value });
   };
 
-  // Check if screen size is mobile
+  const handleSubmit = async e => {
+    e.preventDefault();
+    setLoading(true);
+    const { title, description } = formData;
+    if (!title.trim() || !description.trim()) {
+      toast.error("Please fill all the fields");
+      setLoading(false);
+      return;
+    }
+    if (title.trim() === "" || description.trim() === "") {
+      toast.error("Title and Description cannot be whitespace only");
+      setLoading(false);
+      return;
+    }
+    try {
+      const { name, role, profilePicture } = currentUser;
+      await axios.post(
+        "http://localhost:3000/server/announcement/announcement-post",
+        {
+          userID: currentUser.userID,
+          name,
+          role,
+          title,
+          description,
+          profilePicture
+        }
+      );
+      toast.success("Announcement posted successfully");
+      props.onPostCreated();
+      setLoading(false);
+      setOpenCreatePopup(false);
+    } catch (error) {
+      console.error("Error posting announcement:", error);
+      toast.error("Failed to post announcement");
+      setLoading(false);
+    }
+  };
+
   const isMobile = useMediaQuery("(max-width:600px)");
 
-  // Dynamic styles for modal
   const dynamicPopupStyle = {
     position: "absolute",
     top: "50%",
@@ -43,7 +75,7 @@ const CreatePopup = props => {
     p: 4,
     width: "auto",
     width: "min(90%, 600px)",
-    maxHeight: isMobile ? "95vh" : "calc(100vh - 100px)" // Adjusted maximum height based on screen size
+    maxHeight: isMobile ? "95vh" : "calc(100vh - 100px)"
   };
 
   return (
@@ -70,7 +102,7 @@ const CreatePopup = props => {
           <Divider />
           <div className="mt-8">
             <div>
-              <form className="flex flex-col gap-4">
+              <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                 <p className="text-sm font-semibold">Title</p>
                 <input
                   type="text"
@@ -87,17 +119,17 @@ const CreatePopup = props => {
                   onChange={handleChange}
                   autoComplete="off"
                   className="form-control bg-white p-3 rounded-lg border border-gray-300 text-sm sm:text-base overflow-scroll"
-                  rows="4" // Set the initial rows to 4
+                  rows="4"
                   style={{
                     minHeight: "4rem",
-                    maxHeight: isMobile ? "18rem" : "26rem" // Adjusted maxHeight based on screen size
-                  }} // Set dynamic styles
+                    maxHeight: isMobile ? "18rem" : "26rem"
+                  }}
                 />
 
                 <div className="flex justify-end gap-2 mt-4">
                   <button
                     disabled={loading}
-                    className="bg-primary w-full text-white p-3 rounded-lg w-24 hover:opacity-85 disabled:opacity-80 text-sm sm:text-base"
+                    className="bg-primary w-full text-white p-3 rounded-lg hover:opacity-85 disabled:opacity-80 text-sm sm:text-base"
                   >
                     {loading ? "Loading..." : "Post"}
                   </button>
