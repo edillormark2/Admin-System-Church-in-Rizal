@@ -68,9 +68,9 @@ const Sidebar = () => {
         <Link
           to="/admin/dashboard"
           onClick={handleCloseSideBar}
-          className="items-center gap-1 ml-20 mt-8 flex text-xl font-extrabold tracking-tight text-slate-900"
+          className="items-center gap-1 ml-12 mt-8 flex text-xl font-extrabold tracking-tight text-slate-900"
         >
-          <span>Admin</span>
+          <span>Registration</span>
         </Link>
         <button
           type="button"
