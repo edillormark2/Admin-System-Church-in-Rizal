@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./Reg.css";
 import Navbar from "../../components/RegComponents/Navbar";
 import Sidebar from "../../components/RegComponents/Sidebar";
@@ -15,6 +15,7 @@ import axios from "axios";
 
 const ManageRegForm = () => {
   const { activeMenu } = useStateContext();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [actionPopupOpen, setActionPopupOpen] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const [placement, setPlacement] = React.useState("bottom-end");
@@ -24,17 +25,32 @@ const ManageRegForm = () => {
   const [sortBy, setSortBy] = useState(() => {
     return localStorage.getItem("sortBy") || "status";
   });
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleOutsideClick = event => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        !event.target.closest(".dropdown-button")
+      ) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
   const open = Boolean(anchor);
   const id = open ? "simple-popper" : undefined;
 
   const handleClick = (event, popupSetter) => {
     popupSetter(true);
     setAnchor(event.currentTarget);
-  };
-
-  const handleCloseSort = () => {
-    setDropdownOpen(false);
   };
 
   const handleClose = () => {
@@ -111,11 +127,11 @@ const ManageRegForm = () => {
               <h1 className="text-2xl font-semibold mb-2 ">
                 Manage Registration
               </h1>
+
               <div className="flex justify-end mb-4 relative">
                 <button
-                  className="relative p-3 bg-white drop-shadow-md text-sm rounded-md cursor-pointer hover:bg-gray-100 border-gray-300"
-                  onClick={e => {
-                    e.preventDefault(); // Prevents default button behavior
+                  className="relative p-3 bg-white drop-shadow-md text-sm rounded-md cursor-pointer hover:bg-gray-100 border-gray-300 dropdown-button"
+                  onClick={() => {
                     setDropdownOpen(!dropdownOpen);
                   }}
                 >
@@ -126,7 +142,10 @@ const ManageRegForm = () => {
                   <TiArrowSortedDown className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600" />
                 </button>
                 {dropdownOpen &&
-                  <div className="absolute mt-12 w-40 bg-white rounded-md shadow-xl z-10">
+                  <div
+                    ref={dropdownRef}
+                    className="absolute mt-12 w-40 bg-white rounded-md shadow-xl z-10"
+                  >
                     <button
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                       onClick={() => {
@@ -165,7 +184,7 @@ const ManageRegForm = () => {
                   ? searchResults.map((registration, index) =>
                       <div
                         key={index}
-                        className="w-full sm:w-full lg:w-1/2 2xl:w-1/3 p-2"
+                        className="w-full sm:w-full lg:w-1/2 2xl:w-1/3 px-0 md:px-2 py-2"
                       >
                         <div
                           className={`relative bg-white hover:bg-blue-50 rounded-md drop-shadow-xl p-2 border ${registration.status ===
@@ -192,11 +211,11 @@ const ManageRegForm = () => {
                           <Divider />
                           <div className="flex justify-between p-4 rounded-xl mt-0 mb-2">
                             <div className="flex flex-col my-2 pt-2">
-                              <p className="text-black font-semibold text-sm">
+                              <p className="text-black font-semibold text-xs sm:text-sm">
                                 {registration.title}
                               </p>
                               <p
-                                className={`text-xl font-semibold ${registration.status ===
+                                className={`text-base md:text-xl font-semibold ${registration.status ===
                                 "Open"
                                   ? "text-gray-700"
                                   : "text-gray-500"}`}
