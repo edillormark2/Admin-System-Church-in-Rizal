@@ -1,7 +1,7 @@
-import Admin from "../models/adminlogin.model.js";
-import Registration from "../models/registrationlogin.model.js";
-import Inventory from "../models/inventory.model.js";
-import Reports from "../models/reportslogin.model.js";
+import Admin from "../models/UserModel/adminlogin.model.js";
+import Registration from "../models/UserModel/registrationlogin.model.js";
+import Inventory from "../models/UserModel/inventory.model.js";
+import Reports from "../models/UserModel/reportslogin.model.js";
 import bcrypt from "bcryptjs"; // Import bcrypt for password hashing
 import jwt from "jsonwebtoken";
 

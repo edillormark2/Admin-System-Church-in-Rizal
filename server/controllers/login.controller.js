@@ -1,7 +1,7 @@
-import Admin from "../models/adminlogin.model.js";
-import Inventory from "../models/inventory.model.js";
-import Registration from "../models/registrationlogin.model.js";
-import Reports from "../models/reportslogin.model.js";
+import Admin from "../models/UserModel/adminlogin.model.js";
+import Inventory from "../models/UserModel/inventory.model.js";
+import Registration from "../models/UserModel/registrationlogin.model.js";
+import Reports from "../models/UserModel/reportslogin.model.js";
 import jwt from "jsonwebtoken";
 
 // Controller for admin login

@@ -49,3 +49,10 @@
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
 }
+
+.button-control {
+  display: block;
+  border-color: #bfc9ca;
+  outline: 0;
+}
+
