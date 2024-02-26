@@ -13,7 +13,6 @@ import CreatePopup from "../../components/RegComponents/Announcement/CreatePopup
 import { Divider } from "@mui/material";
 import axios from "axios";
 import { GoKebabHorizontal } from "react-icons/go";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -53,6 +52,7 @@ const Announcement = () => {
   };
 
   const handlePostCreated = async () => {
+    setActionPopupOpen(false);
     setShowLoader(true);
     setTimeout(async () => {
       await fetchAnnouncements();
@@ -64,18 +64,42 @@ const Announcement = () => {
     setOpenCreatePopup(true);
   };
 
-  const open = Boolean(anchor);
-  const id = open ? "simple-popper" : undefined;
-
-  const handleClick = (event, popupSetter, announcementId) => {
-    popupSetter(true);
+  useEffect(() => {
+    const handleOutsideClick = event => {
+      const editPopupOpen = localStorage.getItem('editPopupOpen') === 'true';
+      const deletePopupOpen = localStorage.getItem('deletePopupOpen') === 'true';
+      // Check if both editPopupOpen and deletePopupOpen are false
+      if (!editPopupOpen && !deletePopupOpen) {
+        if (
+          anchor &&
+          !anchor.contains(event.target) &&
+          !event.target.closest(".action-popup")
+        ) {
+          setActionPopupOpen(false);
+        }
+      }
+    };
+  
+    document.addEventListener("mousedown", handleOutsideClick);
+  
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [anchor]);
+  
+  
+  const handleClick = (event, announcementId) => {
+    setActionPopupOpen(prev => !prev);
     setAnchor(event.currentTarget);
-    setSelectedAnnouncementId(announcementId); // Set the clicked announcement id
+    setSelectedAnnouncementId(announcementId);
   };
 
   const handleClose = () => {
     setActionPopupOpen(false);
   };
+
+  const open = Boolean(anchor);
+  const id = open ? "simple-popper" : undefined;
 
   const pinAnnouncement = async (announcementId) => {
     try {
@@ -88,6 +112,7 @@ const Announcement = () => {
           `http://localhost:3000/server/announcement/announcement-pin/${announcementId}`,
           { pinned: updatedPinnedStatus }
         );
+        setActionPopupOpen(false);
         toast.success(
           updatedPinnedStatus
             ? "Announcement has been pinned"
@@ -101,6 +126,7 @@ const Announcement = () => {
       console.error("Error updating announcement pinned status:", error);
     }
   };
+
 
   return (
     <div className="bg-gray-200 min-h-screen">
@@ -208,14 +234,8 @@ const Announcement = () => {
                                   </div>
                                   {currentUser.userID === announcement.userID && ( // Check if the currentUser's userID matches the announcement's userID
                                     <div>
-                                      <GoKebabHorizontal
-                                        onClick={(event) =>
-                                          handleClick(
-                                            event,
-                                            setActionPopupOpen,
-                                            announcement._id
-                                          )
-                                        }
+                                      <GoKebabHorizontal  
+                                        onClick={(event) => handleClick(event, announcement._id)}
                                         size={37}
                                         className="cursor-pointer text-gray-600 hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
                                       />
@@ -266,13 +286,7 @@ const Announcement = () => {
                                 {currentUser.userID === announcement.userID && ( // Check if the currentUser's userID matches the announcement's userID
                                   <div>
                                     <GoKebabHorizontal
-                                      onClick={(event) =>
-                                        handleClick(
-                                          event,
-                                          setActionPopupOpen,
-                                          announcement._id
-                                        )
-                                      }
+                                      onClick={(event) => handleClick(event, announcement._id)}
                                       size={37}
                                       className="cursor-pointer text-gray-600 hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
                                     />
@@ -297,28 +311,28 @@ const Announcement = () => {
           </div>
         </div>
       </div>
-      {actionPopupOpen && (
-        <ClickAwayListener onClickAway={handleClose}>
-          <BasePopup
-            id={id}
-            open={open}
-            anchor={anchor}
-            placement={placement}
-            offset={4}
-            onClose={handleClose}
-          >
-            <ActionPopup
-              onClose={handleClose}
-              selectedAnnouncementId={selectedAnnouncementId}
-              handlePostCreated={handlePostCreated}
-              pinAnnouncement={pinAnnouncement}
-              isPinned={announcements.find(
-                (announcement) => announcement._id === selectedAnnouncementId
-              )?.pinned}
-            />
-          </BasePopup>
-        </ClickAwayListener>
-      )}
+      {actionPopupOpen &&
+  <BasePopup
+    id={id}
+    open={actionPopupOpen}
+    anchor={anchor}
+    placement={placement}
+    offset={4}
+    onClose={handleClose}
+  >
+    <div className="action-popup">
+      <ActionPopup
+        onClose={handleClose}
+        selectedAnnouncementId={selectedAnnouncementId}
+        handlePostCreated={handlePostCreated}
+        pinAnnouncement={pinAnnouncement}
+        isPinned={announcements.find(
+          (announcement) => announcement._id === selectedAnnouncementId
+        )?.pinned} 
+      />
+    </div>
+  </BasePopup>}
+
       <CreatePopup
         openCreatePopup={openCreatePopup}
         setOpenCreatePopup={setOpenCreatePopup}

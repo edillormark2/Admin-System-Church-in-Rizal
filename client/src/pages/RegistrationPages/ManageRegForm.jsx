@@ -5,7 +5,6 @@ import Sidebar from "../../components/RegComponents/Sidebar";
 import { useStateContext } from "../../redux/ContextProvider";
 import { GoKebabHorizontal } from "react-icons/go";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
 import ActionPopup from "../../components/RegComponents/ManageReg/ActionPopup";
 import { Divider } from "@mui/material";
 import { IoSearch } from "react-icons/io5";
@@ -22,6 +21,7 @@ const ManageRegForm = () => {
   const [registrations, setRegistrations] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+
   const [sortBy, setSortBy] = useState(() => {
     return localStorage.getItem("sortBy") || "status";
   });
@@ -45,11 +45,32 @@ const ManageRegForm = () => {
     };
   }, []);
 
+  useEffect(
+    () => {
+      const handleOutsideClick = event => {
+        if (
+          anchor &&
+          !anchor.contains(event.target) &&
+          !event.target.closest(".action-popup")
+        ) {
+          setActionPopupOpen(false);
+        }
+      };
+
+      document.addEventListener("mousedown", handleOutsideClick);
+
+      return () => {
+        document.removeEventListener("mousedown", handleOutsideClick);
+      };
+    },
+    [anchor]
+  );
+
   const open = Boolean(anchor);
   const id = open ? "simple-popper" : undefined;
 
-  const handleClick = (event, popupSetter) => {
-    popupSetter(true);
+  const handleClick = event => {
+    setActionPopupOpen(prev => !prev);
     setAnchor(event.currentTarget);
   };
 
@@ -239,18 +260,18 @@ const ManageRegForm = () => {
         </div>
       </div>
       {actionPopupOpen &&
-        <ClickAwayListener onClickAway={handleClose}>
-          <BasePopup
-            id={id}
-            open={Boolean(anchor)}
-            anchor={anchor}
-            placement={placement}
-            offset={4}
-            onClose={handleClose}
-          >
+        <BasePopup
+          id={id}
+          open={actionPopupOpen}
+          anchor={anchor}
+          placement={placement}
+          offset={4}
+          onClose={handleClose}
+        >
+          <div className="action-popup">
             <ActionPopup onClose={handleClose} />
-          </BasePopup>
-        </ClickAwayListener>}
+          </div>
+        </BasePopup>}
     </div>
   );
 };
