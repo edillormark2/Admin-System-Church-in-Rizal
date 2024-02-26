@@ -113,7 +113,7 @@ const Announcement = () => {
           { pinned: updatedPinnedStatus }
         );
         setActionPopupOpen(false);
-        toast.success(
+        toast(
           updatedPinnedStatus
             ? "Announcement has been pinned"
             : "Announcement has been unpinned"

@@ -21,6 +21,9 @@ const ManageRegForm = () => {
   const [registrations, setRegistrations] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [selectedRegistrationformId, setSelectedRegistrationformId] = useState(
+    null
+  );
 
   const [sortBy, setSortBy] = useState(() => {
     return localStorage.getItem("sortBy") || "status";
@@ -69,9 +72,10 @@ const ManageRegForm = () => {
   const open = Boolean(anchor);
   const id = open ? "simple-popper" : undefined;
 
-  const handleClick = event => {
+  const handleClick = (event, registrationformId) => {
     setActionPopupOpen(prev => !prev);
     setAnchor(event.currentTarget);
+    setSelectedRegistrationformId(registrationformId);
   };
 
   const handleClose = () => {
@@ -224,7 +228,7 @@ const ManageRegForm = () => {
                           <div className="flex justify-end">
                             <GoKebabHorizontal
                               onClick={event =>
-                                handleClick(event, setActionPopupOpen)}
+                                handleClick(event, registration._id)}
                               size={37}
                               className="cursor-pointer text-gray-600 hover:bg-gray-200 p-2 rounded-full drop-shadow-md mb-4"
                             />
@@ -269,7 +273,11 @@ const ManageRegForm = () => {
           onClose={handleClose}
         >
           <div className="action-popup">
-            <ActionPopup onClose={handleClose} />
+            <ActionPopup
+              onClose={handleClose}
+              selectedRegistrationformId={selectedRegistrationformId}
+              
+            />
           </div>
         </BasePopup>}
     </div>

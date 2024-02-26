@@ -35,6 +35,7 @@ import EditReport from "./pages/AdminPages/ManageUser/EditReport";
 import RegProfileSettings from "./pages/RegistrationPages/RegProfileSettings";
 import Announcement from "./pages/RegistrationPages/Announcement";
 import ManageRegForm from "./pages/RegistrationPages/ManageRegForm";
+import EditRegDetails from "./pages/RegistrationPages/EditRegDetails";
 
 const customToastStyle = {
   position: "top-right",
@@ -124,6 +125,10 @@ const App = () => {
                 />
                 <Route path="announcement" element={<Announcement />} />
                 <Route path="manage-registration" element={<ManageRegForm />} />
+                <Route
+                  path="manage-registration/edit-details/:id"
+                  element={<EditRegDetails />}
+                />
               </Route>
 
               {/* Inventory routes */}

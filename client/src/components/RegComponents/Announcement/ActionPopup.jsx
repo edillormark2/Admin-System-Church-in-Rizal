@@ -50,7 +50,7 @@ const ActionPopup = ({
       await axios.put(
         `http://localhost:3000/server/announcement/announcement-unpin/${announcementId}`
       );
-      toast.success("Announcement has been unpinned");
+      toast("Announcement has been unpinned");
       handlePostCreated();
     } catch (error) {
       console.error("Error unpinning announcement:", error);
