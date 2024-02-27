@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaEye } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
-import { FaUnlock } from "react-icons/fa6";
-import { FaLock } from "react-icons/fa6";
+import { FaUnlock, FaLock } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,6 +13,7 @@ const ActionPopup = ({
   handleUpdateStatus
 }) => {
   const [registrationStatus, setRegistrationStatus] = useState(null);
+  const [loading, setLoading] = useState(true); // New loading state
 
   useEffect(() => {
     // Fetch the registration status when the component mounts
@@ -29,6 +29,8 @@ const ActionPopup = ({
     } catch (error) {
       toast.error("Error fetching registration status");
       console.error("Error fetching registration status:", error);
+    } finally {
+      setTimeout(() => setLoading(false), 0); // Delay rendering by 500 milliseconds
     }
   };
 
@@ -53,6 +55,10 @@ const ActionPopup = ({
     }
   };
 
+  if (loading) {
+    return <div />; // Render loading indicator while fetching
+  }
+
   return (
     <div className="bg-white p-1 rounded-lg drop-shadow-xl border mt-1 border-gray-300 w-52 relative md:mt-0">
       <div
@@ -60,13 +66,14 @@ const ActionPopup = ({
         className="flex items-center w-full p-2 mb-1 rounded-lg cursor-pointer hover:bg-gray-200"
       >
         <div className="w-10 flex justify-center items-center">
-          {registrationStatus === "Closed"
-            ? <FaUnlock size={22} className="text-gray-700" />
-            : <FaLock size={22} className="text-gray-700" />}
+          {registrationStatus === "Open"
+            ? <FaLock size={22} className="text-gray-700" />
+            : <FaUnlock size={22} className="text-gray-700" />}
         </div>
         <span className="ml-2 text-sm">
-          {registrationStatus === "Closed" && "Open Registration"}
-          {registrationStatus === "Open" && "Close Registration"}
+          {registrationStatus === "Open"
+            ? "Close Registration"
+            : "Open Registration"}
         </span>
       </div>
 
