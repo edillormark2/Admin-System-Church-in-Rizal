@@ -57,6 +57,27 @@ const Navbar = () => {
     setActiveMenu(!activeMenu);
   };
 
+  useEffect(
+    () => {
+      const handleOutsideClick = event => {
+        if (
+          anchor &&
+          !anchor.contains(event.target) &&
+          !event.target.closest(".action-popup")
+        ) {
+          setIsPopupOpen(false);
+        }
+      };
+
+      document.addEventListener("mousedown", handleOutsideClick);
+
+      return () => {
+        document.removeEventListener("mousedown", handleOutsideClick);
+      };
+    },
+    [anchor]
+  );
+
   const handleClick = event => {
     setIsPopupOpen(prev => !prev);
     setAnchor(event.currentTarget);
@@ -77,7 +98,7 @@ const Navbar = () => {
 
       <div className="flex drop-shadow-sm">
         <div
-          onClick={handleClick}
+          onClick={event => handleClick(event)}
           className="flex items-center gap-2 cursor-pointer p-2 rounded-xl hover:bg-gray-200"
         >
           <img
@@ -92,18 +113,18 @@ const Navbar = () => {
         </div>
       </div>
       {isPopupOpen &&
-        <ClickAwayListener onClickAway={handleClose}>
-          <BasePopup
-            id={id}
-            open={Boolean(anchor)}
-            anchor={anchor}
-            placement={placement}
-            offset={4}
-            onClose={handleClose}
-          >
+        <BasePopup
+          id={id}
+          open={isPopupOpen}
+          anchor={anchor}
+          placement={placement}
+          offset={4}
+          onClose={handleClose}
+        >
+          <div className="action-popup">
             <RegProfilePopup closePopup={handleClose} />
-          </BasePopup>
-        </ClickAwayListener>}
+          </div>
+        </BasePopup>}
     </div>
   );
 };

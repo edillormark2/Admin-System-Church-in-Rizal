@@ -11,9 +11,14 @@ import { IoSearch } from "react-icons/io5";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { FaSortAmountUp } from "react-icons/fa";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ThreeDots } from "react-loader-spinner";
 
 const ManageRegForm = () => {
   const { activeMenu } = useStateContext();
+  const [loading, setLoading] = useState(true);
+  const [showLoader, setShowLoader] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [actionPopupOpen, setActionPopupOpen] = useState(false);
   const [anchor, setAnchor] = useState(null);
@@ -21,6 +26,7 @@ const ManageRegForm = () => {
   const [registrations, setRegistrations] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [registrationStatus, setRegistrationStatus] = useState(null);
   const [selectedRegistrationformId, setSelectedRegistrationformId] = useState(
     null
   );
@@ -110,9 +116,24 @@ const ManageRegForm = () => {
         "http://localhost:3000/server/registration/registration-display"
       );
       setRegistrations(response.data.registrations);
+      setLoading(false);
+      setTimeout(() => {
+        setShowLoader(false);
+      }, 800);
     } catch (error) {
       console.error("Error fetching registrations:", error);
+      setShowLoader(false);
     }
+  };
+
+  const handleUpdateStatus = async () => {
+    setActionPopupOpen(false);
+    setShowLoader(true);
+    setTimeout(async () => {
+      await fetchRegistrations();
+      setActionPopupOpen(false);
+      setShowLoader(false);
+    }, 800);
   };
 
   const sortRegistrations = () => {
@@ -204,61 +225,75 @@ const ManageRegForm = () => {
                   <IoSearch className="text-gray-800" />
                 </div>
               </div>
-              <div className="w-full flex flex-wrap mt-6">
-                {searchResults.length > 0
-                  ? searchResults.map((registration, index) =>
-                      <div
-                        key={index}
-                        className="w-full sm:w-full lg:w-1/2 2xl:w-1/3 px-0 md:px-2 py-2"
-                      >
-                        <div
-                          className={`relative bg-white hover:bg-blue-50 rounded-md drop-shadow-xl p-2 border ${registration.status ===
-                          "Open"
-                            ? "border-green-400 bg-gradient-to-r from-green-100 to-white hover:bg-gradient hover:from-green-200 hover:to-white"
-                            : "border-gray-300"} w-full h-48`}
-                        >
-                          <p
-                            className={`absolute top-4 left-2 ${registration.status ===
-                            "Open"
-                              ? "bg-green-400"
-                              : "bg-gray-400"} text-white py-1 px-2 rounded-md text-xs`}
+              {showLoader
+                ? <div className="p-16 mt-20 flex flex-col items-center">
+                    <ThreeDots
+                      visible={true}
+                      height={80}
+                      width={80}
+                      color="#85929E"
+                      radius={9}
+                      ariaLabel="three-dots-loading"
+                      wrapperStyle={{}}
+                      wrapperClass=""
+                    />
+                    <p>Loading</p>
+                  </div>
+                : <div className="w-full flex flex-wrap mt-6">
+                    {searchResults.length > 0
+                      ? searchResults.map((registration, index) =>
+                          <div
+                            key={index}
+                            className="w-full sm:w-full lg:w-1/2 2xl:w-1/3 px-0 md:px-2 py-2"
                           >
-                            {registration.status}
-                          </p>
-                          <div className="flex justify-end">
-                            <GoKebabHorizontal
-                              onClick={event =>
-                                handleClick(event, registration._id)}
-                              size={37}
-                              className="cursor-pointer text-gray-600 hover:bg-gray-200 p-2 rounded-full drop-shadow-md mb-4"
-                            />
-                          </div>
-                          <Divider />
-                          <div className="flex justify-between p-4 rounded-xl mt-0 mb-2">
-                            <div className="flex flex-col my-2 pt-2">
-                              <p className="text-black font-semibold text-xs sm:text-sm">
-                                {registration.title}
-                              </p>
+                            <div
+                              className={`relative bg-white hover:bg-blue-50 rounded-md drop-shadow-xl p-2 border ${registration.status ===
+                              "Open"
+                                ? "border-green-400 bg-gradient-to-r from-green-100 to-white hover:bg-gradient hover:from-green-200 hover:to-white"
+                                : "border-gray-300"} w-full h-48`}
+                            >
                               <p
-                                className={`text-base md:text-xl font-semibold ${registration.status ===
+                                className={`absolute top-4 left-2 ${registration.status ===
                                 "Open"
-                                  ? "text-gray-700"
-                                  : "text-gray-500"}`}
+                                  ? "bg-green-400"
+                                  : "bg-gray-400"} text-white py-1 px-2 rounded-md text-xs`}
                               >
-                                Currently Registered
+                                {registration.status}
                               </p>
-                            </div>
-                            <div className="my-auto text-black text-4xl font-semibold pt-2">
-                              0
+                              <div className="flex justify-end">
+                                <GoKebabHorizontal
+                                  onClick={event =>
+                                    handleClick(event, registration._id)}
+                                  size={37}
+                                  className="cursor-pointer text-gray-600 hover:bg-gray-200 p-2 rounded-full drop-shadow-md mb-4"
+                                />
+                              </div>
+                              <Divider />
+                              <div className="flex justify-between p-4 rounded-xl mt-0 mb-2">
+                                <div className="flex flex-col my-2 pt-2">
+                                  <p className="text-black font-semibold text-xs sm:text-sm">
+                                    {registration.title}
+                                  </p>
+                                  <p
+                                    className={`text-base md:text-xl font-semibold ${registration.status ===
+                                    "Open"
+                                      ? "text-gray-700"
+                                      : "text-gray-500"}`}
+                                  >
+                                    Currently Registered
+                                  </p>
+                                </div>
+                                <div className="my-auto text-black text-4xl font-semibold pt-2">
+                                  0
+                                </div>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                    )
-                  : <div className="mx-auto p-8 text-gray-500 font-semibold">
-                      No registrations found
-                    </div>}
-              </div>
+                        )
+                      : <div className="mx-auto p-8 text-gray-500 font-semibold">
+                          No registrations found
+                        </div>}
+                  </div>}
             </div>
           </div>
         </div>
@@ -275,8 +310,8 @@ const ManageRegForm = () => {
           <div className="action-popup">
             <ActionPopup
               onClose={handleClose}
+              handleUpdateStatus={handleUpdateStatus}
               selectedRegistrationformId={selectedRegistrationformId}
-              
             />
           </div>
         </BasePopup>}

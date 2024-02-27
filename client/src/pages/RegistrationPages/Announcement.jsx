@@ -157,9 +157,9 @@ const Announcement = () => {
                       <img
                         src={announcement}
                         alt="announcement"
-                        className="object-cover w-24 h-24 drop-shadow-2xl p-2 ml-4"
+                        className="object-cover w-20 md:w-24 h-20 md:h-24 drop-shadow-2xl p-2 ml-6 "
                       />
-                      <p className="text-3xl md:text-4xl font-semibold text-white ">
+                      <p className="text-2xl md:text-4xl font-semibold text-white ">
                         Announcement
                       </p>
                     </div>
@@ -174,7 +174,7 @@ const Announcement = () => {
                     />
                     <div
                       onClick={handleOpenCreate}
-                      className="bg-gray-200 p-3 hover:bg-gray-300  cursor-pointer text-gray-500 rounded-full w-full"
+                      className="bg-gray-200 p-3 hover:bg-gray-300  cursor-pointer text-gray-500 rounded-full w-full text-sm md:text-base"
                     >
                       Make an Announcement, {currentUser.name}?
                     </div>
