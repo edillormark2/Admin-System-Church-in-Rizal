@@ -53,7 +53,14 @@ export const registrationGetbyID = async (req, res) => {
 export const registrationUpdateByID = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, location, price, cardImage, description } = req.body;
+    const {
+      title,
+      location,
+      price,
+      cardImage,
+      formTitle,
+      description
+    } = req.body;
 
     // Check if registration exists
     const existingRegistration = await Registrationform.findById(id);
@@ -66,6 +73,7 @@ export const registrationUpdateByID = async (req, res) => {
     existingRegistration.location = location;
     existingRegistration.price = price;
     existingRegistration.cardImage = cardImage;
+    existingRegistration.formTitle = formTitle;
     existingRegistration.description = description;
 
     // Save updated registration

@@ -17,8 +17,9 @@ import { FaCamera } from "react-icons/fa";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; 
+import "react-toastify/dist/ReactToastify.css";
 import { ThreeDots } from "react-loader-spinner";
+import { Divider } from "@mui/material";
 
 const EditRegDetails = () => {
   const { id } = useParams();
@@ -34,6 +35,7 @@ const EditRegDetails = () => {
     price: "",
     cardImage: "",
     status: "",
+    formTitle: "",
     description: ""
   });
 
@@ -46,14 +48,18 @@ const EditRegDetails = () => {
 
   const handleChange = e => {
     const { id, value } = e.target;
-    const maxLength = id === "title" ? 30 : id === "location" ? 20 : 6; // Maximum allowed length
-    if (id === "price") {
-      // Filter out non-numeric characters
-      const numericValue = value.replace(/\D/g, "");
-      setFormData({ ...formData, [id]: numericValue });
-      setPriceLength(numericValue.length);
+    const maxLength = id === "title" ? 30 : id === "location" ? 20 : 6;
+    if (id === "description") {
+      setFormData({ ...formData, description: value });
+      setIsDataChanged(formData.description !== value);
+    } else if (id === "formTitle") {
+      setFormData({ ...formData, formTitle: value });
+      setIsDataChanged(formData.formTitle !== value);
     } else {
       if (value.length <= maxLength) {
+        if (formData[id] !== value) {
+          setIsDataChanged(true);
+        }
         setFormData({ ...formData, [id]: value });
         if (id === "title") {
           setTitleLength(value.length);
@@ -62,56 +68,41 @@ const EditRegDetails = () => {
         }
       }
     }
-     // Only set isDataChanged to true if the value is different from the original value
-     if (formData[id] !== value) {
-      setIsDataChanged(true);
-    }else {
-      // For non-password fields, directly update the state
-      setFormData({ ...formData, description: value });
+  };
+
+  const fetchRegistrationData = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/server/registration/registration-get/${id}`
+      );
+      setFormData({
+        ...formData,
+        title: response.data.title,
+        status: response.data.status,
+        location: response.data.location,
+        price: response.data.price,
+        cardImage: response.data.cardImage,
+        formTitle: response.data.formTitle,
+        description: response.data.description
+      });
+
+      // Set default state values for titleLength and localityLength
+      setTitleLength(response.data.title.length);
+      setLocalityLength(response.data.location.length);
+      setPriceLength(response.data.price.length);
+
+      setLoading(false);
+      setTimeout(() => {
+        setShowLoader(false);
+      }, 1000);
+    } catch (error) {
+      console.error("Error fetching registration data:", error);
     }
   };
-  const handleChangeDescription = e => {
-    const { value } = e.target;
-    setFormData({ ...formData, description: value });
-  };
-  
-
-
-    const fetchRegistrationData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3000/server/registration/registration-get/${id}`
-        );
-        setFormData({
-          ...formData,
-          title: response.data.title,
-          status: response.data.status,
-          location: response.data.location,
-          cardImage: response.data.cardImage,
-          description: response.data.description,
-          price: response.data.price
-        });
-  
-        // Set default state values for titleLength and localityLength
-        setTitleLength(response.data.title.length);
-        setLocalityLength(response.data.location.length);
-        setPriceLength(response.data.price.length);
-        
-        setLoading(false);
-          setTimeout(() => {
-            setShowLoader(false);
-          }, 1000);
-      } catch (error) {
-        console.error("Error fetching registration data:", error);
-      }
-    };
-
 
   useEffect(() => {
     fetchRegistrationData();
   }, []);
-
-  
 
   useEffect(
     () => {
@@ -160,7 +151,13 @@ const EditRegDetails = () => {
     }
 
     // Check if name, locality, or username is empty
-    if (!formData.title || !formData.location || !formData.price || !formData.description) {
+    if (
+      !formData.title ||
+      !formData.location ||
+      !formData.price ||
+      !formData.description ||
+      !formData.formTitle
+    ) {
       toast.error("Please fill out all fields.");
       return;
     }
@@ -214,28 +211,41 @@ const EditRegDetails = () => {
                   />
                   <p>Loading</p>
                 </div>
-              : <>
+              : <div>
                   <h1 className="text-xl md:text-2xl font-semibold mb-2 ">
                     Edit Registration Details
                   </h1>
                   <Breadcrumbs links={breadcrumbLinks} />
                   <div className="mt-4 flex flex-col lg:flex-row gap-4">
-                  <div className="w-80 max-w-1/4 mx-auto lg:mx-0">
+                    <div className="w-80 max-w-1/4 mx-auto lg:mx-0">
                       <p className="text-slate-400 text-sm my-2">Overview</p>
                       <div className="relative bg-white rounded-md drop-shadow-xl dark:bg-secondary-dark-bg mb-6">
                         <div>
+                          <input
+                            type="file"
+                            ref={fileRef}
+                            hidden
+                            accept="image/*"
+                            onChange={e => setImage(e.target.files[0])}
+                          />
                           <img
                             className="h-52 w-full object-cover rounded-t-lg"
                             src={formData.cardImage}
                             alt="image"
                             key={formData.cardImage}
                           />
+                          <button
+                            onClick={() => fileRef.current.click()}
+                            className="absolute top-1 left-2 bg-black opacity-50 rounded-full p-2   text-white hover:opacity-80 text-sm hover:text-white cursor-pointer"
+                          >
+                            <FaCamera size={18} />
+                          </button>
                         </div>
                         <div
                           className={`absolute top-2 right-2 py-1 px-2 rounded-md text-xs ${formData.status ===
-                            "Open"
-                              ? "bg-green-500 text-white opacity-80"
-                              : formData.status === "Closed"
+                          "Open"
+                            ? "bg-green-500 text-white opacity-80"
+                            : formData.status === "Closed"
                               ? "bg-red-500 text-white opacity-75"
                               : ""}`}
                         >
@@ -262,66 +272,44 @@ const EditRegDetails = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="w-full lg:w-2/3">
-                      <p className="text-slate-400 text-sm my-2">Edit Details</p>
-                      <div className="bg-white rounded-lg shadow-lg p-4">
-                        <div>
-                          <div className="relative w-64">
-                            <input
-                              type="file"
-                              ref={fileRef}
-                              hidden
-                              accept="image/*"
-                              onChange={e => setImage(e.target.files[0])}
-                            />
-                            <img
-                              className="h-52 w-64 object-cover rounded-t-lg opacity-20"
-                              src={formData.cardImage}
-                              alt="image"
-                              key={formData.cardImage}
-                            />
-                            <button
-                              onClick={() => fileRef.current.click()}
-                              className="absolute bottom-0 bg-primary rounded-b-md w-full p-2   text-white hover:opacity-65  text-sm hover:text-white cursor-pointer"
-                            >
-                              Choose Image
-                            </button>
-                          </div>
-
-                          <div className="text-sm self-center my-4">
-                            {imageError
-                              ? <span className="text-red-500">
-                                  Error uploading image (file size must be less than 3
-                                  MB)
-                                </span>
-                              : imagePercent > 0 && imagePercent < 100
-                              ? <span className="text-slate-700 dark:text-gray-200">
-                                  Uploading: {imagePercent}%
-                                  <span
-                                    className="block h-1 bg-blue-500"
-                                    style={{
-                                      width: `${imagePercent}%`,
-                                      transition: "width 0.3s ease-out"
-                                    }}
-                                  />
-                                </span>
-                              : imagePercent === 100 &&
-                                image &&
-                                image.size <= 3 * 1024 * 1024
+                      <div className="flex justify-center text-sm mx-auto my-4">
+                        {imageError
+                          ? <span className="text-red-500">
+                              Error uploading image (file size must be less than
+                              3 MB)
+                            </span>
+                          : imagePercent > 0 && imagePercent < 100
+                            ? <span className="text-slate-700 dark:text-gray-200">
+                                Uploading: {imagePercent}%
+                                <span
+                                  className="block h-1 bg-blue-500"
+                                  style={{
+                                    width: `${imagePercent}%`,
+                                    transition: "width 0.3s ease-out"
+                                  }}
+                                />
+                              </span>
+                            : imagePercent === 100 &&
+                              image &&
+                              image.size <= 3 * 1024 * 1024
                               ? <span className="text-green-500 text-sm">
                                   Image uploaded successfully
                                 </span>
                               : null}
-                          </div>
-                        </div>
+                      </div>
+                    </div>
+                    <div className="w-full lg:w-2/3">
+                      <p className="text-slate-400 text-sm my-2">
+                        Edit Details
+                      </p>
+                      <div className="bg-white rounded-lg shadow-lg p-4">
                         <div className="w-full  mb-4">
-                          <p className="text-sm">
-                            Title{" "}
-                            <span className="ml-2 text-gray-500">
-                              {titleLength}/{30}
-                            </span>
-                          </p>
+                          <div className="flex justify-between">
+                            <p className="text-sm font-semibold">Title</p>
+                            <p className="text-sm ml-2 text-gray-400">
+                              {titleLength}/{20}
+                            </p>
+                          </div>
                           <input
                             type="text"
                             placeholder=""
@@ -330,60 +318,76 @@ const EditRegDetails = () => {
                             autoComplete="off"
                             onChange={handleChange}
                             value={formData.title}
-                            className="form-control bg-slate-50 p-3 mt-2 rounded-lg border border-gray-300 text-sm sm:text-base "
+                            className="form-control bg-white p-3 mt-2 rounded-lg border border-gray-300 text-sm sm:text-base "
                           />
                         </div>
+                        <div className="flex flex-col md:flex-row gap-4">
+                          <div className="w-full mb-4">
+                            <div className="flex justify-between">
+                              <p className="text-sm font-semibold">Location</p>
+                              <p className="text-sm ml-2 text-gray-400">
+                                {localityLength}/{20}
+                              </p>
+                            </div>
 
-                        <div className="w-full mb-4">
-                          <p className="text-sm">
-                            Locality
-                            <span className="ml-2 text-gray-500">
-                              {localityLength}/{20}
-                            </span>
-                          </p>
+                            <input
+                              type="text"
+                              placeholder=""
+                              id="location"
+                              maxLength={20}
+                              autoComplete="off"
+                              onChange={handleChange}
+                              value={formData.location}
+                              className="form-control bg-white p-3 mt-2 rounded-lg border border-gray-300 text-sm sm:text-base "
+                            />
+                          </div>
+                          <div className="w-full mb-8">
+                            <div className="flex justify-between">
+                              <p className="text-sm font-semibold">Price</p>
+                              <p className="text-sm ml-2 text-gray-400">
+                                {priceLength}/{20}
+                              </p>
+                            </div>
+                            <input
+                              type="text"
+                              placeholder=""
+                              id="price"
+                              autoComplete="off"
+                              maxLength={6}
+                              onChange={handleChange}
+                              value={formData.price}
+                              className="form-control bg-white p-3 mt-2 rounded-lg border border-gray-300 text-sm sm:text-base "
+                            />
+                          </div>
+                        </div>
+                        <Divider />
+                        <p className="text-sm text-gray-400 my-4">
+                          Note: The Title and Description fields are only
+                          visible within a registration form. In the Title
+                          field, you can input a title for the form, and in the
+                          Description field, you can include requirements,
+                          rules, qualifications, etc."
+                        </p>
+                        <div className="w-full mb-4 ">
+                          <p className="text-sm font-semibold">Title</p>
 
                           <input
                             type="text"
                             placeholder=""
-                            id="location"
-                            maxLength={20}
+                            id="formTitle"
                             autoComplete="off"
                             onChange={handleChange}
-                            value={formData.location}
-                            className="form-control bg-slate-50 p-3 mt-2 rounded-lg border border-gray-300 text-sm sm:text-base "
+                            value={formData.formTitle}
+                            className="form-control bg-white p-3 mt-2 rounded-lg border border-gray-300 text-sm sm:text-base "
                           />
                         </div>
                         <div className="w-full mb-4">
-                          <p className="text-sm">
-                            Price
-                            <span className="ml-2 text-gray-500">
-                              {priceLength}/{6}
-                            </span>
-                          </p>
-                          <input
-                            type="text"
-                            placeholder=""
-                            id="price"
-                            autoComplete="off"
-                            maxLength={6}
-                            onChange={handleChange}
-                            value={formData.price}
-                            className="form-control bg-slate-50 p-3 mt-2 rounded-lg border border-gray-300 text-sm sm:text-base "
-                          />
-                        </div>
+                          <p className="text-sm font-semibold">Description</p>
 
-                        <div className="w-full mb-4">
-                          <p className="text-sm">Description</p>
-                          <p className="text-sm text-slate-500 my-2">
-                            Note: The Description field is only visible within a
-                            registration form. In this field, you can input a
-                            description for the form, including requirements, rules,
-                            qualifications, etc.
-                          </p>
                           <textarea
                             placeholder=""
                             id="description"
-                            onChange={handleChangeDescription}
+                            onChange={handleChange}
                             value={formData.description}
                             autoComplete="off"
                             className="form-control bg-white p-3  mt-2 rounded-lg border border-gray-300 text-sm sm:text-base overflow-scroll"
@@ -395,12 +399,12 @@ const EditRegDetails = () => {
                           disabled={loading}
                           className="bg-primary text-white text-center p-2 rounded-md hover:opacity-70 disabled:opacity-80 text-sm sm:text-base cursor-pointer "
                         >
-                           {loading ? "Loading..." : "Save"}
+                          {loading ? "Loading..." : "Save"}
                         </div>
                       </div>
                     </div>
                   </div>
-                </>}
+                </div>}
           </div>
         </div>
       </div>

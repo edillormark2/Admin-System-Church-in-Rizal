@@ -7,31 +7,31 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
-
 const ActionPopup = ({
   closePopup,
   selectedRegistrationformId,
   handleUpdateStatus
 }) => {
   const [registrationStatus, setRegistrationStatus] = useState(null);
-  const [loading, setLoading] = useState(true); // New loading state
+  const [registrantsLink, setRegistrantsLink] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch the registration status when the component mounts
-    fetchRegistrationStatus();
+    fetchRegistrationData(); // Fetch both registration status and registrantsLink
   }, []);
 
-  const fetchRegistrationStatus = async () => {
+  const fetchRegistrationData = async () => {
     try {
       const response = await axios.get(
         `http://localhost:3000/server/registration/registration-get/${selectedRegistrationformId}`
       );
       setRegistrationStatus(response.data.status);
+      setRegistrantsLink(response.data.registrantsLink); // Store registrantsLink
     } catch (error) {
-      toast.error("Error fetching registration status");
-      console.error("Error fetching registration status:", error);
+      toast.error("Error fetching registration data");
+      console.error("Error fetching registration data:", error);
     } finally {
-      setTimeout(() => setLoading(false), 0); // Delay rendering by 500 milliseconds
+      setTimeout(() => setLoading(false), 0);
     }
   };
 
@@ -57,7 +57,7 @@ const ActionPopup = ({
   };
 
   if (loading) {
-    return <div />; // Render loading indicator while fetching
+    return <div />;
   }
 
   return (
@@ -78,12 +78,15 @@ const ActionPopup = ({
         </span>
       </div>
 
-      <div className="flex items-center w-full p-2 mb-1 rounded-lg cursor-pointer hover:bg-gray-200">
-        <div className="  w-10 flex justify-center items-center">
-          <FaEye size={22} className="text-gray-700" />
+      <Link to={registrantsLink}>
+        <div className="flex items-center w-full p-2 mb-1 rounded-lg cursor-pointer hover:bg-gray-200">
+          <div className="  w-10 flex justify-center items-center">
+            <FaEye size={22} className="text-gray-700" />
+          </div>
+          <span className="ml-2 text-sm">View Registrants</span>
         </div>
-        <span className="ml-2 text-sm">View Registrants</span>
-      </div>
+      </Link>
+
       <Link
         to={`/registration/manage-registration/edit-details/${selectedRegistrationformId}`}
       >

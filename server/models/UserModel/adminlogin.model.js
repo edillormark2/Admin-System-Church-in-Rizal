@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-
 const adminloginSchema = new mongoose.Schema({
   userID: {
     type: Number,

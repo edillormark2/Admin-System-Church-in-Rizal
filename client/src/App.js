@@ -36,6 +36,9 @@ import RegProfileSettings from "./pages/RegistrationPages/RegProfileSettings";
 import Announcement from "./pages/RegistrationPages/Announcement";
 import ManageRegForm from "./pages/RegistrationPages/ManageRegForm";
 import EditRegDetails from "./pages/RegistrationPages/EditRegDetails";
+import BRregistrants from "./pages/RegistrationPages/Registrants/BibleReading/BRregistrants";
+import AddBRregistrants from "./pages/RegistrationPages/Registrants/BibleReading/AddBRregistrants";
+import ViewBRregistrants from "./pages/RegistrationPages/Registrants/BibleReading/ViewBRregistrant";
 
 const customToastStyle = {
   position: "top-right",
@@ -128,6 +131,19 @@ const App = () => {
                 <Route
                   path="manage-registration/edit-details/:id"
                   element={<EditRegDetails />}
+                />
+                {/* Registrants routes */}
+                <Route
+                  path="manage-registration/BR-registrants"
+                  element={<BRregistrants />}
+                />
+                <Route
+                  path="manage-registration/BR-registrants/Add-BRregistrants"
+                  element={<AddBRregistrants />}
+                />
+                <Route
+                  path="manage-registration/BR-registrants/view-registrant/:id"
+                  element={<ViewBRregistrants />}
                 />
               </Route>
 

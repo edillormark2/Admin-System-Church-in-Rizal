@@ -4,6 +4,9 @@ const registrationSchema = new mongoose.Schema({
   title: {
     type: String
   },
+  formTitle: {
+    type: String
+  },
   status: {
     type: String
   },
@@ -22,6 +25,9 @@ const registrationSchema = new mongoose.Schema({
       "https://qph.cf2.quoracdn.net/main-qimg-6d72b77c81c9841bd98fc806d702e859-lq"
   },
   buttonLink: {
+    type: String
+  },
+  registrantsLink: {
     type: String
   }
 });

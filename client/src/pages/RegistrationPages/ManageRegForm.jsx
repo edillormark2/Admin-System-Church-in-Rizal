@@ -26,7 +26,7 @@ const ManageRegForm = () => {
   const [registrations, setRegistrations] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [registrationStatus, setRegistrationStatus] = useState(null);
+
   const [selectedRegistrationformId, setSelectedRegistrationformId] = useState(
     null
   );
