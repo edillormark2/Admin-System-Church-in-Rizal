@@ -44,7 +44,7 @@ const AddBRregistrants = () => {
         "http://localhost:3000/server/registrants/registrants-add",
         formData
       );
-      toast.success("Registranst added");
+      toast.success("Registration submitted");
       clearForm();
     } catch (error) {
       toast.error("Error submitting form:", error);

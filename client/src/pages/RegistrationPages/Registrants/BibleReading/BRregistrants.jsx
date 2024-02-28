@@ -22,8 +22,8 @@ const BRregistrants = () => {
   const { activeMenu } = useStateContext();
   const [registrants, setRegistrants] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
   const [selectedRegistrant, setSelectedRegistrant] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [openDeleteRegistrantsPopup, setOpenDeleteRegistrantsPopup] = useState(
     false
   );
@@ -33,12 +33,16 @@ const BRregistrants = () => {
   }, []);
 
   const fetchRegistrantsData = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(
         "http://localhost:3000/server/registrants/registrants-display"
       );
       setRegistrants(response.data.registrants);
-      setIsLoading(false); // Set loading to false after data is fetched
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 800);
     } catch (error) {
       console.error("Error fetching registrants:", error);
     }
@@ -61,10 +65,10 @@ const BRregistrants = () => {
   };
 
   const handleRegistrantsDeleted = async () => {
-    setIsLoading(true);
+    setLoading(true);
     setTimeout(async () => {
       await fetchRegistrantsData();
-      setIsLoading(false);
+      setLoading(false);
     }, 1000);
   };
 
@@ -139,7 +143,10 @@ const BRregistrants = () => {
             placement="top"
             TransitionComponent={Fade}
           >
-            <Link to={`/registration/manage-registration/BR-registrants/view-registrant/${params.row._id}`}>
+            <Link
+              to={`/registration/manage-registration/BR-registrants/view-registrant/${params
+                .row._id}`}
+            >
               <button
                 style={{
                   backgroundColor: "#F39C12",
@@ -260,7 +267,7 @@ const BRregistrants = () => {
                       ? "h-44"
                       : ""}`}
                   >
-                    {isLoading
+                    {loading
                       ? <div className="p-16 flex flex-col items-center">
                           <ThreeDots
                             visible={true}

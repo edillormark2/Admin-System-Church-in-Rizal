@@ -303,7 +303,7 @@ const EditRegDetails = () => {
                         Edit Details
                       </p>
                       <div className="bg-white rounded-lg shadow-lg p-4">
-                        <div className="w-full  mb-4">
+                        <div className="w-full  my-4">
                           <div className="flex justify-between">
                             <p className="text-sm font-semibold">Title</p>
                             <p className="text-sm ml-2 text-gray-400">
@@ -321,8 +321,8 @@ const EditRegDetails = () => {
                             className="form-control bg-white p-3 mt-2 rounded-lg border border-gray-300 text-sm sm:text-base "
                           />
                         </div>
-                        <div className="flex flex-col md:flex-row gap-4">
-                          <div className="w-full mb-4">
+                        <div className="flex flex-col md:flex-row gap-4 mb-4">
+                          <div className="w-full my-4">
                             <div className="flex justify-between">
                               <p className="text-sm font-semibold">Location</p>
                               <p className="text-sm ml-2 text-gray-400">
@@ -341,7 +341,7 @@ const EditRegDetails = () => {
                               className="form-control bg-white p-3 mt-2 rounded-lg border border-gray-300 text-sm sm:text-base "
                             />
                           </div>
-                          <div className="w-full mb-8">
+                          <div className="w-full my-4">
                             <div className="flex justify-between">
                               <p className="text-sm font-semibold">Price</p>
                               <p className="text-sm ml-2 text-gray-400">
@@ -368,7 +368,7 @@ const EditRegDetails = () => {
                           Description field, you can include requirements,
                           rules, qualifications, etc."
                         </p>
-                        <div className="w-full mb-4 ">
+                        <div className="w-full my-4 ">
                           <p className="text-sm font-semibold">Title</p>
 
                           <input
@@ -381,7 +381,7 @@ const EditRegDetails = () => {
                             className="form-control bg-white p-3 mt-2 rounded-lg border border-gray-300 text-sm sm:text-base "
                           />
                         </div>
-                        <div className="w-full mb-4">
+                        <div className="w-full my-6">
                           <p className="text-sm font-semibold">Description</p>
 
                           <textarea
@@ -397,7 +397,7 @@ const EditRegDetails = () => {
                         <div
                           onClick={handleSave}
                           disabled={loading}
-                          className="bg-primary text-white text-center p-2 rounded-md hover:opacity-70 disabled:opacity-80 text-sm sm:text-base cursor-pointer "
+                          className="bg-primary text-white text-center p-2 rounded-md hover:opacity-70 disabled:opacity-80 text-sm sm:text-base cursor-pointer mt-8 "
                         >
                           {loading ? "Loading..." : "Save"}
                         </div>
