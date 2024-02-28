@@ -17,7 +17,9 @@ const registrationSchema = new mongoose.Schema({
     type: String
   },
   cardImage: {
-    type: String
+    type: String,
+    default:
+      "https://qph.cf2.quoracdn.net/main-qimg-6d72b77c81c9841bd98fc806d702e859-lq"
   },
   buttonLink: {
     type: String
