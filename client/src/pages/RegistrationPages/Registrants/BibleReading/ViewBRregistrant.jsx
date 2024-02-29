@@ -8,6 +8,8 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { ThreeDots } from "react-loader-spinner";
+import { FaArrowUp } from "react-icons/fa6";
+import ScrollToTop from "../../../../components/ScrollToTop";
 
 const ViewBRregistrants = () => {
   const { id } = useParams();
@@ -120,7 +122,8 @@ const ViewBRregistrants = () => {
           <div className="fixed md:static navbar w-full md:w-11/12 mx-auto rounded-md">
             <Navbar />
           </div>
-          <div className="my-28 md:my-16 mx-10 md:mx-16 ">
+          <ScrollToTop />
+          <div className="my-28 md:my-16 mx-4 md:mx-16 ">
             {showLoader
               ? <div className="p-16 mt-60 flex flex-col items-center">
                   <ThreeDots
@@ -137,7 +140,7 @@ const ViewBRregistrants = () => {
                 </div>
               : <div>
                   <h1 className="text-2xl font-semibold mb-2 ">
-                    Add Registrants
+                    View Registrant
                   </h1>
                   <Breadcrumbs links={breadcrumbLinks} />
                   <div className="py-4 md:py-10 max-w-4xl mx-auto">

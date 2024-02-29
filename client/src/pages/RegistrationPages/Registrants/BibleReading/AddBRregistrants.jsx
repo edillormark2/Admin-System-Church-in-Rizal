@@ -7,6 +7,7 @@ import Breadcrumbs from "../../../../components/Breadcrumbs";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import ScrollToTop from "../../../../components/ScrollToTop";
 
 const AddBRregistrants = () => {
   const { id } = useParams();
@@ -109,7 +110,8 @@ const AddBRregistrants = () => {
           <div className="fixed md:static navbar w-full md:w-11/12 mx-auto rounded-md">
             <Navbar />
           </div>
-          <div className="my-28 md:my-16 mx-10 md:mx-16 ">
+          <ScrollToTop />
+          <div className=" my-28 md:my-16 mx-4 md:mx-16 ">
             <h1 className="text-2xl font-semibold mb-2 ">Add Registrants</h1>
             <Breadcrumbs links={breadcrumbLinks} />
             <div className="py-4 md:py-10 max-w-4xl mx-auto">

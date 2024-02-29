@@ -362,11 +362,11 @@ const EditRegDetails = () => {
                         </div>
                         <Divider />
                         <p className="text-sm text-gray-400 my-4">
-                          Note: The Title and Description fields are only
-                          visible within a registration form. In the Title
-                          field, you can input a title for the form, and in the
-                          Description field, you can include requirements,
-                          rules, qualifications, etc."
+                          Note: The Title and Description fields in this section
+                          are only visible within a registration form. In the
+                          Title field, you can input a title for the form, and
+                          in the Description field, you can include
+                          requirements, rules, qualifications, etc.
                         </p>
                         <div className="w-full my-4 ">
                           <p className="text-sm font-semibold">Title</p>

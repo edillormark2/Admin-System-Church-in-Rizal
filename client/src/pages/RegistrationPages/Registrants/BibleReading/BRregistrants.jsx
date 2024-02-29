@@ -16,7 +16,8 @@ import { TiUserAdd } from "react-icons/ti";
 import { Link } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
 import BRDeletePopup from "../../../../components/RegComponents/Registrants/BRDeletePopup";
-import { useParams } from "react-router-dom";
+import { MdDownload } from "react-icons/md";
+import { CSVLink } from "react-csv";
 
 const BRregistrants = () => {
   const { activeMenu } = useStateContext();
@@ -223,7 +224,7 @@ const BRregistrants = () => {
           <div className="fixed md:static navbar w-full md:w-11/12 mx-auto rounded-md">
             <Navbar />
           </div>
-          <div className="my-28 md:my-16 mx-10 md:mx-16 ">
+          <div className="my-28 md:my-16 mx-4 md:mx-16 ">
             <div className="mb-12">
               <h1 className="text-2xl font-semibold mb-2 ">
                 Bible Reading Registrants
@@ -231,7 +232,24 @@ const BRregistrants = () => {
               <Breadcrumbs links={breadcrumbLinks} />
             </div>
             <div>
-              <div className="flex justify-end mb-8">
+              <div className="flex justify-end mb-8 gap-2">
+                <Tooltip
+                  arrow
+                  title="Download Data"
+                  placement="bottom"
+                  TransitionComponent={Fade}
+                >
+                  <div className=" bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70">
+                    <CSVLink
+                      data={registrants}
+                      filename={"registrants.csv"}
+                      className="text-white flex items-center"
+                      target="_blank"
+                    >
+                      <MdDownload size={22} />
+                    </CSVLink>
+                  </div>
+                </Tooltip>
                 <Tooltip
                   arrow
                   title="Add Registrants"

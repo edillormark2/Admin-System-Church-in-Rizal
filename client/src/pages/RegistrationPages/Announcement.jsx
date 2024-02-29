@@ -148,7 +148,7 @@ const Announcement = () => {
           <div className="fixed md:static navbar w-full md:w-11/12 mx-auto rounded-md z-10">
             <Navbar />
           </div>
-          <div className="my-28 md:my-16 mx-4 md:mx-16 overflow-x-auto">
+          <div className="my-28 md:my-8 mx-4 md:mx-16 overflow-x-auto">
             <div>
               <div>
                 <div className="w-full mx-auto mb-8">
@@ -226,7 +226,7 @@ const Announcement = () => {
                                       <p className="font-semibold">
                                         {announcement.name}
                                       </p>
-                                      <div className="flex flex-row text-sm text-gray-500 gap-1">
+                                      <div className="flex flex-row text-xs md:text-sm text-gray-500 gap-1">
                                         <p>{announcement.role}</p>•
                                         <p>{announcement.dateCreated}</p>
                                       </div>
@@ -277,7 +277,7 @@ const Announcement = () => {
                                     <p className="font-semibold">
                                       {announcement.name}
                                     </p>
-                                    <div className="flex flex-row text-sm text-gray-500 gap-1">
+                                    <div className="flex flex-row text-xs md:text-sm text-gray-500 gap-1">
                                       <p>{announcement.role}</p>•
                                       <p>{announcement.dateCreated}</p>
                                     </div>
