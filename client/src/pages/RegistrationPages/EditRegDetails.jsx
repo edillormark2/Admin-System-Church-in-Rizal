@@ -345,7 +345,7 @@ const EditRegDetails = () => {
                             <div className="flex justify-between">
                               <p className="text-sm font-semibold">Price</p>
                               <p className="text-sm ml-2 text-gray-400">
-                                {priceLength}/{20}
+                                {priceLength}/{6}
                               </p>
                             </div>
                             <input

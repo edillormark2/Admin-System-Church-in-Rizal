@@ -242,7 +242,7 @@ const BRregistrants = () => {
                   <div className=" bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70">
                     <CSVLink
                       data={registrants}
-                      filename={"registrants.csv"}
+                      filename={"bible-reading-registrants.csv"}
                       className="text-white flex items-center"
                       target="_blank"
                     >

@@ -39,6 +39,7 @@ import EditRegDetails from "./pages/RegistrationPages/EditRegDetails";
 import BRregistrants from "./pages/RegistrationPages/Registrants/BibleReading/BRregistrants";
 import AddBRregistrants from "./pages/RegistrationPages/Registrants/BibleReading/AddBRregistrants";
 import ViewBRregistrants from "./pages/RegistrationPages/Registrants/BibleReading/ViewBRregistrant";
+import CheckInOut from "./pages/RegistrationPages/CheckInOut";
 
 const customToastStyle = {
   position: "top-right",
@@ -132,6 +133,7 @@ const App = () => {
                   path="manage-registration/edit-details/:id"
                   element={<EditRegDetails />}
                 />
+                <Route path="check-in-out" element={<CheckInOut />} />
                 {/* Registrants routes */}
                 <Route
                   path="manage-registration/BR-registrants"

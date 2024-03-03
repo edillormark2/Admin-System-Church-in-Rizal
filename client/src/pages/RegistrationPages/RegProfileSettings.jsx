@@ -303,7 +303,7 @@ const RegProfileSettings = () => {
               : <div>
                   <h1 className="mb-4 text-2xl font-semibold">My Profile</h1>
                   <div className="flex flex-col lg:flex-row gap-4 xl:gap-8">
-                    <div className="bg-none lg:bg-white  lg:w-2/6 shadow-none lg:shadow-lg  rounded-lg w-full xl:w-1/5 p-0 lg:p-4 h-64 lg:h-80 ">
+                    <div className=" bg-none lg:bg-white  shadow-none lg:shadow-lg  rounded-lg mx-auto lg:mx-0 w-72 p-0 lg:p-4 h-64 lg:h-80 ">
                       <div className="flex justify-center flex-col items-center">
                         <div className="relative mt-4">
                           <input
