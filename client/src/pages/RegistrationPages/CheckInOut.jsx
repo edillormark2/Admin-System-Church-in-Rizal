@@ -3,7 +3,6 @@ import "./Reg.css";
 import Navbar from "../../components/RegComponents/Navbar";
 import Sidebar from "../../components/RegComponents/Sidebar";
 import { useStateContext } from "../../redux/ContextProvider";
-import { CSVLink } from "react-csv";
 import Tooltip from "@mui/material/Tooltip";
 import Fade from "@mui/material/Fade";
 import { MdDownload } from "react-icons/md";
@@ -56,7 +55,7 @@ const CheckInOut = () => {
 
   return (
     <div className="bg-gray-200 min-h-screen">
-      <div className="flex relative ">
+      <div className="flex relative">
         {activeMenu
           ? <div className="w-64 fixed sidebar drop-shadow-xl bg-gray-100">
               <Sidebar />
@@ -65,7 +64,7 @@ const CheckInOut = () => {
               <Sidebar />
             </div>}
         <div
-          className={` bg-gray-100 min-h-screen w-full md:flex-1 md:overflow-hidden ${activeMenu
+          className={`bg-gray-100 min-h-screen w-full md:flex-1 md:overflow-hidden ${activeMenu
             ? "lg:ml-60"
             : "flex-1"}`}
         >
@@ -101,7 +100,7 @@ const CheckInOut = () => {
                     placement="bottom"
                     TransitionComponent={Fade}
                   >
-                    <div className=" bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70 text-white">
+                    <div className="bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70 text-white">
                       <MdDownload size={24} />
                     </div>
                   </Tooltip>

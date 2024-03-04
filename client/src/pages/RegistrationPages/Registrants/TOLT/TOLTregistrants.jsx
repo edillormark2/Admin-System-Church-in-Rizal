@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../../Reg.css";
 import Navbar from "../../../../components/RegComponents/Navbar";
 import Sidebar from "../../../../components/RegComponents/Sidebar";
@@ -18,6 +18,7 @@ import { ThreeDots } from "react-loader-spinner";
 import { MdDownload } from "react-icons/md";
 import { CSVLink } from "react-csv";
 import TOLTDeletePopup from "../../../../components/RegComponents/Registrants/TOLTDeletePopup";
+import YearMenuPicker from "../../../../components/YearMenuPicker";
 
 const TOLTregistrants = () => {
   const { activeMenu } = useStateContext();
@@ -25,19 +26,50 @@ const TOLTregistrants = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRegistrant, setSelectedRegistrant] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
   const [openDeleteRegistrantsPopup, setOpenDeleteRegistrantsPopup] = useState(
     false
   );
 
+  const yearDropdownRef = useRef(null);
+
   useEffect(() => {
-    fetchRegistrantsData();
+    const handleOutsideClick = event => {
+      if (
+        yearDropdownRef.current &&
+        !yearDropdownRef.current.contains(event.target) &&
+        !event.target.closest(".year-dropdown-button")
+      ) {
+        setYearDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
   }, []);
+
+  const handleYearItemClick = year => {
+    setSelectedYear(year);
+    setYearDropdownOpen(false);
+  };
+
+  useEffect(
+    () => {
+      fetchRegistrantsData();
+    },
+    [selectedYear]
+  );
 
   const fetchRegistrantsData = async () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://localhost:3000/server/registrants/tolt-registrants-display"
+        `http://localhost:3000/server/registrants/tolt-registrants-display?year=${selectedYear}`
       );
       setRegistrants(response.data.registrants);
 
@@ -225,6 +257,13 @@ const TOLTregistrants = () => {
             </div>
             <div>
               <div className="flex justify-end mb-8 gap-2">
+                <YearMenuPicker
+                  selectedYear={selectedYear}
+                  handleYearItemClick={handleYearItemClick}
+                  yearDropdownOpen={yearDropdownOpen}
+                  setYearDropdownOpen={setYearDropdownOpen}
+                  yearDropdownRef={yearDropdownRef}
+                />
                 <Tooltip
                   arrow
                   title="Download Data"

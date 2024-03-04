@@ -264,8 +264,7 @@ const BRregistrants = () => {
               <Breadcrumbs links={breadcrumbLinks} />
             </div>
             <div>
-              <div className="flex bg-white pt-16 pb-4 rounded-lg shadow-sm  px-4 justify-end mb-8 gap-2">
-                <p className="mt-2 text-sm text-gray-500">Select Year</p>
+              <div className="flex  px-4 justify-end mb-8 gap-2">
                 <YearMenuPicker
                   selectedYear={selectedYear}
                   handleYearItemClick={handleYearItemClick}
@@ -279,7 +278,7 @@ const BRregistrants = () => {
                   placement="bottom"
                   TransitionComponent={Fade}
                 >
-                  <div className=" bg-primary ml-4 p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70">
+                  <div className=" bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70">
                     <CSVLink
                       data={registrants}
                       filename={"bible-reading-registrants.csv"}

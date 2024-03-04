@@ -18,6 +18,13 @@ const ToltDataGrid = ({ selectedYear }) => {
     setSearchQuery(e.target.value);
   };
 
+  // Filter registrants based on search query
+  const filteredRegistrants = registrants.filter(registrant =>
+    Object.values(registrant).some(value =>
+      value.toString().toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  );
+
   // Fetch registrants data
   useEffect(
     () => {
@@ -131,7 +138,9 @@ const ToltDataGrid = ({ selectedYear }) => {
         <div className="flex justify-between">
           <div className="flex relative">
             <GoDotFill className="absolute top-1/2 transform -translate-y-1/2 text-green-500" />
-            <p className="ml-5 font-semibold">Tour of a Lifetime Registrants</p>
+            <p className="ml-5 font-semibold text-sm md:text-base">
+              Tour of a Lifetime Registrants
+            </p>
           </div>
           <div className="absolute top-0 right-0 mt-4 mr-4">
             <div className="relative">
@@ -149,7 +158,7 @@ const ToltDataGrid = ({ selectedYear }) => {
           </div>
         </div>
         <div
-          className={`max-w-full overflow-x-auto mt-12 ${registrants.length ===
+          className={`max-w-full overflow-x-auto mt-12 ${filteredRegistrants.length ===
           0
             ? "h-44"
             : ""}`}
@@ -179,7 +188,7 @@ const ToltDataGrid = ({ selectedYear }) => {
                 initialState={{
                   pagination: { paginationModel: { pageSize: 6 } }
                 }}
-                rows={registrants}
+                rows={filteredRegistrants}
                 columns={columns}
                 pageSizeOptions={[6, 20, 50]}
                 getRowId={row => row._id}

@@ -16,7 +16,9 @@ const YearMenuPicker = ({
 
   return (
     <div
-      className="year-dropdown-button flex relative p-2 w-28 text-sm border border-gray-200 bg-white shadow-lg rounded-md cursor-pointer hover:bg-blue-50 hover:border-blue-200"
+      className={`year-dropdown-button flex relative p-2 w-28 text-sm border-1 border-gray-300 bg-white rounded-md cursor-pointer  ${yearDropdownOpen
+        ? "border-primary"
+        : "border-gray-300"}`}
       onClick={() => setYearDropdownOpen(!yearDropdownOpen)}
     >
       <FaRegCalendar className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500" />
