@@ -9,7 +9,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import ScrollToTop from "../../../../components/ScrollToTop";
 
-const AddBRregistrants = () => {
+const AddTOLTregistrants = () => {
   const { id } = useParams();
   const { activeMenu } = useStateContext();
 
@@ -19,7 +19,6 @@ const AddBRregistrants = () => {
     surname: "",
     firstname: "",
     locality: "",
-    status: "",
     grade: "",
     attended: "",
     school: "",
@@ -42,7 +41,7 @@ const AddBRregistrants = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3000/server/registrants/br-registrants-add",
+        "http://localhost:3000/server/registrants/tolt-registrants-add",
         formData
       );
       toast.success("Registration submitted");
@@ -64,7 +63,7 @@ const AddBRregistrants = () => {
   const fetchRegistrationData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/server/registration/registration-get/65db70f34f3f45521cece27f`
+        `http://localhost:3000/server/registration/registration-get/65db71204f3f45521cece280`
       );
       setRegData({
         ...regData,
@@ -86,7 +85,7 @@ const AddBRregistrants = () => {
     { to: "/registration/dashboard", label: "Home" },
     { to: "/registration/manage-registration", label: "Registration" },
     {
-      to: "/registration/manage-registration/BR-registrants",
+      to: "/registration/manage-registration/TOLT-registrants",
       label: "View Registrants"
     },
     { to: "", label: "Add Registrants" }
@@ -141,17 +140,15 @@ const AddBRregistrants = () => {
 
                 <div className="bg-white p-8 rounded-md shadow-md border border-gray-300 dark:border-gray-500 dark:bg-secondary-dark-bg dark:text-gray-200 text-sm sm:text-lg font-normal">
                   <p className="mb-4 font-semibold">
-                    Below are the Rizal Young People Bible Reading Basic
+                    Below are the Tour of a Lifetime (Rizal) Basic
                     Qualifications. Thus, these Young People must be:
                   </p>
                   <ol className="list-decimal pl-6 mb-4">
-                    <li>A Grade 7 to a 5th-year college student</li>
+                    <li>A Grade 10 to a 5th-year college student</li>
                     <li>Willing to be trained and adjusted</li>
-                    <li>
-                      Willing to participate and function in all the sessions
-                    </li>
-                    <li>Willing to exercise his spirit at all times</li>
-                    <li>Willing to coordinate with the saints</li>
+                    <li>Participative and functioning in all the sessions</li>
+                    <li>Exercising his/her spirit at all times</li>
+                    <li>Willing to coordinate with the coordinators</li>
                   </ol>
                   <div className="flex flex-col items-left mt-8">
                     <label className="flex items-center mb-2">
@@ -360,66 +357,6 @@ const AddBRregistrants = () => {
                   </div>
                 </div>
 
-                <div className="bg-white p-8 rounded-md shadow-md border border-gray-300 dark:border-gray-500 dark:bg-secondary-dark-bg dark:text-gray-200 text-sm sm:text-lg font-normal">
-                  <p className="mb-4 font-semibold">
-                    ARE YOU A JUNIOR, A SENIOR YOUNG PEOPLE, OR A SERVING ONE?
-                  </p>
-                  <p className="italic">JYP - Grades 5 and 6</p>
-                  <p className="mb-4 italic">
-                    SYP - Grades 7 to 5th Year College
-                  </p>
-                  <p className="font-semibold">Note:</p>
-                  <p className="mb-4 italic">
-                    For those Grade 5 and 6 students who want to attend this
-                    Bible Reading, you can answer the pre-registration form.
-                  </p>
-                  <p className="mb-4 italic">
-                    Also, kindly fellowship to the serving ones in your locality
-                    about your willingness to attend.
-                  </p>
-                  <p className="mb-8 italic">
-                    However, we will still fellowship your desire to join
-                    through the coordinating brothers. Please wait for their
-                    confirmation about this. Amen!
-                  </p>
-                  <label className="flex items-center mb-2">
-                    <input
-                      type="radio"
-                      name="status"
-                      className="mr-2 h-5 w-5"
-                      onChange={handleChange}
-                      value="Junior Young People"
-                      checked={formData.status === "Junior Young People"}
-                      required
-                    />
-                    Junior Young People
-                  </label>
-                  <label className="flex items-center mb-2">
-                    <input
-                      type="radio"
-                      name="status"
-                      className="mr-2 h-5 w-5"
-                      onChange={handleChange}
-                      value="Senior Young People"
-                      checked={formData.status === "Senior Young People"}
-                      required
-                    />
-                    Senior Young People
-                  </label>
-                  <label className="flex items-center mb-2">
-                    <input
-                      type="radio"
-                      name="status"
-                      className="mr-2 h-5 w-5"
-                      onChange={handleChange}
-                      value="Serving One"
-                      checked={formData.status === "Serving One"}
-                      required
-                    />
-                    Serving One
-                  </label>
-                </div>
-
                 <div className="bg-white p-8 rounded-md shadow-md border border-gray-300 dark:border-gray-500 dark:bg-secondary-dark-bg dark:text-gray-200 text-sm sm:text-lg mb-4 mt-4">
                   <h1 className="mb-4 font-semibold">
                     Grade / Year Level<span className="text-red-500"> *</span>
@@ -584,7 +521,8 @@ const AddBRregistrants = () => {
 
                 <div className="bg-white p-8 rounded-md shadow-md border border-gray-300 dark:border-gray-500 dark:bg-secondary-dark-bg dark:text-gray-200 text-sm sm:text-lg mb-4 mt-4">
                   <h1 className="mb-4 font-semibold">
-                    Times Attended<span className="text-red-500"> *</span>
+                    How many times have you attended the Tour of a Lifetime?
+                    <span className="text-red-500"> *</span>
                   </h1>
                   <label className="flex items-center mb-2">
                     <input
@@ -657,6 +595,20 @@ const AddBRregistrants = () => {
                       required
                     />
                     More Than 5 Times
+                  </label>
+                  <label className="flex items-center mb-2">
+                    <input
+                      type="radio"
+                      name="attended"
+                      className="mr-2 h-5 w-5"
+                      onChange={handleChange}
+                      value="Not Yet (I am a First-Timer)"
+                      checked={
+                        formData.attended === "Not Yet (I am a First-Timer)"
+                      }
+                      required
+                    />
+                    Not Yet (I am a First-Timer)
                   </label>
                 </div>
 
@@ -740,4 +692,4 @@ const AddBRregistrants = () => {
   );
 };
 
-export default AddBRregistrants;
+export default AddTOLTregistrants;

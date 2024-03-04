@@ -40,6 +40,9 @@ import BRregistrants from "./pages/RegistrationPages/Registrants/BibleReading/BR
 import AddBRregistrants from "./pages/RegistrationPages/Registrants/BibleReading/AddBRregistrants";
 import ViewBRregistrants from "./pages/RegistrationPages/Registrants/BibleReading/ViewBRregistrant";
 import CheckInOut from "./pages/RegistrationPages/CheckInOut";
+import TOLTregistrants from "./pages/RegistrationPages/Registrants/TOLT/TOLTregistrants";
+import AddTOLTregistrants from "./pages/RegistrationPages/Registrants/TOLT/AddTOLTregistrants";
+import ViewTOLTregistrants from "./pages/RegistrationPages/Registrants/TOLT/ViewTOLTregistrants";
 
 const customToastStyle = {
   position: "top-right",
@@ -146,6 +149,18 @@ const App = () => {
                 <Route
                   path="manage-registration/BR-registrants/view-registrant/:id"
                   element={<ViewBRregistrants />}
+                />
+                <Route
+                  path="manage-registration/TOLT-registrants"
+                  element={<TOLTregistrants />}
+                />
+                <Route
+                  path="manage-registration/TOLT-registrants/Add-TOLTregistrants"
+                  element={<AddTOLTregistrants />}
+                />
+                <Route
+                  path="manage-registration/TOLT-registrants/view-registrant/:id"
+                  element={<ViewTOLTregistrants />}
                 />
               </Route>
 

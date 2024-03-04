@@ -19,7 +19,7 @@ import BRDeletePopup from "../../../../components/RegComponents/Registrants/BRDe
 import { MdDownload } from "react-icons/md";
 import { CSVLink } from "react-csv";
 
-const BRregistrants = () => {
+const TOLTregistrants = () => {
   const { activeMenu } = useStateContext();
   const [registrants, setRegistrants] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -37,7 +37,7 @@ const BRregistrants = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://localhost:3000/server/registrants/br-registrants-display"
+        "http://localhost:3000/server/registrants/tolt-registrants-display"
       );
       setRegistrants(response.data.registrants);
 
@@ -107,14 +107,6 @@ const BRregistrants = () => {
       minWidth: 120
     },
     {
-      field: "status",
-      headerName: "Status",
-      width: 150,
-      editable: false,
-      flex: 1,
-      minWidth: 120
-    },
-    {
       field: "email",
       headerName: "Email",
       width: 150,
@@ -145,7 +137,7 @@ const BRregistrants = () => {
             TransitionComponent={Fade}
           >
             <Link
-              to={`/registration/manage-registration/BR-registrants/view-registrant/${params
+              to={`/registration/manage-registration/TOLT-registrants/view-registrant/${params
                 .row._id}`}
             >
               <button
@@ -227,7 +219,7 @@ const BRregistrants = () => {
           <div className="my-28 md:my-16 mx-4 md:mx-16 ">
             <div className="mb-12">
               <h1 className="text-2xl font-semibold mb-2 ">
-                Bible Reading Registrants
+                Tour of a Lifetime Registrants
               </h1>
               <Breadcrumbs links={breadcrumbLinks} />
             </div>
@@ -242,7 +234,7 @@ const BRregistrants = () => {
                   <div className=" bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70">
                     <CSVLink
                       data={registrants}
-                      filename={"bible-reading-registrants.csv"}
+                      filename={"tour-of-a-lifetime-registrants.csv"}
                       className="text-white flex items-center"
                       target="_blank"
                     >
@@ -256,7 +248,7 @@ const BRregistrants = () => {
                   placement="bottom"
                   TransitionComponent={Fade}
                 >
-                  <Link to="/registration/manage-registration/BR-registrants/Add-BRregistrants">
+                  <Link to="/registration/manage-registration/TOLT-registrants/Add-TOLTregistrants">
                     <div className=" bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70">
                       <TiUserAdd size={22} className="text-white" />
                     </div>
@@ -334,4 +326,4 @@ const BRregistrants = () => {
   );
 };
 
-export default BRregistrants;
+export default TOLTregistrants;
