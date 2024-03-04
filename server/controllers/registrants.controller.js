@@ -4,7 +4,11 @@ import TOLTregistrants from "../models/Registrants/TOLTregistrants.model.js";
 // Controller for registrants display
 export const BRregistrantsDisplay = async (req, res) => {
   try {
-    const registrants = await BRregistrants.find();
+    const { year } = req.query;
+    // Constructing a regular expression to match the beginning of the date string with the selected year
+    const regex = new RegExp(`^${year}`);
+    // Assuming TOLTregistrants is your MongoDB model
+    const registrants = await BRregistrants.find({ year: regex });
     res.status(200).json({ success: true, registrants });
   } catch (error) {
     console.error("Error fetching registrations:", error);
@@ -108,7 +112,11 @@ export const BRregistrantsDisplayByID = async (req, res) => {
 // Controller for registrants display
 export const TOLTregistrantsDisplay = async (req, res) => {
   try {
-    const registrants = await TOLTregistrants.find();
+    const { year } = req.query;
+    // Constructing a regular expression to match the beginning of the date string with the selected year
+    const regex = new RegExp(`^${year}`);
+    // Assuming TOLTregistrants is your MongoDB model
+    const registrants = await TOLTregistrants.find({ year: regex });
     res.status(200).json({ success: true, registrants });
   } catch (error) {
     console.error("Error fetching registrations:", error);

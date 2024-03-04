@@ -7,14 +7,8 @@ import { CSVLink } from "react-csv";
 import Tooltip from "@mui/material/Tooltip";
 import Fade from "@mui/material/Fade";
 import { MdDownload } from "react-icons/md";
-import { DataGrid } from "@mui/x-data-grid";
-import axios from "axios";
-import { IoMdSearch } from "react-icons/io";
-import { gridClasses } from "@mui/x-data-grid";
-import { ThreeDots } from "react-loader-spinner";
 import YearMenuPicker from "../../components/YearMenuPicker";
 import RegMenuPicker from "../../components/RegMenuPicker";
-import { FaPlay } from "react-icons/fa6";
 import BrDataGrid from "../../components/RegistrantsDataGrid/BrDataGrid";
 import ToltDataGrid from "../../components/RegistrantsDataGrid/ToltDataGrid";
 
@@ -23,11 +17,7 @@ const CheckInOut = () => {
   const [regDropdownOpen, setRegDropdownOpen] = useState(false);
   const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
   const [selectedReg, setSelectedReg] = useState(null);
-  const [selectedYear, setSelectedYear] = useState(null);
-  const [registrants, setRegistrants] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedRegistrant, setSelectedRegistrant] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
   const regDropdownRef = useRef(null);
   const yearDropdownRef = useRef(null);
@@ -119,8 +109,12 @@ const CheckInOut = () => {
               </div>
             </div>
             <div>
-              <BrDataGrid />
-              <ToltDataGrid />
+              <div>
+                {selectedReg === "Bible Reading" &&
+                  <BrDataGrid selectedYear={selectedYear} />}
+                {selectedReg === "Tour of a Lifetime" &&
+                  <ToltDataGrid selectedYear={selectedYear} />}
+              </div>
             </div>
           </div>
         </div>

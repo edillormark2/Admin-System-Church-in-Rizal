@@ -11,7 +11,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const BRDeletePopup = ({
+const TOLTDeletePopup = ({
   openDeleteRegistrantsPopup,
   setOpenDeleteRegistrantsPopup,
   selectedRegistrant,
@@ -24,7 +24,7 @@ const BRDeletePopup = ({
   const handleDeleteRegistrant = async () => {
     try {
       await axios.delete(
-        `http://localhost:3000/server/registrants/br-registrants-delete/${selectedRegistrant}`
+        `http://localhost:3000/server/registrants/tolt-registrants-delete/${selectedRegistrant}`
       );
       toast.success("Registrant deleted");
       setOpenDeleteRegistrantsPopup(false);
@@ -68,4 +68,4 @@ const BRDeletePopup = ({
   );
 };
 
-export default BRDeletePopup;
+export default TOLTDeletePopup;

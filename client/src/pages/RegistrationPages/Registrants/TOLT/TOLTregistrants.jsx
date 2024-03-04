@@ -15,9 +15,9 @@ import { gridClasses } from "@mui/x-data-grid";
 import { TiUserAdd } from "react-icons/ti";
 import { Link } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
-import BRDeletePopup from "../../../../components/RegComponents/Registrants/BRDeletePopup";
 import { MdDownload } from "react-icons/md";
 import { CSVLink } from "react-csv";
+import TOLTDeletePopup from "../../../../components/RegComponents/Registrants/TOLTDeletePopup";
 
 const TOLTregistrants = () => {
   const { activeMenu } = useStateContext();
@@ -308,7 +308,7 @@ const TOLTregistrants = () => {
                           getRowId={row => row._id}
                         />}
                   </div>
-                  <BRDeletePopup
+                  <TOLTDeletePopup
                     openDeleteRegistrantsPopup={openDeleteRegistrantsPopup}
                     setOpenDeleteRegistrantsPopup={
                       setOpenDeleteRegistrantsPopup

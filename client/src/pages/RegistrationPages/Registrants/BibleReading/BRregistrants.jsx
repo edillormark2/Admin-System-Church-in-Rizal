@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../../Reg.css";
 import Navbar from "../../../../components/RegComponents/Navbar";
 import Sidebar from "../../../../components/RegComponents/Sidebar";
@@ -18,6 +18,7 @@ import { ThreeDots } from "react-loader-spinner";
 import BRDeletePopup from "../../../../components/RegComponents/Registrants/BRDeletePopup";
 import { MdDownload } from "react-icons/md";
 import { CSVLink } from "react-csv";
+import YearMenuPicker from "../../../../components/YearMenuPicker";
 
 const BRregistrants = () => {
   const { activeMenu } = useStateContext();
@@ -25,19 +26,50 @@ const BRregistrants = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRegistrant, setSelectedRegistrant] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
   const [openDeleteRegistrantsPopup, setOpenDeleteRegistrantsPopup] = useState(
     false
   );
 
+  const yearDropdownRef = useRef(null);
+
   useEffect(() => {
-    fetchRegistrantsData();
+    const handleOutsideClick = event => {
+      if (
+        yearDropdownRef.current &&
+        !yearDropdownRef.current.contains(event.target) &&
+        !event.target.closest(".year-dropdown-button")
+      ) {
+        setYearDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
   }, []);
+
+  const handleYearItemClick = year => {
+    setSelectedYear(year);
+    setYearDropdownOpen(false);
+  };
+
+  useEffect(
+    () => {
+      fetchRegistrantsData();
+    },
+    [selectedYear]
+  );
 
   const fetchRegistrantsData = async () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://localhost:3000/server/registrants/br-registrants-display"
+        `http://localhost:3000/server/registrants/br-registrants-display?year=${selectedYear}`
       );
       setRegistrants(response.data.registrants);
 
@@ -232,14 +264,22 @@ const BRregistrants = () => {
               <Breadcrumbs links={breadcrumbLinks} />
             </div>
             <div>
-              <div className="flex justify-end mb-8 gap-2">
+              <div className="flex bg-white pt-16 pb-4 rounded-lg shadow-sm  px-4 justify-end mb-8 gap-2">
+                <p className="mt-2 text-sm text-gray-500">Select Year</p>
+                <YearMenuPicker
+                  selectedYear={selectedYear}
+                  handleYearItemClick={handleYearItemClick}
+                  yearDropdownOpen={yearDropdownOpen}
+                  setYearDropdownOpen={setYearDropdownOpen}
+                  yearDropdownRef={yearDropdownRef}
+                />
                 <Tooltip
                   arrow
                   title="Download Data"
                   placement="bottom"
                   TransitionComponent={Fade}
                 >
-                  <div className=" bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70">
+                  <div className=" bg-primary ml-4 p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70">
                     <CSVLink
                       data={registrants}
                       filename={"bible-reading-registrants.csv"}

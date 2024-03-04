@@ -20,6 +20,13 @@ const BRregistrantsSchema = new mongoose.Schema({
         day: "2-digit",
         year: "numeric"
       })
+  },
+  year: {
+    type: String,
+    default: () =>
+      new Date().toLocaleDateString("en-US", {
+        year: "numeric"
+      })
   }
 });
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import { MdDownload } from "react-icons/md";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { FaRegAddressBook } from "react-icons/fa6";
@@ -74,11 +74,11 @@ const RegMenuPicker = ({
           Summer School of Truth
         </button>
         <button
-          onClick={() => handleRegItemClick("Tour of a life time")}
+          onClick={() => handleRegItemClick("Tour of a Lifetime")}
           className={`block px-4 py-2 text-sm text-gray-400 hover:bg-blue-50 w-full text-left ${selectedReg ===
-            "Tour of a life time" && "bg-blue-50 text-gray-700"}`}
+            "Tour of a Lifetime" && "bg-blue-50 text-gray-700"}`}
         >
-          Tour of a life time
+          Tour of a Lifetime
         </button>
       </div>}
   </div>;

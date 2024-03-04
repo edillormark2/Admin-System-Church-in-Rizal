@@ -7,8 +7,9 @@ import { IoMdSearch } from "react-icons/io";
 import { gridClasses } from "@mui/x-data-grid";
 import { ThreeDots } from "react-loader-spinner";
 import { FaPlay } from "react-icons/fa6";
+import { GoDotFill } from "react-icons/go";
 
-const BrDataGrid = () => {
+const BrDataGrid = ({ selectedYear }) => {
   const [registrants, setRegistrants] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
@@ -18,15 +19,18 @@ const BrDataGrid = () => {
   };
 
   // Fetch registrants data
-  useEffect(() => {
-    fetchRegistrantsData();
-  }, []);
+  useEffect(
+    () => {
+      fetchRegistrantsData();
+    },
+    [selectedYear]
+  );
 
   const fetchRegistrantsData = async () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://localhost:3000/server/registrants/br-registrants-display"
+        `http://localhost:3000/server/registrants/br-registrants-display?year=${selectedYear}`
       );
       setRegistrants(response.data.registrants);
       setLoading(false); // Set loading to false after data fetch
@@ -125,7 +129,10 @@ const BrDataGrid = () => {
     <div>
       <div className="bg-white p-4 rounded-xl drop-shadow-xl">
         <div className="flex justify-between">
-          <div>Bible Reading Registrants</div>
+          <div className="flex relative">
+            <GoDotFill className="absolute top-1/2 transform -translate-y-1/2 text-green-500" />
+            <p className="ml-5 font-semibold">Bible Reading Registrants</p>
+          </div>
           <div className="absolute top-0 right-0 mt-4 mr-4">
             <div className="relative">
               <input
