@@ -7,14 +7,14 @@ import { CSVLink } from "react-csv";
 import Tooltip from "@mui/material/Tooltip";
 import Fade from "@mui/material/Fade";
 import { MdDownload } from "react-icons/md";
-import { IoMdArrowDropdown } from "react-icons/io";
-import { FaRegCalendar } from "react-icons/fa6";
-import { FaRegAddressBook } from "react-icons/fa6";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import { IoMdSearch } from "react-icons/io";
 import { gridClasses } from "@mui/x-data-grid";
 import { ThreeDots } from "react-loader-spinner";
+import YearMenuPicker from "../../components/YearMenuPicker";
+import RegMenuPicker from "../../components/RegMenuPicker";
+import { FaPlay } from "react-icons/fa6";
 
 const CheckInOut = () => {
   const { activeMenu } = useStateContext();
@@ -128,7 +128,7 @@ const CheckInOut = () => {
     },
     {
       field: "check-in",
-      headerName: "Check in",
+      headerName: "Check-in",
       width: 150,
       editable: false,
       flex: 1,
@@ -136,19 +136,57 @@ const CheckInOut = () => {
     },
     {
       field: "check-out",
-      headerName: "Check out",
+      headerName: "Check-out",
       width: 150,
       editable: false,
       flex: 1,
       minWidth: 140
     },
     {
-      field: "status",
+      field: "check-status",
       headerName: "Status",
       width: 150,
       editable: false,
       flex: 1,
       minWidth: 120
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 150,
+      flex: 1,
+      minWidth: 120,
+      renderCell: params =>
+        <div className="flex justify-center gap-1">
+          <Tooltip
+            arrow
+            title="View"
+            placement="top"
+            TransitionComponent={Fade}
+          >
+            <button
+              style={{
+                backgroundColor: "#58D68D",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "28px",
+                height: "28px",
+                border: "none",
+                cursor: "pointer",
+                borderRadius: "30%",
+                textDecoration: "none"
+              }}
+            >
+              <FaPlay
+                style={{
+                  color: "white",
+                  fontSize: "18px"
+                }}
+              />
+            </button>
+          </Tooltip>
+        </div>
     }
   ];
 
@@ -177,131 +215,22 @@ const CheckInOut = () => {
             <div>
               <div className="my-4 p-4 ">
                 <div className="flex justify-end gap-3">
-                  {/*Reg Menu */}
-                  <div
-                    className="reg-dropdown-button flex relative p-2 border  text-sm min-w-64 w-auto border-gray-200 bg-white shadow-lg rounded-md cursor-pointer hover:bg-blue-50 hover:border-blue-200"
-                    onClick={() => setRegDropdownOpen(!regDropdownOpen)}
-                  >
-                    <FaRegAddressBook className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500" />
-                    <p className="px-6">
-                      {selectedReg}
-                    </p>
-                    <IoMdArrowDropdown className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500" />
-                    {regDropdownOpen &&
-                      <div
-                        ref={regDropdownRef}
-                        className="absolute top-full left-0 mt-2 min-w-64 w-auto bg-white rounded-md shadow-xl z-10"
-                      >
-                        <button
-                          onClick={() => handleRegItemClick("Bible Reading")}
-                          className={`block px-4 py-2 text-sm text-gray-400 hover:bg-blue-50 w-full text-left ${selectedReg ===
-                            "Bible Reading" && "bg-blue-50 text-gray-700"}`}
-                        >
-                          Bible Reading
-                        </button>
-                        <button
-                          onClick={() =>
-                            handleRegItemClick(
-                              "Combined Young People's Meeting"
-                            )}
-                          className={`block px-4 py-2 text-sm text-gray-400 hover:bg-blue-50 w-full text-left ${selectedReg ===
-                            "Combined Young People's Meeting" &&
-                            "bg-blue-50 text-gray-700"}`}
-                        >
-                          Combined Young People's Meeting
-                        </button>
-                        <button
-                          onClick={() =>
-                            handleRegItemClick("Combined Lord's Table Meeting")}
-                          className={`block px-4 py-2 text-sm text-gray-400 hover:bg-blue-50 w-full text-left ${selectedReg ===
-                            "Combined Lord's Table Meeting" &&
-                            "bg-blue-50 text-gray-700"}`}
-                        >
-                          Combined Lord's Table Meeting
-                        </button>
-                        <button
-                          onClick={() =>
-                            handleRegItemClick("Coordinators Meeting")}
-                          className={`block px-4 py-2 text-sm text-gray-400 hover:bg-blue-50 w-full text-left ${selectedReg ===
-                            "Coordinators Meeting" &&
-                            "bg-blue-50 text-gray-700"}`}
-                        >
-                          Coordinators Meeting
-                        </button>
-                        <button
-                          onClick={() => handleRegItemClick("Family Day")}
-                          className={`block px-4 py-2 text-sm text-gray-400 hover:bg-blue-50 w-full text-left ${selectedReg ===
-                            "Family Day" && "bg-blue-50 text-gray-700"}`}
-                        >
-                          Family Day
-                        </button>
-                        <button
-                          onClick={() =>
-                            handleRegItemClick("Fellowship Among the Churches")}
-                          className={`block px-4 py-2 text-sm text-gray-400 hover:bg-blue-50 w-full text-left ${selectedReg ===
-                            "Fellowship Among the Churches" &&
-                            "bg-blue-50 text-gray-700"}`}
-                        >
-                          Fellowship Among the Churches
-                        </button>
-                        <button
-                          onClick={() =>
-                            handleRegItemClick("Summer School of Truth")}
-                          className={`block px-4 py-2 text-sm text-gray-400 hover:bg-blue-50 w-full text-left ${selectedReg ===
-                            "Summer School of Truth" &&
-                            "bg-blue-50 text-gray-700"}`}
-                        >
-                          Summer School of Truth
-                        </button>
-                        <button
-                          onClick={() =>
-                            handleRegItemClick("Tour of a life time")}
-                          className={`block px-4 py-2 text-sm text-gray-400 hover:bg-blue-50 w-full text-left ${selectedReg ===
-                            "Tour of a life time" &&
-                            "bg-blue-50 text-gray-700"}`}
-                        >
-                          Tour of a life time
-                        </button>
-                      </div>}
-                  </div>
-                  {/*Year Menu */}
-                  <div
-                    className="year-dropdown-button flex relative p-2 w-28 text-sm border border-gray-200 bg-white shadow-lg rounded-md cursor-pointer hover:bg-blue-50 hover:border-blue-200"
-                    onClick={() => setYearDropdownOpen(!yearDropdownOpen)}
-                  >
-                    <FaRegCalendar className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500" />
-                    <p className="px-6">
-                      {selectedYear}
-                    </p>
-                    <IoMdArrowDropdown className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500" />
-                    {yearDropdownOpen &&
-                      <div
-                        ref={yearDropdownRef}
-                        className="absolute top-full left-0 mt-2 w-28 bg-white rounded-md shadow-xl z-10"
-                      >
-                        <button
-                          onClick={() => handleYearItemClick("2024")}
-                          className={`block px-4 py-2 text-sm text-gray-400 hover:bg-blue-50 w-full text-center ${selectedYear ===
-                            "2024" && "bg-blue-50 text-gray-700"}`}
-                        >
-                          2024
-                        </button>
-                        <button
-                          onClick={() => handleYearItemClick("2023")}
-                          className={`block px-4 py-2 text-sm text-gray-400 hover:bg-blue-50 w-full text-center ${selectedYear ===
-                            "2023" && "bg-blue-50 text-gray-700"}`}
-                        >
-                          2023
-                        </button>
-                        <button
-                          onClick={() => handleYearItemClick("2022")}
-                          className={`block px-4 py-2 text-sm text-gray-400 hover:bg-blue-50 w-full text-center ${selectedYear ===
-                            "2022" && "bg-blue-50 text-gray-700"}`}
-                        >
-                          2022
-                        </button>
-                      </div>}
-                  </div>
+                  {/* Reg Menu */}
+                  <RegMenuPicker
+                    selectedReg={selectedReg}
+                    handleRegItemClick={handleRegItemClick}
+                    regDropdownOpen={regDropdownOpen}
+                    setRegDropdownOpen={setRegDropdownOpen}
+                    regDropdownRef={regDropdownRef}
+                  />
+                  {/* Year Menu */}
+                  <YearMenuPicker
+                    selectedYear={selectedYear}
+                    handleYearItemClick={handleYearItemClick}
+                    yearDropdownOpen={yearDropdownOpen}
+                    setYearDropdownOpen={setYearDropdownOpen}
+                    yearDropdownRef={yearDropdownRef}
+                  />
                   <Tooltip
                     arrow
                     title="Download Data"
