@@ -16,7 +16,7 @@ const YearMenuPicker = ({
 
   return (
     <div
-      className={`year-dropdown-button flex relative p-2 w-28 text-sm border-1 border-gray-300 bg-white rounded-md cursor-pointer  ${yearDropdownOpen
+      className={`year-dropdown-button flex relative p-2 w-full md:w-28 text-sm border-1 border-gray-300 bg-white rounded-md cursor-pointer  ${yearDropdownOpen
         ? "border-primary"
         : "border-gray-300"}`}
       onClick={() => setYearDropdownOpen(!yearDropdownOpen)}

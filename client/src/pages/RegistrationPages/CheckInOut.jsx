@@ -75,9 +75,12 @@ const CheckInOut = () => {
             <h1 className="text-2xl font-semibold mb-2 ">
               Check-in | Check-out
             </h1>
-            <div>
-              <div className="my-4 p-4 ">
-                <div className="flex justify-end gap-3">
+            <div className="relative my-4 p-0 flex flex-col">
+              <p className="absolute right-11/12 md:right-64 mr-4  top-0 text-sm text-gray-400">
+                Select registration type
+              </p>
+              <div className="flex flex-col md:flex-row justify-end gap-2 mt-6">
+                <div>
                   {/* Reg Menu */}
                   <RegMenuPicker
                     selectedReg={selectedReg}
@@ -86,27 +89,34 @@ const CheckInOut = () => {
                     setRegDropdownOpen={setRegDropdownOpen}
                     regDropdownRef={regDropdownRef}
                   />
-                  {/* Year Menu */}
-                  <YearMenuPicker
-                    selectedYear={selectedYear}
-                    handleYearItemClick={handleYearItemClick}
-                    yearDropdownOpen={yearDropdownOpen}
-                    setYearDropdownOpen={setYearDropdownOpen}
-                    yearDropdownRef={yearDropdownRef}
-                  />
-                  <Tooltip
-                    arrow
-                    title="Download Data"
-                    placement="bottom"
-                    TransitionComponent={Fade}
-                  >
-                    <div className="bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70 text-white">
-                      <MdDownload size={24} />
-                    </div>
-                  </Tooltip>
+                </div>
+                <div className="flex flex-row md:flex-row gap-2">
+                  <div className="w-full">
+                    {/* Year Menu */}
+                    <YearMenuPicker
+                      selectedYear={selectedYear}
+                      handleYearItemClick={handleYearItemClick}
+                      yearDropdownOpen={yearDropdownOpen}
+                      setYearDropdownOpen={setYearDropdownOpen}
+                      yearDropdownRef={yearDropdownRef}
+                    />
+                  </div>
+                  <div>
+                    <Tooltip
+                      arrow
+                      title="Download Data"
+                      placement="bottom"
+                      TransitionComponent={Fade}
+                    >
+                      <div className="bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70 text-white">
+                        <MdDownload size={24} />
+                      </div>
+                    </Tooltip>
+                  </div>
                 </div>
               </div>
             </div>
+
             <div>
               <div>
                 {selectedReg === "Bible Reading" &&

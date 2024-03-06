@@ -142,7 +142,7 @@ const BrDataGrid = ({ selectedYear }) => {
               Bible Reading Registrants
             </p>
           </div>
-          <div className="absolute top-0 right-0 mt-4 mr-4">
+          <div className="absolute top-0 right-0 w-full md:w-auto mt-12 md:mt-4 mr-4 pl-8">
             <div className="relative">
               <input
                 type="text"
@@ -158,7 +158,7 @@ const BrDataGrid = ({ selectedYear }) => {
           </div>
         </div>
         <div
-          className={`max-w-full overflow-x-auto mt-12 ${filteredRegistrants.length ===
+          className={`max-w-full overflow-x-auto mt-14 ${filteredRegistrants.length ===
           0
             ? "h-44"
             : ""}`}

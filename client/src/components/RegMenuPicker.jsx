@@ -15,7 +15,7 @@ const RegMenuPicker = ({
   };
   return (
     <div
-      className={`reg-dropdown-button flex relative p-2 w-auto min-w-64 text-sm border-1 border-gray-300 bg-white rounded-md cursor-pointer ${regDropdownOpen
+      className={`reg-dropdown-button flex relative p-2 min-h-10 w-auto min-w-64 text-sm border-1 border-gray-300 bg-white rounded-md cursor-pointer ${regDropdownOpen
         ? "border-primary"
         : "border-gray-300"}`}
       onClick={toggleDropdown}
