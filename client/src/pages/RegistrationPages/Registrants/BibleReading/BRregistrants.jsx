@@ -238,6 +238,17 @@ const BRregistrants = () => {
     { to: "", label: "View Registrants" }
   ];
 
+  // Extracting only the desired columns for download
+  const dataForDownload = filteredRegistrants.map(item => ({
+    surname: item.surname,
+    firstname: item.firstname,
+    dateRegistered: item.dateRegistered,
+    locality: item.locality,
+    status: item.status,
+    email: item.email,
+    contact: item.contact
+  }));
+
   return (
     <div className="bg-gray-200 min-h-screen">
       <div className="flex relative ">
@@ -280,7 +291,7 @@ const BRregistrants = () => {
                 >
                   <div className=" bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70">
                     <CSVLink
-                      data={registrants}
+                      data={dataForDownload}
                       filename={"bible-reading-registrants.csv"}
                       className="text-white flex items-center"
                       target="_blank"

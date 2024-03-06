@@ -12,6 +12,9 @@ const BRregistrantsSchema = new mongoose.Schema({
   school: { type: String },
   contact: { type: Number },
   amen: { type: String },
+  checkin: { type: String },
+  checkout: { type: String },
+  checkStatus: { type: String },
   dateRegistered: {
     type: String,
     default: () =>

@@ -7,7 +7,8 @@ import {
   TOLTregistrantsDisplay,
   TOLTregistrantsAdd,
   TOLTregistrantsDeleted,
-  TOLTregistrantsDisplayByID
+  TOLTregistrantsDisplayByID,
+  BRregistrantsUpdateByID
 } from "../controllers/registrants.controller.js";
 
 const router = express.Router();
@@ -17,6 +18,7 @@ router.get("/br-registrants-display", BRregistrantsDisplay);
 router.post("/br-registrants-add", BRregistrantsAdd);
 router.delete("/br-registrants-delete/:id", BRregistrantsDeleted);
 router.get("/br-registrant-display/:id", BRregistrantsDisplayByID);
+router.put("/br-registrant-update/:id", BRregistrantsUpdateByID);
 //TOLT routes
 router.get("/tolt-registrants-display", TOLTregistrantsDisplay);
 router.post("/tolt-registrants-add", TOLTregistrantsAdd);

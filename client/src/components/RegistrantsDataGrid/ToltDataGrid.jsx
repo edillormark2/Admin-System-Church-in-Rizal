@@ -199,4 +199,17 @@ const ToltDataGrid = ({ selectedYear }) => {
   );
 };
 
+// Static method to fetch data for download
+ToltDataGrid.getRegistrantsData = async selectedYear => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/server/registrants/tolt-registrants-display?year=${selectedYear}`
+    );
+    return response.data.registrants;
+  } catch (error) {
+    console.error("Error fetching registrants:", error);
+    return []; // Return empty array in case of error
+  }
+};
+
 export default ToltDataGrid;

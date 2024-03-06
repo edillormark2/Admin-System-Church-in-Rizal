@@ -8,11 +8,19 @@ import { gridClasses } from "@mui/x-data-grid";
 import { ThreeDots } from "react-loader-spinner";
 import { FaPlay } from "react-icons/fa6";
 import { GoDotFill } from "react-icons/go";
+import BRViewRegistrant from "../RegComponents/CheckInCheckout/BRViewRegistrant";
 
 const BrDataGrid = ({ selectedYear }) => {
   const [registrants, setRegistrants] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
+  const [selectedRegistrant, setSelectedRegistrant] = useState(null);
+  const [openViewRegistrant, setOpenViewRegistrant] = useState(false);
+
+  const handleViewRegistrant = id => {
+    setSelectedRegistrant(id);
+    setOpenViewRegistrant(true);
+  };
 
   const handleSearchChange = e => {
     setSearchQuery(e.target.value);
@@ -47,6 +55,42 @@ const BrDataGrid = ({ selectedYear }) => {
     }
   };
 
+  const handleCheckCreated = async () => {
+    setOpenViewRegistrant(false);
+    setLoading(true);
+    setTimeout(async () => {
+      await fetchRegistrantsData();
+      setLoading(false);
+    }, 800);
+  };
+
+  const RegistrantGridStatus = props => {
+    let bgColorClass = "";
+
+    switch (props.checkStatus) {
+      case "Registered":
+        bgColorClass = "bg-yellow-600";
+        break;
+      case "Checked In":
+        bgColorClass = "bg-green-500";
+        break;
+      case "Checked Out":
+        bgColorClass = "bg-red-500";
+        break;
+      default:
+        bgColorClass = "";
+    }
+
+    return (
+      <button
+        type="button"
+        className={`px-2 py-1 w-24 capitalize rounded-2xl text-md text-white ${bgColorClass}`}
+      >
+        {props.checkStatus}
+      </button>
+    );
+  };
+
   const columns = [
     {
       field: "surname",
@@ -77,25 +121,26 @@ const BrDataGrid = ({ selectedYear }) => {
       minWidth: 120
     },
     {
-      field: "check-in",
+      field: "checkin",
       headerName: "Check-in",
       width: 150,
       flex: 1,
       minWidth: 140
     },
     {
-      field: "check-out",
+      field: "checkout",
       headerName: "Check-out",
       width: 150,
       flex: 1,
       minWidth: 140
     },
     {
-      field: "check-status",
+      field: "checkStatus",
       headerName: "Status",
       width: 150,
       flex: 1,
-      minWidth: 120
+      minWidth: 150,
+      renderCell: params => <RegistrantGridStatus checkStatus={params.value} />
     },
     {
       field: "action",
@@ -112,6 +157,9 @@ const BrDataGrid = ({ selectedYear }) => {
             TransitionComponent={Fade}
           >
             <button
+              onClick={() => {
+                handleViewRegistrant(params.row._id);
+              }}
               style={{
                 backgroundColor: "#58D68D",
                 display: "inline-flex",
@@ -142,7 +190,7 @@ const BrDataGrid = ({ selectedYear }) => {
               Bible Reading Registrants
             </p>
           </div>
-          <div className="absolute top-0 right-0 w-full md:w-auto mt-12 md:mt-4 mr-4 pl-8">
+          <div className="absolute top-0 right-0 w-full md:w-auto mt-12 md:mt-4 mr-3 pl-8">
             <div className="relative">
               <input
                 type="text"
@@ -191,9 +239,28 @@ const BrDataGrid = ({ selectedYear }) => {
                 getRowId={row => row._id}
               />}
         </div>
+        <BRViewRegistrant
+          openViewRegistrant={openViewRegistrant}
+          setOpenViewRegistrant={setOpenViewRegistrant}
+          selectedRegistrant={selectedRegistrant}
+          onCheckCreated={handleCheckCreated}
+        />
       </div>
     </div>
   );
+};
+
+// Static method to get registrants data
+BrDataGrid.getRegistrantsData = async selectedYear => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/server/registrants/br-registrants-display?year=${selectedYear}`
+    );
+    return response.data.registrants;
+  } catch (error) {
+    console.error("Error fetching registrants:", error);
+    return []; // Return an empty array in case of error
+  }
 };
 
 export default BrDataGrid;

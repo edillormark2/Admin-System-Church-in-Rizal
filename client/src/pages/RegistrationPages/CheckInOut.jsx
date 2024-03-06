@@ -11,6 +11,8 @@ import RegMenuPicker from "../../components/RegMenuPicker";
 import BrDataGrid from "../../components/RegistrantsDataGrid/BrDataGrid";
 import ToltDataGrid from "../../components/RegistrantsDataGrid/ToltDataGrid";
 import select from "../../assets/select.png";
+import { saveAs } from "file-saver";
+import * as XLSX from "xlsx";
 
 const CheckInOut = () => {
   const { activeMenu } = useStateContext();
@@ -23,7 +25,6 @@ const CheckInOut = () => {
   const yearDropdownRef = useRef(null);
 
   useEffect(() => {
-    // Retrieve selected registration menu from local storage
     const storedSelectedReg = localStorage.getItem("selectedReg");
     if (storedSelectedReg) {
       setSelectedReg(storedSelectedReg);
@@ -52,7 +53,6 @@ const CheckInOut = () => {
 
   useEffect(
     () => {
-      // Store selected registration menu in local storage
       localStorage.setItem("selectedReg", selectedReg);
     },
     [selectedReg]
@@ -66,6 +66,55 @@ const CheckInOut = () => {
   const handleYearItemClick = year => {
     setSelectedYear(year);
     setYearDropdownOpen(false);
+  };
+
+  const handleDownloadData = async () => {
+    let data = [];
+    if (selectedReg === "Bible Reading") {
+      data = await BrDataGrid.getRegistrantsData(selectedYear);
+    } else if (selectedReg === "Tour of a Lifetime") {
+      data = await ToltDataGrid.getRegistrantsData(selectedYear);
+    }
+
+    // Ensure data is fetched successfully before proceeding
+    if (data && data.length > 0) {
+      // Filter the columns you want to include in the Excel file
+      const filteredData = data.map(item => ({
+        surname: item.surname,
+        firstname: item.firstname,
+        dateRegistered: item.dateRegistered,
+        locality: item.locality,
+        checkin: item.checkin,
+        checkout: item.checkout,
+        checkstatus: item.checkstatus
+      }));
+
+      // Convert filtered data to Excel workbook
+      const workbook = XLSX.utils.book_new();
+      const worksheet = XLSX.utils.json_to_sheet(filteredData);
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Registrants");
+
+      // Generate Excel file
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array"
+      });
+      const excelBlob = new Blob([excelBuffer], {
+        type:
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      });
+
+      // Generate file name with year
+      const fileName = `${selectedReg
+        .toLowerCase()
+        .replace(" ", "-")}-registrants-checkin-checkout-${selectedYear}.xlsx`;
+
+      // Save Excel file
+      saveAs(excelBlob, fileName);
+    } else {
+      // Handle case where data couldn't be fetched
+      console.error("Error fetching data.");
+    }
   };
 
   return (
@@ -123,8 +172,13 @@ const CheckInOut = () => {
                       placement="bottom"
                       TransitionComponent={Fade}
                     >
-                      <div className="bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70 text-white">
-                        <MdDownload size={24} />
+                      <div
+                        onClick={handleDownloadData}
+                        className=" bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70"
+                      >
+                        <button className="text-white flex items-center">
+                          <MdDownload size={22} />
+                        </button>
                       </div>
                     </Tooltip>
                   </div>
