@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
+import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
 import Divider from "@mui/material/Divider";
 import axios from "axios";
@@ -16,6 +16,8 @@ const BRViewRegistrant = props => {
     selectedRegistrant
   } = props;
 
+  const [loading, setLoading] = useState(true);
+  const [showLoader, setShowLoader] = useState(true);
   const [registrantData, setRegistrantData] = useState({
     surname: "",
     firstname: "",
@@ -28,6 +30,7 @@ const BRViewRegistrant = props => {
 
   const fetchRegistrantData = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(
         `http://localhost:3000/server/registrants/br-registrant-display/${selectedRegistrant}`
       );
@@ -36,12 +39,18 @@ const BRViewRegistrant = props => {
     } catch (error) {
       console.error("Error fetching registration data:", error);
       toast.error("Error fetching registration data");
+    } finally {
+      // Simulate a delay of at least 1 second before hiding the loader
+
+      setLoading(false);
+      setShowLoader(false); // Hide the loader when data is fetched
     }
   };
 
   useEffect(
     () => {
       if (openViewRegistrant) {
+        setShowLoader(true); // Show loader when modal is opened
         fetchRegistrantData();
       }
     },
@@ -127,14 +136,14 @@ const BRViewRegistrant = props => {
       <div
         key="close-button"
         onClick={handleClosePopup}
-        className="bg-gray-300 rounded-md text-black shadow-lg p-3 hover:opacity-70 cursor-pointer w-24 text-center"
+        className="bg-gray-300 rounded-md text-black shadow-lg p-3 hover:opacity-70 cursor-pointer w-24 text-center text-sm md:text-base"
       >
         Close
       </div>,
       <div
         key="check-in-button"
         onClick={handleCheckIn}
-        className="bg-green-500 rounded-md text-white shadow-lg p-3 hover:opacity-70 cursor-pointer w-24 text-center"
+        className="bg-green-500 rounded-md text-white shadow-lg p-3 hover:opacity-70 cursor-pointer w-24 text-center text-sm md:text-base"
       >
         Check In
       </div>
@@ -144,14 +153,15 @@ const BRViewRegistrant = props => {
       <div
         key="close-button"
         onClick={handleClosePopup}
-        className="bg-gray-300 rounded-md text-black shadow-lg p-3 hover:opacity-70 cursor-pointer w-24 text-center"
+        className="bg-gray-300 rounded-md text-black shadow-lg p-3 hover:opacity-70 cursor-pointer w-24 text-center text-sm md:text-base"
       >
         Close
       </div>,
       <div
         key="check-out-button"
         onClick={handleCheckOut}
-        className="bg-red-500 rounded-md text-white shadow-lg p-3 hover:opacity-70 cursor-pointer w-28 text-center"
+        style={{ backgroundColor: "#DE3163" }}
+        className=" rounded-md text-white shadow-lg p-3 hover:opacity-70 cursor-pointer w-28 text-center text-sm md:text-base"
       >
         Check Out
       </div>
@@ -161,7 +171,7 @@ const BRViewRegistrant = props => {
       <div
         key="close-button"
         onClick={handleClosePopup}
-        className="bg-gray-300 rounded-md text-black shadow-lg p-3 hover:opacity-70 cursor-pointer w-24 text-center"
+        className="bg-gray-300 rounded-md text-black shadow-lg p-3 hover:opacity-70 cursor-pointer w-24 text-center text-sm md:text-base"
       >
         Close
       </div>
@@ -170,78 +180,82 @@ const BRViewRegistrant = props => {
 
   return (
     <div>
-      <Modal open={openViewRegistrant} onClose={handleClosePopup}>
-        <Box
-          className=" bg-white rounded-xl "
-          sx={dynamicPopupStyle}
-          style={
-            isMobile || window.innerWidth <= window.innerHeight * 2
-              ? dynamicPopupStyle
-              : null
-          }
-        >
-          <div className="flex justify-between">
-            <ModalClose
-              variant="outlined"
-              onClick={() => setOpenViewRegistrant(false)}
-            />
-            <div className="flex justify-start  mb-8">
-              <FaUser size={20} className="my-auto mr-4 text-gray-500" />
-              <p className="text-base font-semibold">
-                Bible Reading Registrant
-              </p>
-            </div>
-          </div>
-          <Divider />
-          <div>
-            <div className="flex justify-between my-4">
-              <p className="font-semibold text-md">Name</p>
-              <p>
-                {registrantData.firstname} {registrantData.surname}
-              </p>
-            </div>
-            <Divider />
-            <div className="flex justify-between my-4">
-              <p className="font-semibold">Locality</p>
-              <p>
-                {registrantData.locality}
-              </p>
-            </div>
-            <Divider />
-            <div className="flex justify-between my-4">
-              <p className="font-semibold">Date Registered</p>
-              <p>
-                {registrantData.dateRegistered}
-              </p>
-            </div>
-            <Divider />
-            <div className="flex justify-between my-4">
-              <p className="font-semibold">Check In</p>
-              <p>
-                {registrantData.checkin}
-              </p>
-            </div>
-            <Divider />
-            <div className="flex justify-between my-4">
-              <p className="font-semibold">Check Out</p>
-              <p>
-                {registrantData.checkout}
-              </p>
-            </div>
-            <Divider />
-            <div className="flex justify-between my-4">
-              <p className="font-semibold">Status</p>
-              <p>
-                {registrantData.checkStatus}
-              </p>
-            </div>
-            <Divider />
-            <div className="flex justify-end mt-8 gap-2">
-              {buttonsToShow}
-            </div>
-          </div>
-        </Box>
-      </Modal>
+      {showLoader
+        ? <div />
+        : <div>
+            <Modal open={openViewRegistrant} onClose={handleClosePopup}>
+              <Box
+                className=" bg-white rounded-xl "
+                sx={dynamicPopupStyle}
+                style={
+                  isMobile || window.innerWidth <= window.innerHeight * 2
+                    ? dynamicPopupStyle
+                    : null
+                }
+              >
+                <div className="flex justify-between">
+                  <ModalClose
+                    variant="outlined"
+                    onClick={() => setOpenViewRegistrant(false)}
+                  />
+                  <div className="flex justify-start  mb-8">
+                    <FaUser size={20} className="my-auto mr-4 text-gray-500" />
+                    <p className="text-sm md:text-base font-semibold">
+                      Bible Reading Registrant
+                    </p>
+                  </div>
+                </div>
+                <Divider />
+                <div>
+                  <div className="flex justify-between my-4 text-sm md:text-base">
+                    <p className="font-semibold text-md">Name</p>
+                    <p>
+                      {registrantData.firstname} {registrantData.surname}
+                    </p>
+                  </div>
+                  <Divider />
+                  <div className="flex justify-between my-4 text-sm md:text-base">
+                    <p className="font-semibold">Locality</p>
+                    <p>
+                      {registrantData.locality}
+                    </p>
+                  </div>
+                  <Divider />
+                  <div className="flex justify-between my-4 text-sm md:text-base">
+                    <p className="font-semibold">Date Registered</p>
+                    <p>
+                      {registrantData.dateRegistered}
+                    </p>
+                  </div>
+                  <Divider />
+                  <div className="flex justify-between my-4 text-sm md:text-base">
+                    <p className="font-semibold">Check In</p>
+                    <p>
+                      {registrantData.checkin}
+                    </p>
+                  </div>
+                  <Divider />
+                  <div className="flex justify-between my-4 text-sm md:text-base">
+                    <p className="font-semibold">Check Out</p>
+                    <p>
+                      {registrantData.checkout}
+                    </p>
+                  </div>
+                  <Divider />
+                  <div className="flex justify-between my-4 text-sm md:text-base">
+                    <p className="font-semibold">Status</p>
+                    <p>
+                      {registrantData.checkStatus}
+                    </p>
+                  </div>
+                  <Divider />
+                  <div className="flex justify-end mt-8 gap-2">
+                    {buttonsToShow}
+                  </div>
+                </div>
+              </Box>
+            </Modal>
+          </div>}
     </div>
   );
 };

@@ -65,26 +65,27 @@ const BrDataGrid = ({ selectedYear }) => {
   };
 
   const RegistrantGridStatus = props => {
-    let bgColorClass = "";
+    let bgColorStyle = {};
 
     switch (props.checkStatus) {
       case "Registered":
-        bgColorClass = "bg-yellow-600";
+        bgColorStyle.backgroundColor = "#F39C12";
         break;
       case "Checked In":
-        bgColorClass = "bg-green-500";
+        bgColorStyle.backgroundColor = "#27AE60";
         break;
       case "Checked Out":
-        bgColorClass = "bg-red-500";
+        bgColorStyle.backgroundColor = "#DE3163";
         break;
       default:
-        bgColorClass = "";
+        bgColorStyle = {};
     }
 
     return (
       <button
         type="button"
-        className={`px-2 py-1 w-24 capitalize rounded-2xl text-md text-white ${bgColorClass}`}
+        className="px-2 py-1 w-24 capitalize rounded-2xl text-md text-white"
+        style={bgColorStyle}
       >
         {props.checkStatus}
       </button>
@@ -140,7 +141,6 @@ const BrDataGrid = ({ selectedYear }) => {
       width: 150,
       flex: 1,
       minWidth: 150,
-      headerAlign: "center",
       align: "Center",
       renderCell: params => <RegistrantGridStatus checkStatus={params.value} />
     },
@@ -150,7 +150,6 @@ const BrDataGrid = ({ selectedYear }) => {
       width: 150,
       flex: 1,
       minWidth: 120,
-      headerAlign: "center",
       align: "Center",
       renderCell: params =>
         <div className="flex justify-center gap-1">

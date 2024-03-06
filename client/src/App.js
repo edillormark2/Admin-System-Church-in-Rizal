@@ -44,6 +44,7 @@ import TOLTregistrants from "./pages/RegistrationPages/Registrants/TOLT/TOLTregi
 import AddTOLTregistrants from "./pages/RegistrationPages/Registrants/TOLT/AddTOLTregistrants";
 import ViewTOLTregistrants from "./pages/RegistrationPages/Registrants/TOLT/ViewTOLTregistrants";
 
+
 const customToastStyle = {
   position: "top-right",
   autoClose: 4000,
