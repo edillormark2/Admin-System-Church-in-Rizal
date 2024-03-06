@@ -16,9 +16,10 @@ const YearMenuPicker = ({
 
   return (
     <div
-      className={`year-dropdown-button flex relative p-2 w-full md:w-28 text-sm border-1 border-gray-300 bg-white rounded-md cursor-pointer  ${yearDropdownOpen
-        ? "border-primary"
-        : "border-gray-300"}`}
+      className={`year-dropdown-button flex relative p-2 w-full md:w-28 text-sm border-1 border-gray-300 bg-white rounded-md cursor-pointer ${selectedYear ===
+      String(currentYear)
+        ? "bg-blue-50 text-gray-700"
+        : ""} ${yearDropdownOpen ? "border-primary" : "border-gray-300"}`}
       onClick={() => setYearDropdownOpen(!yearDropdownOpen)}
     >
       <FaRegCalendar className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500" />

@@ -10,18 +10,25 @@ import YearMenuPicker from "../../components/YearMenuPicker";
 import RegMenuPicker from "../../components/RegMenuPicker";
 import BrDataGrid from "../../components/RegistrantsDataGrid/BrDataGrid";
 import ToltDataGrid from "../../components/RegistrantsDataGrid/ToltDataGrid";
+import select from "../../assets/select.png";
 
 const CheckInOut = () => {
   const { activeMenu } = useStateContext();
   const [regDropdownOpen, setRegDropdownOpen] = useState(false);
   const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
-  const [selectedReg, setSelectedReg] = useState(null);
+  const [selectedReg, setSelectedReg] = useState("");
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
   const regDropdownRef = useRef(null);
   const yearDropdownRef = useRef(null);
 
   useEffect(() => {
+    // Retrieve selected registration menu from local storage
+    const storedSelectedReg = localStorage.getItem("selectedReg");
+    if (storedSelectedReg) {
+      setSelectedReg(storedSelectedReg);
+    }
+
     const handleOutsideClick = event => {
       if (
         (regDropdownRef.current &&
@@ -42,6 +49,14 @@ const CheckInOut = () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
+
+  useEffect(
+    () => {
+      // Store selected registration menu in local storage
+      localStorage.setItem("selectedReg", selectedReg);
+    },
+    [selectedReg]
+  );
 
   const handleRegItemClick = item => {
     setSelectedReg(item);
@@ -118,12 +133,23 @@ const CheckInOut = () => {
             </div>
 
             <div>
-              <div>
-                {selectedReg === "Bible Reading" &&
-                  <BrDataGrid selectedYear={selectedYear} />}
-                {selectedReg === "Tour of a Lifetime" &&
-                  <ToltDataGrid selectedYear={selectedYear} />}
-              </div>
+              {selectedReg
+                ? <div>
+                    {selectedReg === "Bible Reading" &&
+                      <BrDataGrid selectedYear={selectedYear} />}
+                    {selectedReg === "Tour of a Lifetime" &&
+                      <ToltDataGrid selectedYear={selectedYear} />}
+                  </div>
+                : <div className="flex flex-col items-center justify-center h-full py-4 md:py-8">
+                    <img
+                      src={select}
+                      alt="profile"
+                      className="h-72 lg:h-1/3 w-72 lg:w-1/3 object-cover"
+                    />
+                    <p className="text-gray-500 text-lg font-semibold">
+                      Please choose a registration type
+                    </p>
+                  </div>}
             </div>
           </div>
         </div>
