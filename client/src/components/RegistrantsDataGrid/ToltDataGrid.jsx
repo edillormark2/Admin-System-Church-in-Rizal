@@ -95,7 +95,9 @@ const ToltDataGrid = ({ selectedYear }) => {
       headerName: "Status",
       width: 150,
       flex: 1,
-      minWidth: 120
+      minWidth: 120,
+      headerAlign: "center",
+      align: "Center"
     },
     {
       field: "action",
@@ -103,6 +105,8 @@ const ToltDataGrid = ({ selectedYear }) => {
       width: 150,
       flex: 1,
       minWidth: 120,
+      headerAlign: "center",
+      align: "Center",
       renderCell: params =>
         <div className="flex justify-center gap-1">
           <Tooltip
@@ -190,7 +194,7 @@ const ToltDataGrid = ({ selectedYear }) => {
                 }}
                 rows={filteredRegistrants}
                 columns={columns}
-                pageSizeOptions={[6, 20, 50]}
+                pageSizeOptions={[6, 20, 50, 100]}
                 getRowId={row => row._id}
               />}
         </div>

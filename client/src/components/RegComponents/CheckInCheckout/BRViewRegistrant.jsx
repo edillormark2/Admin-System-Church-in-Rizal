@@ -65,7 +65,7 @@ const BRViewRegistrant = props => {
         }
       )}`;
       await axios.put(
-        `http://localhost:3000/server/registrants/br-registrant-update/${selectedRegistrant}`,
+        `http://localhost:3000/server/registrants/br-registrant-update-checkin/${selectedRegistrant}`,
         {
           checkin: formattedDate,
           checkStatus: "Checked In" // Update checkStatus field
@@ -77,6 +77,34 @@ const BRViewRegistrant = props => {
     } catch (error) {
       console.error("Error checking in:", error);
       toast.error("Error checking in");
+    }
+  };
+
+  const handleCheckOut = async () => {
+    try {
+      const currentDate = new Date();
+      const formattedDate = `${currentDate.toLocaleString("default", {
+        month: "short"
+      })} ${currentDate.getDate()}, ${currentDate.getFullYear()} | ${currentDate.toLocaleTimeString(
+        [],
+        {
+          hour: "numeric",
+          minute: "2-digit"
+        }
+      )}`;
+      await axios.put(
+        `http://localhost:3000/server/registrants/br-registrant-update-checkout/${selectedRegistrant}`,
+        {
+          checkout: formattedDate,
+          checkStatus: "Checked Out" // Update checkStatus field
+        }
+      );
+      toast.success("Check-out successful");
+      fetchRegistrantData(); // Fetch updated data after successful check-out
+      props.onCheckCreated();
+    } catch (error) {
+      console.error("Error checking out:", error);
+      toast.error("Error checking out");
     }
   };
 
@@ -122,6 +150,7 @@ const BRViewRegistrant = props => {
       </div>,
       <div
         key="check-out-button"
+        onClick={handleCheckOut}
         className="bg-red-500 rounded-md text-white shadow-lg p-3 hover:opacity-70 cursor-pointer w-28 text-center"
       >
         Check Out

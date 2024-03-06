@@ -86,7 +86,7 @@ const CheckInOut = () => {
         locality: item.locality,
         checkin: item.checkin,
         checkout: item.checkout,
-        checkstatus: item.checkstatus
+        checkStatus: item.checkStatus
       }));
 
       // Convert filtered data to Excel workbook

@@ -140,6 +140,8 @@ const BrDataGrid = ({ selectedYear }) => {
       width: 150,
       flex: 1,
       minWidth: 150,
+      headerAlign: "center",
+      align: "Center",
       renderCell: params => <RegistrantGridStatus checkStatus={params.value} />
     },
     {
@@ -148,6 +150,8 @@ const BrDataGrid = ({ selectedYear }) => {
       width: 150,
       flex: 1,
       minWidth: 120,
+      headerAlign: "center",
+      align: "Center",
       renderCell: params =>
         <div className="flex justify-center gap-1">
           <Tooltip
@@ -233,9 +237,12 @@ const BrDataGrid = ({ selectedYear }) => {
                     outline: "none"
                   }
                 }}
+                initialState={{
+                  pagination: { paginationModel: { pageSize: 6 } }
+                }}
                 rows={filteredRegistrants}
                 columns={columns}
-                pageSizeOptions={[6, 20, 50]}
+                pageSizeOptions={[6, 20, 50, 100]}
                 getRowId={row => row._id}
               />}
         </div>

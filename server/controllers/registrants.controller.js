@@ -107,8 +107,8 @@ export const BRregistrantsDisplayByID = async (req, res) => {
   }
 };
 
-// Controller for updating registrant data by ID
-export const BRregistrantsUpdateByID = async (req, res) => {
+// Controller for updating check in registrant data by ID
+export const BRregistrantsUpdateInByID = async (req, res) => {
   try {
     const { id } = req.params;
     const { checkin, checkStatus } = req.body; // Get checkin and checkStatus from request body
@@ -137,6 +137,34 @@ export const BRregistrantsUpdateByID = async (req, res) => {
   }
 };
 
+// Controller for updating check out registrant data by ID
+export const BRregistrantsUpdateOutByID = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { checkout, checkStatus } = req.body;
+
+    const registrant = await BRregistrants.findById(id);
+    if (!registrant) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Registrant not found" });
+    }
+
+    registrant.checkout = checkout;
+    registrant.checkStatus = checkStatus;
+
+    await registrant.save();
+
+    res
+      .status(200)
+      .json({ success: true, message: "Registrant updated successfully" });
+  } catch (error) {
+    console.error("Error updating registrant:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to update registrant" });
+  }
+};
 //--------------------------TOLT-Backend-Controller-logic------------------------------------------------------------------------------
 
 // Controller for registrants display

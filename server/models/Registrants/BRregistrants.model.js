@@ -14,7 +14,7 @@ const BRregistrantsSchema = new mongoose.Schema({
   amen: { type: String },
   checkin: { type: String },
   checkout: { type: String },
-  checkStatus: { type: String },
+  checkStatus: { type: String, default: "Registered" },
   dateRegistered: {
     type: String,
     default: () =>
