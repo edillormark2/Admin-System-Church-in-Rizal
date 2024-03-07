@@ -8,11 +8,19 @@ import { gridClasses } from "@mui/x-data-grid";
 import { ThreeDots } from "react-loader-spinner";
 import { FaPlay } from "react-icons/fa6";
 import { GoDotFill } from "react-icons/go";
+import TOLTViewRegistrant from "../RegComponents/CheckInCheckout/TOLTViewRegistrant";
 
 const ToltDataGrid = ({ selectedYear }) => {
   const [registrants, setRegistrants] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
+  const [selectedRegistrant, setSelectedRegistrant] = useState(null);
+  const [openViewRegistrant, setOpenViewRegistrant] = useState(false);
+
+  const handleViewRegistrant = id => {
+    setSelectedRegistrant(id);
+    setOpenViewRegistrant(true);
+  };
 
   const handleSearchChange = e => {
     setSearchQuery(e.target.value);
@@ -47,6 +55,43 @@ const ToltDataGrid = ({ selectedYear }) => {
     }
   };
 
+  const handleCheckCreated = async () => {
+    setOpenViewRegistrant(false);
+    setLoading(true);
+    setTimeout(async () => {
+      await fetchToltRegistrantsData();
+      setLoading(false);
+    }, 800);
+  };
+
+  const RegistrantGridStatus = props => {
+    let bgColorStyle = {};
+
+    switch (props.checkStatus) {
+      case "Registered":
+        bgColorStyle.backgroundColor = "#F39C12";
+        break;
+      case "Checked In":
+        bgColorStyle.backgroundColor = "#27AE60";
+        break;
+      case "Checked Out":
+        bgColorStyle.backgroundColor = "#DE3163";
+        break;
+      default:
+        bgColorStyle = {};
+    }
+
+    return (
+      <button
+        type="button"
+        className="px-2 py-1 w-24 capitalize rounded-2xl text-md text-white"
+        style={bgColorStyle}
+      >
+        {props.checkStatus}
+      </button>
+    );
+  };
+
   const columns = [
     {
       field: "surname",
@@ -77,27 +122,27 @@ const ToltDataGrid = ({ selectedYear }) => {
       minWidth: 120
     },
     {
-      field: "check-in",
+      field: "checkin",
       headerName: "Check-in",
       width: 150,
       flex: 1,
       minWidth: 140
     },
     {
-      field: "check-out",
+      field: "checkout",
       headerName: "Check-out",
       width: 150,
       flex: 1,
       minWidth: 140
     },
     {
-      field: "check-status",
+      field: "checkStatus",
       headerName: "Status",
       width: 150,
       flex: 1,
       minWidth: 120,
-      headerAlign: "center",
-      align: "Center"
+      align: "Center",
+      renderCell: params => <RegistrantGridStatus checkStatus={params.value} />
     },
     {
       field: "action",
@@ -105,7 +150,6 @@ const ToltDataGrid = ({ selectedYear }) => {
       width: 150,
       flex: 1,
       minWidth: 120,
-      headerAlign: "center",
       align: "Center",
       renderCell: params =>
         <div className="flex justify-center gap-1">
@@ -116,6 +160,9 @@ const ToltDataGrid = ({ selectedYear }) => {
             TransitionComponent={Fade}
           >
             <button
+              onClick={() => {
+                handleViewRegistrant(params.row._id);
+              }}
               style={{
                 backgroundColor: "#58D68D",
                 display: "inline-flex",
@@ -198,6 +245,12 @@ const ToltDataGrid = ({ selectedYear }) => {
                 getRowId={row => row._id}
               />}
         </div>
+        <TOLTViewRegistrant
+          openViewRegistrant={openViewRegistrant}
+          setOpenViewRegistrant={setOpenViewRegistrant}
+          selectedRegistrant={selectedRegistrant}
+          onCheckCreated={handleCheckCreated}
+        />
       </div>
     </div>
   );

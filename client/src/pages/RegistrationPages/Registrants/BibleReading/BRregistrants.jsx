@@ -19,6 +19,7 @@ import BRDeletePopup from "../../../../components/RegComponents/Registrants/BRDe
 import { MdDownload } from "react-icons/md";
 import { CSVLink } from "react-csv";
 import YearMenuPicker from "../../../../components/YearMenuPicker";
+import * as XLSX from "xlsx";
 
 const BRregistrants = () => {
   const { activeMenu } = useStateContext();
@@ -238,16 +239,25 @@ const BRregistrants = () => {
     { to: "", label: "View Registrants" }
   ];
 
-  // Extracting only the desired columns for download
-  const dataForDownload = filteredRegistrants.map(item => ({
-    surname: item.surname,
-    firstname: item.firstname,
-    dateRegistered: item.dateRegistered,
-    locality: item.locality,
-    status: item.status,
-    email: item.email,
-    contact: item.contact
-  }));
+  // Constructing the filename with the selected year
+  const filename = `bible-reading-registrants-${selectedYear}.xlsx`;
+
+  const handleDownload = () => {
+    const filteredData = registrants.map(item => ({
+      surname: item.surname,
+      firstname: item.firstname,
+      dateRegistered: item.dateRegistered,
+      locality: item.locality,
+      status: item.status,
+      email: item.email,
+      contact: item.contact
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(filteredData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Registrants");
+    XLSX.writeFile(workbook, filename);
+  };
 
   return (
     <div className="bg-gray-200 min-h-screen">
@@ -290,14 +300,12 @@ const BRregistrants = () => {
                   TransitionComponent={Fade}
                 >
                   <div className=" bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70">
-                    <CSVLink
-                      data={dataForDownload}
-                      filename={"bible-reading-registrants.csv"}
+                    <button
+                      onClick={handleDownload}
                       className="text-white flex items-center"
-                      target="_blank"
                     >
                       <MdDownload size={22} />
-                    </CSVLink>
+                    </button>
                   </div>
                 </Tooltip>
                 <Tooltip

@@ -4,12 +4,14 @@ import {
   BRregistrantsAdd,
   BRregistrantsDeleted,
   BRregistrantsDisplayByID,
+  BRregistrantsUpdateInByID,
+  BRregistrantsUpdateOutByID,
   TOLTregistrantsDisplay,
   TOLTregistrantsAdd,
   TOLTregistrantsDeleted,
   TOLTregistrantsDisplayByID,
-  BRregistrantsUpdateInByID,
-  BRregistrantsUpdateOutByID
+  TOLTregistrantsUpdateInByID,
+  TOLTregistrantsUpdateOutByID
 } from "../controllers/registrants.controller.js";
 
 const router = express.Router();
@@ -26,5 +28,10 @@ router.get("/tolt-registrants-display", TOLTregistrantsDisplay);
 router.post("/tolt-registrants-add", TOLTregistrantsAdd);
 router.delete("/tolt-registrants-delete/:id", TOLTregistrantsDeleted);
 router.get("/tolt-registrant-display/:id", TOLTregistrantsDisplayByID);
+router.put("/tolt-registrant-update-checkin/:id", TOLTregistrantsUpdateInByID);
+router.put(
+  "/tolt-registrant-update-checkout/:id",
+  TOLTregistrantsUpdateOutByID
+);
 
 export default router;

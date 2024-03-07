@@ -19,6 +19,8 @@ import { MdDownload } from "react-icons/md";
 import { CSVLink } from "react-csv";
 import TOLTDeletePopup from "../../../../components/RegComponents/Registrants/TOLTDeletePopup";
 import YearMenuPicker from "../../../../components/YearMenuPicker";
+import { saveAs } from "file-saver";
+import * as XLSX from "xlsx";
 
 const TOLTregistrants = () => {
   const { activeMenu } = useStateContext();
@@ -230,6 +232,25 @@ const TOLTregistrants = () => {
     { to: "", label: "View Registrants" }
   ];
 
+  // Constructing the filename with the selected year
+  const filename = `tour-of-a-lifetime-registrants-${selectedYear}.xlsx`;
+
+  const handleDownload = () => {
+    const filteredData = registrants.map(item => ({
+      surname: item.surname,
+      firstname: item.firstname,
+      dateRegistered: item.dateRegistered,
+      locality: item.locality,
+      email: item.email,
+      contact: item.contact
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(filteredData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Registrants");
+    XLSX.writeFile(workbook, filename);
+  };
+
   return (
     <div className="bg-gray-200 min-h-screen">
       <div className="flex relative ">
@@ -271,14 +292,12 @@ const TOLTregistrants = () => {
                   TransitionComponent={Fade}
                 >
                   <div className=" bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70">
-                    <CSVLink
-                      data={registrants}
-                      filename={"tour-of-a-lifetime-registrants.csv"}
+                    <button
+                      onClick={handleDownload}
                       className="text-white flex items-center"
-                      target="_blank"
                     >
                       <MdDownload size={22} />
-                    </CSVLink>
+                    </button>
                   </div>
                 </Tooltip>
                 <Tooltip

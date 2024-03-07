@@ -10,6 +10,9 @@ const TOLTregistrantsSchema = new mongoose.Schema({
   attended: { type: String },
   school: { type: String },
   contact: { type: Number },
+  checkin: { type: String },
+  checkout: { type: String },
+  checkStatus: { type: String, default: "Registered" },
   amen: { type: String },
   dateRegistered: {
     type: String,
