@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-
-
 const inventoryloginSchema = new mongoose.Schema({
   userID: {
     type: Number,
@@ -51,7 +49,7 @@ inventoryloginSchema.pre("save", async function(next) {
   }
 
   // Find the maximum userID in the collection
-  const maxUserIDDoc = await Inventory.findOne(
+  const maxUserIDDoc = await InventoryUser.findOne(
     {},
     {},
     { sort: { userID: -1 } }
@@ -69,6 +67,6 @@ inventoryloginSchema.pre("save", async function(next) {
   next();
 });
 
-const Inventory = mongoose.model("Inventory", inventoryloginSchema);
+const InventoryUser = mongoose.model("InventoryUser", inventoryloginSchema);
 
-export default Inventory;
+export default InventoryUser;

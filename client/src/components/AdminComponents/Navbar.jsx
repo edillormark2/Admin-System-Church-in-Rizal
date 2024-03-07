@@ -34,7 +34,6 @@ const Navbar = () => {
   const [placement, setPlacement] = React.useState("bottom-end");
   const [userData, setUserData] = useState({});
   const { profilePicture, name } = userData;
-
   const open = Boolean(anchor);
   const id = open ? "simple-popper" : undefined;
 
@@ -57,6 +56,27 @@ const Navbar = () => {
   const handleActiveMenu = () => {
     setActiveMenu(!activeMenu);
   };
+
+  useEffect(
+    () => {
+      const handleOutsideClick = event => {
+        if (
+          anchor &&
+          !anchor.contains(event.target) &&
+          !event.target.closest(".action-popup")
+        ) {
+          setIsPopupOpen(false);
+        }
+      };
+
+      document.addEventListener("mousedown", handleOutsideClick);
+
+      return () => {
+        document.removeEventListener("mousedown", handleOutsideClick);
+      };
+    },
+    [anchor]
+  );
 
   const handleClick = event => {
     setIsPopupOpen(prev => !prev);
@@ -93,18 +113,18 @@ const Navbar = () => {
         </div>
       </div>
       {isPopupOpen &&
-        <ClickAwayListener onClickAway={handleClose}>
-          <BasePopup
-            id={id}
-            open={Boolean(anchor)}
-            anchor={anchor}
-            placement={placement}
-            offset={4}
-            onClose={handleClose}
-          >
+        <BasePopup
+          id={id}
+          open={isPopupOpen}
+          anchor={anchor}
+          placement={placement}
+          offset={4}
+          onClose={handleClose}
+        >
+          <div className="action-popup">
             <PopupBody closePopup={handleClose} />
-          </BasePopup>
-        </ClickAwayListener>}
+          </div>
+        </BasePopup>}
     </div>
   );
 };

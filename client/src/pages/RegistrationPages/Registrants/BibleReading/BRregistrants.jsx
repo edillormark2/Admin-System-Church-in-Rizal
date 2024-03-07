@@ -17,7 +17,6 @@ import { Link } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
 import BRDeletePopup from "../../../../components/RegComponents/Registrants/BRDeletePopup";
 import { MdDownload } from "react-icons/md";
-import { CSVLink } from "react-csv";
 import YearMenuPicker from "../../../../components/YearMenuPicker";
 import * as XLSX from "xlsx";
 

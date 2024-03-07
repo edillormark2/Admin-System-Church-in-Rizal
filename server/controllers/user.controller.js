@@ -1,7 +1,7 @@
-import Admin from "../models/UserModel/adminlogin.model.js";
-import Registration from "../models/UserModel/registrationlogin.model.js";
-import Inventory from "../models/UserModel/inventory.model.js";
-import Reports from "../models/UserModel/reportslogin.model.js";
+import AdminUser from "../models/UserModel/adminlogin.model.js";
+import RegistrationUser from "../models/UserModel/registrationlogin.model.js";
+import InventoryUser from "../models/UserModel/inventory.model.js";
+import ReportsUser from "../models/UserModel/reportslogin.model.js";
 import bcrypt from "bcryptjs"; // Import bcrypt for password hashing
 import jwt from "jsonwebtoken";
 
@@ -9,7 +9,7 @@ import jwt from "jsonwebtoken";
 export const getUserAdmin = async (req, res) => {
   try {
     // Fetch all admin users from the database
-    const admins = await Admin.find();
+    const admins = await AdminUser.find();
 
     // If no admin users are found, send a 404 response
     if (!admins || admins.length === 0) {
@@ -44,7 +44,7 @@ export const updateUserAdmin = async (req, res) => {
     }
 
     // Find the admin user by userID
-    let admin = await Admin.findOne({ userID });
+    let admin = await AdminUser.findOne({ userID });
 
     // If admin user with given userID is not found, send 404 response
     if (!admin) {
@@ -80,7 +80,7 @@ export const getUserAdminByID = async (req, res) => {
     const { userID } = req.params; // Get userID from request parameters
 
     // Find the admin user by userID
-    const admin = await Admin.findOne({ userID: userID });
+    const admin = await AdminUser.findOne({ userID: userID });
 
     // If admin user with given userID is not found, send 404 response
     if (!admin) {
@@ -102,7 +102,7 @@ export const deleteUserAdmin = async (req, res) => {
     const { userID } = req.params; // Get userID from request parameters
 
     // Find the admin user by userID and delete it
-    const deletedAdmin = await Admin.findOneAndDelete({ userID: userID });
+    const deletedAdmin = await AdminUser.findOneAndDelete({ userID: userID });
 
     // If admin user with given userID is not found, send 404 response
     if (!deletedAdmin) {
@@ -123,7 +123,7 @@ export const deleteUserAdmin = async (req, res) => {
 // Fetching user reg data
 export const getUserReg = async (req, res) => {
   try {
-    const regs = await Registration.find();
+    const regs = await RegistrationUser.find();
 
     if (!regs || regs.length === 0) {
       return res.status(404).json({ message: "No admin users found" });
@@ -141,7 +141,7 @@ export const getUserRegByID = async (req, res) => {
   try {
     const { userID } = req.params;
 
-    const reg = await Registration.findOne({ userID: userID });
+    const reg = await RegistrationUser.findOne({ userID: userID });
 
     if (!reg) {
       return res.status(404).json({ message: "User not found" });
@@ -170,7 +170,7 @@ export const updateUserReg = async (req, res) => {
         .json({ message: "Name, username, and password are required" });
     }
 
-    const reg = await Registration.findOneAndUpdate(
+    const reg = await RegistrationUser.findOneAndUpdate(
       { userID: userID },
       {
         name: name,
@@ -198,7 +198,9 @@ export const deleteUserReg = async (req, res) => {
   try {
     const { userID } = req.params;
 
-    const deletedReg = await Registration.findOneAndDelete({ userID: userID });
+    const deletedReg = await RegistrationUser.findOneAndDelete({
+      userID: userID
+    });
 
     if (!deletedReg) {
       return res.status(404).json({ message: "User not found" });
@@ -216,7 +218,7 @@ export const deleteUserReg = async (req, res) => {
 // Fetching user inventory data
 export const getUserInv = async (req, res) => {
   try {
-    const regs = await Inventory.find();
+    const regs = await InventoryUser.find();
 
     if (!regs || regs.length === 0) {
       return res.status(404).json({ message: "No users found" });
@@ -224,7 +226,7 @@ export const getUserInv = async (req, res) => {
 
     res.status(200).json(regs);
   } catch (error) {
-    console.error("Error fetching admin users:", error);
+    console.error("Error fetching  users:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -234,7 +236,7 @@ export const getUserInvByID = async (req, res) => {
   try {
     const { userID } = req.params;
 
-    const reg = await Inventory.findOne({ userID: userID });
+    const reg = await InventoryUser.findOne({ userID: userID });
 
     if (!reg) {
       return res.status(404).json({ message: "User not found" });
@@ -242,7 +244,7 @@ export const getUserInvByID = async (req, res) => {
 
     res.status(200).json(reg);
   } catch (error) {
-    console.error("Error fetching admin user:", error);
+    console.error("Error fetching  user:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -263,7 +265,7 @@ export const updateUserInv = async (req, res) => {
         .json({ message: "Name, username, and password are required" });
     }
 
-    const reg = await Inventory.findOneAndUpdate(
+    const reg = await InventoryUser.findOneAndUpdate(
       { userID: userID },
       {
         name: name,
@@ -291,7 +293,7 @@ export const deleteUserInv = async (req, res) => {
   try {
     const { userID } = req.params;
 
-    const deletedReg = await Inventory.findOneAndDelete({ userID: userID });
+    const deletedReg = await InventoryUser.findOneAndDelete({ userID: userID });
 
     if (!deletedReg) {
       return res.status(404).json({ message: "User not found" });
@@ -309,7 +311,7 @@ export const deleteUserInv = async (req, res) => {
 // Fetching user report data
 export const getUserReport = async (req, res) => {
   try {
-    const reps = await Reports.find();
+    const reps = await ReportsUser.find();
 
     if (!reps || reps.length === 0) {
       return res.status(404).json({ message: "No users found" });
@@ -327,7 +329,7 @@ export const getUserReportByID = async (req, res) => {
   try {
     const { userID } = req.params;
 
-    const rep = await Reports.findOne({ userID: userID });
+    const rep = await ReportsUser.findOne({ userID: userID });
 
     if (!rep) {
       return res.status(404).json({ message: "User not found" });
@@ -356,7 +358,7 @@ export const updateUserReport = async (req, res) => {
         .json({ message: "Name, username, and password are required" });
     }
 
-    const rep = await Reports.findOneAndUpdate(
+    const rep = await ReportsUser.findOneAndUpdate(
       { userID: userID },
       {
         name: name,
@@ -384,7 +386,7 @@ export const deleteUserReport = async (req, res) => {
   try {
     const { userID } = req.params;
 
-    const deletedRep = await Reports.findOneAndDelete({ userID: userID });
+    const deletedRep = await ReportsUser.findOneAndDelete({ userID: userID });
 
     if (!deletedRep) {
       return res.status(404).json({ message: "User not found" });
@@ -402,10 +404,10 @@ export const deleteUserReport = async (req, res) => {
 // Fetch counts of users in each collection
 export const getUserCounts = async (req, res) => {
   try {
-    const adminCount = await Admin.countDocuments();
-    const regCount = await Registration.countDocuments();
-    const inventoryCount = await Inventory.countDocuments();
-    const reportsCount = await Reports.countDocuments();
+    const adminCount = await AdminUser.countDocuments();
+    const regCount = await RegistrationUser.countDocuments();
+    const inventoryCount = await InventoryUser.countDocuments();
+    const reportsCount = await ReportsUser.countDocuments();
 
     res.status(200).json({
       Admin: adminCount,
@@ -422,7 +424,7 @@ export const getUserCounts = async (req, res) => {
 //Fetching current user data
 export const getCurrentUserData = async (req, res, next) => {
   try {
-    const admin = await Admin.findById(req.params.id);
+    const admin = await AdminUser.findById(req.params.id);
 
     if (!admin) {
       return res.status(404).json({ message: "User not found" });

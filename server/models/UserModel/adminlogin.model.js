@@ -49,7 +49,11 @@ adminloginSchema.pre("save", async function(next) {
   }
 
   // Find the maximum userID in the collection
-  const maxUserIDDoc = await Admin.findOne({}, {}, { sort: { userID: -1 } });
+  const maxUserIDDoc = await AdminUser.findOne(
+    {},
+    {},
+    { sort: { userID: -1 } }
+  );
 
   let maxUserID = 10000; // Default starting userID
   if (maxUserIDDoc) {
@@ -63,6 +67,6 @@ adminloginSchema.pre("save", async function(next) {
   next();
 });
 
-const Admin = mongoose.model("Admin", adminloginSchema);
+const AdminUser = mongoose.model("AdminUser", adminloginSchema);
 
-export default Admin;
+export default AdminUser;

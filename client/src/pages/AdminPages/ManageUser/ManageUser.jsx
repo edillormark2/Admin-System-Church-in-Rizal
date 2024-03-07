@@ -30,9 +30,6 @@ const ManageUser = () => {
   const [loading, setLoading] = useState(true);
   const [showLoader, setShowLoader] = useState(true);
 
-  const open = Boolean(anchor);
-  const id = open ? "simple-popper" : undefined;
-
   useEffect(() => {
     fetchUserCounts();
   }, []);
@@ -59,8 +56,47 @@ const ManageUser = () => {
     }
   };
 
-  const handleClick = (event, popupSetter) => {
-    popupSetter(true);
+  const open = Boolean(anchor);
+  const id = open ? "simple-popper" : undefined;
+
+  useEffect(
+    () => {
+      const handleOutsideClick = event => {
+        if (
+          anchor &&
+          !anchor.contains(event.target) &&
+          !event.target.closest(".action-popup")
+        ) {
+          setAdminPopupOpen(false);
+          setRegPopupOpen(false);
+          setInvPopupOpen(false);
+          setReportsPopupOpen(false);
+        }
+      };
+
+      document.addEventListener("mousedown", handleOutsideClick);
+
+      return () => {
+        document.removeEventListener("mousedown", handleOutsideClick);
+      };
+    },
+    [anchor]
+  );
+
+  const handleClickAdmin = event => {
+    setAdminPopupOpen(prev => !prev);
+    setAnchor(event.currentTarget);
+  };
+  const handleClickReg = event => {
+    setRegPopupOpen(prev => !prev);
+    setAnchor(event.currentTarget);
+  };
+  const handleClickInv = event => {
+    setInvPopupOpen(prev => !prev);
+    setAnchor(event.currentTarget);
+  };
+  const handleClickReports = event => {
+    setReportsPopupOpen(prev => !prev);
     setAnchor(event.currentTarget);
   };
 
@@ -127,8 +163,7 @@ const ManageUser = () => {
                     <div className="flex flex-col bg-white drop-shadow-xl rounded-md px-4 py-2 m-2 w-full border border-gray-300  hover:border-blue-300 hover:bg-blue-50">
                       <div className="flex justify-end">
                         <GoKebabHorizontal
-                          onClick={event =>
-                            handleClick(event, setAdminPopupOpen)}
+                          onClick={event => handleClickAdmin(event)}
                           size={37}
                           className="cursor-pointer text-gray-500 hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
                         />
@@ -153,28 +188,28 @@ const ManageUser = () => {
                         </p>
                       </div>
                       {adminPopupOpen &&
-                        <ClickAwayListener onClickAway={handleClose}>
-                          <BasePopup
-                            id={id}
-                            open={Boolean(anchor)}
-                            anchor={anchor}
-                            placement={placement}
-                            offset={4}
-                            onClose={handleClose}
-                          >
+                        <BasePopup
+                          id={id}
+                          open={adminPopupOpen}
+                          anchor={anchor}
+                          placement={placement}
+                          offset={4}
+                          onClose={handleClose}
+                        >
+                          <div className="action-popup">
                             <UserPopup
                               onClose={handleClose}
                               buttonLink="/admin/manage-user/admin-user"
                             />
-                          </BasePopup>
-                        </ClickAwayListener>}
+                          </div>
+                        </BasePopup>}
                     </div>
 
                     {/* Registration card */}
                     <div className="flex flex-col bg-white drop-shadow-xl rounded-md p-4 m-2 w-full  border border-gray-300 hover:border-blue-300  hover:bg-blue-50">
                       <div className="flex justify-end">
                         <GoKebabHorizontal
-                          onClick={event => handleClick(event, setRegPopupOpen)}
+                          onClick={event => handleClickReg(event)}
                           size={37}
                           className="cursor-pointer text-gray-500 hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
                         />
@@ -201,21 +236,21 @@ const ManageUser = () => {
                         </p>
                       </div>
                       {regPopupOpen &&
-                        <ClickAwayListener onClickAway={handleCloseReg}>
-                          <BasePopup
-                            id={id}
-                            open={Boolean(anchor)}
-                            anchor={anchor}
-                            placement={placement}
-                            offset={4}
-                            onClose={handleCloseReg}
-                          >
+                        <BasePopup
+                          id={id}
+                          open={regPopupOpen}
+                          anchor={anchor}
+                          placement={placement}
+                          offset={4}
+                          onClose={handleCloseReg}
+                        >
+                          <div className="action-popup">
                             <UserPopup
                               closePopup={handleCloseReg}
                               buttonLink="/admin/manage-user/registration-user"
                             />
-                          </BasePopup>
-                        </ClickAwayListener>}
+                          </div>
+                        </BasePopup>}
                     </div>
                   </div>
 
@@ -224,7 +259,7 @@ const ManageUser = () => {
                     <div className="flex flex-col bg-white drop-shadow-xl rounded-md p-4 m-2 w-full  border border-gray-300 hover:border-blue-300  hover:bg-blue-50">
                       <div className="flex justify-end">
                         <GoKebabHorizontal
-                          onClick={event => handleClick(event, setInvPopupOpen)}
+                          onClick={event => handleClickInv(event)}
                           size={37}
                           className="cursor-pointer text-gray-500 hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
                         />
@@ -249,29 +284,28 @@ const ManageUser = () => {
                         </p>
                       </div>
                       {inventoryPopupOpen &&
-                        <ClickAwayListener onClickAway={handleCloseInv}>
-                          <BasePopup
-                            id={id}
-                            open={Boolean(anchor)}
-                            anchor={anchor}
-                            placement={placement}
-                            offset={4}
-                            onClose={handleCloseInv}
-                          >
+                        <BasePopup
+                          id={id}
+                          open={inventoryPopupOpen}
+                          anchor={anchor}
+                          placement={placement}
+                          offset={4}
+                          onClose={handleCloseInv}
+                        >
+                          <div className="action-popup">
                             <UserPopup
                               onClose={handleCloseInv}
                               buttonLink="/admin/manage-user/inventory-user"
                             />
-                          </BasePopup>
-                        </ClickAwayListener>}
+                          </div>
+                        </BasePopup>}
                     </div>
 
                     {/* Reports card */}
                     <div className="flex flex-col bg-white drop-shadow-xl rounded-md p-4 m-2 w-full border border-gray-300  hover:border-blue-300 hover:bg-blue-50">
                       <div className="flex justify-end">
                         <GoKebabHorizontal
-                          onClick={event =>
-                            handleClick(event, setReportsPopupOpen)}
+                          onClick={event => handleClickReports(event)}
                           size={37}
                           className="cursor-pointer text-gray-500 hover:bg-gray-200 p-2 rounded-full drop-shadow-md"
                         />
@@ -296,21 +330,21 @@ const ManageUser = () => {
                         </p>
                       </div>
                       {reportsPopupOpen &&
-                        <ClickAwayListener onClickAway={handleCloseReports}>
-                          <BasePopup
-                            id={id}
-                            open={Boolean(anchor)}
-                            anchor={anchor}
-                            placement={placement}
-                            offset={4}
-                            onClose={() => handleClose(setReportsPopupOpen)}
-                          >
+                        <BasePopup
+                          id={id}
+                          open={reportsPopupOpen}
+                          anchor={anchor}
+                          placement={placement}
+                          offset={4}
+                          onClose={handleCloseReports}
+                        >
+                          <div className="action-popup">
                             <UserPopup
-                              onClose={() => handleClose(setReportsPopupOpen)}
+                              onClose={handleCloseReports}
                               buttonLink="/admin/manage-user/report-user"
                             />
-                          </BasePopup>
-                        </ClickAwayListener>}
+                          </div>
+                        </BasePopup>}
                     </div>
                   </div>
                 </div>}

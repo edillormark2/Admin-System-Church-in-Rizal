@@ -16,10 +16,8 @@ import { TiUserAdd } from "react-icons/ti";
 import { Link } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
 import { MdDownload } from "react-icons/md";
-import { CSVLink } from "react-csv";
 import TOLTDeletePopup from "../../../../components/RegComponents/Registrants/TOLTDeletePopup";
 import YearMenuPicker from "../../../../components/YearMenuPicker";
-import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
 
 const TOLTregistrants = () => {

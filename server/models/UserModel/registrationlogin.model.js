@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-
-
 const registrationloginSchema = new mongoose.Schema({
   userID: {
     type: Number,
@@ -51,7 +49,7 @@ registrationloginSchema.pre("save", async function(next) {
   }
 
   // Find the maximum userID in the collection
-  const maxUserIDDoc = await Registration.findOne(
+  const maxUserIDDoc = await RegistrationUser.findOne(
     {},
     {},
     { sort: { userID: -1 } }
@@ -69,6 +67,9 @@ registrationloginSchema.pre("save", async function(next) {
   next();
 });
 
-const Registration = mongoose.model("Registration", registrationloginSchema);
+const RegistrationUser = mongoose.model(
+  "RegistrationUser",
+  registrationloginSchema
+);
 
-export default Registration;
+export default RegistrationUser;

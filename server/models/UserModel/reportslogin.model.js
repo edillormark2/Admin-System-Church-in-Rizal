@@ -49,7 +49,11 @@ reportsloginSchema.pre("save", async function(next) {
   }
 
   // Find the maximum userID in the collection
-  const maxUserIDDoc = await Reports.findOne({}, {}, { sort: { userID: -1 } });
+  const maxUserIDDoc = await ReportsUser.findOne(
+    {},
+    {},
+    { sort: { userID: -1 } }
+  );
 
   let maxUserID = 10000; // Default starting userID
   if (maxUserIDDoc) {
@@ -63,6 +67,6 @@ reportsloginSchema.pre("save", async function(next) {
   next();
 });
 
-const Reports = mongoose.model("Reports", reportsloginSchema);
+const ReportsUser = mongoose.model("ReportsUser", reportsloginSchema);
 
-export default Reports;
+export default ReportsUser;
