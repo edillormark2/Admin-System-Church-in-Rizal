@@ -386,17 +386,9 @@ const RegProfileSettings = () => {
                             <div className="text-sm md:text-base">
                               <h1 className="font-semibold">Access</h1>
                               <ul className="list-disc list-inside p-2 text-gray-600">
-                                <li>
-                                  Access administrative functions and settings
-                                </li>
-                                <li>Manage user accounts and permissions</li>
-                                <li>
-                                  Configure system settings and preferences
-                                </li>
-                                <li>
-                                  Oversee the overall operation of the
-                                  application
-                                </li>
+                                <li>View event registration data</li>
+                                <li>Manage announcement posting</li>
+                                <li>Manage all registration processes</li>
                               </ul>
                             </div>
 
