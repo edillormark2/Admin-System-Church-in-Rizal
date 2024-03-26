@@ -43,7 +43,7 @@ import CheckInOut from "./pages/RegistrationPages/CheckInOut";
 import TOLTregistrants from "./pages/RegistrationPages/Registrants/TOLT/TOLTregistrants";
 import AddTOLTregistrants from "./pages/RegistrationPages/Registrants/TOLT/AddTOLTregistrants";
 import ViewTOLTregistrants from "./pages/RegistrationPages/Registrants/TOLT/ViewTOLTregistrants";
-
+import ManageTraining from "./pages/RegistrationPages/TrainingPages/ManageTraining";
 
 const customToastStyle = {
   position: "top-right",
@@ -138,6 +138,7 @@ const App = () => {
                   element={<EditRegDetails />}
                 />
                 <Route path="check-in-out" element={<CheckInOut />} />
+                <Route path="manage-training" element={<ManageTraining />} />
                 {/* Registrants routes */}
                 <Route
                   path="manage-registration/BR-registrants"

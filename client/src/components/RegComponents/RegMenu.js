@@ -3,6 +3,7 @@ import { AiOutlineHome } from "react-icons/ai";
 import { GrAnnounce } from "react-icons/gr";
 import { LuClipboardList } from "react-icons/lu";
 import { TbMapPinCheck } from "react-icons/tb";
+import { MdToday } from "react-icons/md";
 
 export const links = [
   {
@@ -32,6 +33,11 @@ export const links = [
         name: "Check in / out",
         url: "/registration/check-in-out",
         icon: <TbMapPinCheck size={20} />
+      },
+      {
+        name: "Manage Training",
+        url: "/registration/manage-training",
+        icon: <MdToday size={20} />
       }
     ]
   }
