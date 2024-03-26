@@ -1,11 +1,18 @@
 import React from "react";
-import "./Reg.css";
-import Navbar from "../../components/RegComponents/Navbar";
-import Sidebar from "../../components/RegComponents/Sidebar";
-import { useStateContext } from "../../redux/ContextProvider";
+import "../Reg.css";
+import Navbar from "../../../components/RegComponents/Navbar";
+import Sidebar from "../../../components/RegComponents/Sidebar";
+import { useStateContext } from "../../../redux/ContextProvider";
+import Breadcrumbs from "../../../components/Breadcrumbs";
 
-const RegDashboard = () => {
+const Teams = () => {
   const { activeMenu } = useStateContext();
+
+  const breadcrumbLinks = [
+    { to: "/registration/dashboard", label: "Home" },
+    { to: "/registration/manage-training", label: "Manage Training" },
+    { to: "", label: "Teams" }
+  ];
 
   return (
     <div className="bg-gray-200 min-h-screen">
@@ -26,9 +33,8 @@ const RegDashboard = () => {
             <Navbar />
           </div>
           <div className="my-28 md:my-16 mx-10 md:mx-16 ">
-            <h1 className="text-2xl font-semibold mb-2 ">
-              Welcome Registration Dept
-            </h1>
+            <h1 className="text-2xl font-semibold mb-2 ">Teams</h1>
+            <Breadcrumbs links={breadcrumbLinks} />
           </div>
         </div>
       </div>
@@ -36,4 +42,4 @@ const RegDashboard = () => {
   );
 };
 
-export default RegDashboard;
+export default Teams;

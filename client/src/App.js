@@ -44,6 +44,10 @@ import TOLTregistrants from "./pages/RegistrationPages/Registrants/TOLT/TOLTregi
 import AddTOLTregistrants from "./pages/RegistrationPages/Registrants/TOLT/AddTOLTregistrants";
 import ViewTOLTregistrants from "./pages/RegistrationPages/Registrants/TOLT/ViewTOLTregistrants";
 import ManageTraining from "./pages/RegistrationPages/TrainingPages/ManageTraining";
+import Coordinators from "./pages/RegistrationPages/TrainingPages/Coordinators";
+import Teams from "./pages/RegistrationPages/TrainingPages/Teams";
+import Culminating from "./pages/RegistrationPages/TrainingPages/Culminating";
+import Grading from "./pages/RegistrationPages/TrainingPages/Grading";
 
 const customToastStyle = {
   position: "top-right",
@@ -138,7 +142,18 @@ const App = () => {
                   element={<EditRegDetails />}
                 />
                 <Route path="check-in-out" element={<CheckInOut />} />
+                {/* Training pages routes */}
                 <Route path="manage-training" element={<ManageTraining />} />
+                <Route
+                  path="manage-training/coordinators"
+                  element={<Coordinators />}
+                />
+                <Route path="manage-training/teams" element={<Teams />} />
+                <Route
+                  path="manage-training/culminating"
+                  element={<Culminating />}
+                />
+                <Route path="manage-training/grading" element={<Grading />} />
                 {/* Registrants routes */}
                 <Route
                   path="manage-registration/BR-registrants"
