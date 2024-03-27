@@ -7,6 +7,7 @@ import userRoutes from "./routes/user.route.js";
 import AnnouncementRoutes from "./routes/announcement.route.js";
 import RegistrationRoutes from "./routes/registration.route.js";
 import RegistrantsRoutes from "./routes/registrants.route.js";
+import TrainingRoutes from "./routes/training.route.js";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -37,6 +38,7 @@ app.use("/server/users", userRoutes);
 app.use("/server/announcement", AnnouncementRoutes);
 app.use("/server/registration", RegistrationRoutes);
 app.use("/server/registrants", RegistrantsRoutes);
+app.use("/server/training", TrainingRoutes);
 
 // Error handler middleware
 app.use((err, req, res, next) => {

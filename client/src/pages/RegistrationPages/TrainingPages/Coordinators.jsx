@@ -11,22 +11,24 @@ import Fade from "@mui/material/Fade";
 import { TiUserAdd } from "react-icons/ti";
 import { Divider } from "@mui/material";
 import AddCoorPopup from "../../../components/RegComponents/ManageTraining/AddCoorPopup";
+import axios from "axios";
 
 const Coordinators = () => {
   const { activeMenu } = useStateContext();
   const [regDropdownOpen, setRegDropdownOpen] = useState(false);
   const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
-  const [selectedTraining, setSelectedReg] = useState("");
+  const [selectedTraining, setSelectedTraining] = useState("");
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [coordinators, setCoordinators] = useState([]);
   const [openAddPopup, setOpenAddPopup] = useState(false);
 
   const regDropdownRef = useRef(null);
   const yearDropdownRef = useRef(null);
 
   useEffect(() => {
-    const storedSelectedReg = localStorage.getItem("selectedTraining");
-    if (storedSelectedReg) {
-      setSelectedReg(storedSelectedReg);
+    const storedSelectedTraining = localStorage.getItem("selectedTraining");
+    if (storedSelectedTraining) {
+      setSelectedTraining(storedSelectedTraining);
     }
 
     const handleOutsideClick = event => {
@@ -57,8 +59,49 @@ const Coordinators = () => {
     [selectedTraining]
   );
 
+  useEffect(
+    () => {
+      fetchData();
+    },
+    [selectedTraining, selectedYear]
+  );
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/server/training/coordinators-display",
+        {
+          params: {
+            selectedTraining,
+            selectedYear
+          }
+        }
+      );
+      setCoordinators(response.data);
+    } catch (error) {
+      console.error("Error fetching coordinators:", error);
+    }
+  };
+
+  const fetchLatestData = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/server/training/coordinators-display",
+        {
+          params: {
+            selectedTraining,
+            selectedYear
+          }
+        }
+      );
+      setCoordinators(response.data);
+    } catch (error) {
+      console.error("Error fetching latest coordinators data:", error);
+    }
+  };
+
   const handleRegItemClick = item => {
-    setSelectedReg(item);
+    setSelectedTraining(item);
     setRegDropdownOpen(false);
   };
 
@@ -69,6 +112,21 @@ const Coordinators = () => {
 
   const handleOpenAdd = () => {
     setOpenAddPopup(true);
+  };
+
+  const handleCoordAdded = async () => {
+    setOpenAddPopup(false); // Close the add coordinator popup
+    fetchLatestData(); // Fetch the latest data
+  };
+
+  const getCoordinatorsByDepartment = department => {
+    return coordinators
+      .filter(coordinator => coordinator.department === department)
+      .map(coordinator =>
+        <p key={coordinator._id}>
+          {coordinator.name}
+        </p>
+      );
   };
 
   const breadcrumbLinks = [
@@ -150,7 +208,9 @@ const Coordinators = () => {
                   <div className="bg-white  rounded-md drop-shadow-lg p-4 mt-4">
                     <p className="pb-2">Department In-charge</p>
                     <Divider />
-                    <p className="py-1 text-gray-500">Name</p>
+                    <p className="mt-2 py-1 text-gray-500">
+                      {getCoordinatorsByDepartment("Registration")}
+                    </p>
                   </div>
                 </div>
                 <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
@@ -158,7 +218,9 @@ const Coordinators = () => {
                   <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
                     <p className="pb-2">Department In-charge</p>
                     <Divider />
-                    <p className="py-1 text-gray-500">Name</p>
+                    <p className="mt-2 py-1 text-gray-500">
+                      {getCoordinatorsByDepartment("Environment")}
+                    </p>
                   </div>
                 </div>
                 <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
@@ -166,7 +228,9 @@ const Coordinators = () => {
                   <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
                     <p className="pb-2">Department In-charge</p>
                     <Divider />
-                    <p className="py-1 text-gray-500">Name</p>
+                    <p className="py-1 text-gray-500">
+                      {getCoordinatorsByDepartment("Kitchen")}
+                    </p>
                   </div>
                 </div>
                 <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
@@ -176,7 +240,9 @@ const Coordinators = () => {
                   <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
                     <p className="pb-2">Department In-charge</p>
                     <Divider />
-                    <p className="py-1 text-gray-500">Name</p>
+                    <p className="mt-2 py-1 text-gray-500">
+                      {getCoordinatorsByDepartment("Living / Accommodation")}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -187,7 +253,9 @@ const Coordinators = () => {
                   <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
                     <p className="pb-2">Department In-charge</p>
                     <Divider />
-                    <p className="py-1 text-gray-500">Name</p>
+                    <p className="mt-2 py-1 text-gray-500">
+                      {getCoordinatorsByDepartment("Medical")}
+                    </p>
                   </div>
                 </div>
                 <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
@@ -195,7 +263,9 @@ const Coordinators = () => {
                   <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
                     <p className="pb-2">Department In-charge</p>
                     <Divider />
-                    <p className="py-1 text-gray-500">Name</p>
+                    <p className="mt-2 py-1 text-gray-500">
+                      {getCoordinatorsByDepartment("Overall")}
+                    </p>
                   </div>
                 </div>
                 <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
@@ -203,15 +273,18 @@ const Coordinators = () => {
                     Audio video / Multimedia
                   </p>
                   <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
-                    <p className="pb-2">Department In-charge</p>
+                    <p className="mt-2 pb-2">Department In-charge</p>
                     <Divider />
-                    <p className="py-1 text-gray-500">Name</p>
+                    <p className="py-1 text-gray-500">
+                      {getCoordinatorsByDepartment("Audio video / Multimedia")}
+                    </p>
                   </div>
                 </div>
               </div>
               <AddCoorPopup
                 openAddPopup={openAddPopup}
                 setOpenAddPopup={setOpenAddPopup}
+                onCoorAdded={handleCoordAdded}
               />
             </div>
           </div>

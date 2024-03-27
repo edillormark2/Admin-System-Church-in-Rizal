@@ -5,16 +5,19 @@ import ModalClose from "@mui/joy/ModalClose";
 import Divider from "@mui/material/Divider";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { useMediaQuery } from "@mui/material";
+import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddCoorPopup = props => {
   const { openAddPopup, setOpenAddPopup } = props;
   const [formData, setFormData] = useState({
-    title: "",
-    description: ""
+    name: "",
+    department: ""
   });
   const [loading, setLoading] = useState(false);
   const [deptDropdownOpen, setDeptDropdownOpen] = useState(false);
-  const [selectedDept, setSelectedDept] = useState("");
+  const [selectedDept, setSelectedDept] = useState(""); // Track selected department
   const regDropdownRef = useRef(null);
 
   const handleClosePopup = () => {
@@ -25,32 +28,56 @@ const AddCoorPopup = props => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
   };
-  useEffect(() => {
-    const handleOutsideClick = event => {
-      if (
-        regDropdownRef.current &&
-        !regDropdownRef.current.contains(event.target) &&
-        !event.target.closest(".reg-dropdown-button")
-      ) {
-        setDeptDropdownOpen(false);
-      }
-    };
 
-    document.addEventListener("mousedown", handleOutsideClick);
-
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
-  }, []);
+  useEffect(
+    () => {
+      // Update formData when selectedDept changes
+      setFormData({ ...formData, department: selectedDept });
+    },
+    [selectedDept]
+  );
 
   const toggleDropdown = () => {
     setDeptDropdownOpen(!deptDropdownOpen);
   };
 
   const handleDeptItemClick = item => {
-    setSelectedDept(item);
+    setSelectedDept(item); // Update selected department
     setDeptDropdownOpen(false);
   };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    setLoading(true);
+
+    const { name, department } = formData;
+    if (!name.trim() || !department) {
+      // Check if department is selected
+      toast.error("Please fill all the fields");
+      setLoading(false);
+      return;
+    }
+    try {
+      const trainingType = localStorage.getItem("selectedTraining");
+      await axios.post(
+        "http://localhost:3000/server/training/coordinators-add",
+        {
+          name,
+          department,
+          trainingType
+        }
+      );
+      toast.success("Coordinator Added");
+      props.onCoorAdded();
+      setOpenAddPopup(false);
+    } catch (error) {
+      console.error("Error adding coordinator:", error);
+      toast.error("Error adding coordinator");
+    }
+    setLoading(false);
+  };
+
+ 
 
   const isMobile = useMediaQuery("(max-width:600px)");
 
@@ -89,12 +116,12 @@ const AddCoorPopup = props => {
           <Divider />
           <div className="mt-8">
             <div>
-              <form className="flex flex-col gap-4">
+              <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                 <p className="text-sm font-semibold">Name</p>
                 <input
                   type="text"
                   placeholder=""
-                  id="title"
+                  id="name"
                   onChange={handleChange}
                   autoComplete="off"
                   className="form-control bg-white p-3 rounded-lg border border-gray-300 text-sm sm:text-base "
@@ -108,7 +135,7 @@ const AddCoorPopup = props => {
                   onClick={toggleDropdown}
                 >
                   <p>
-                    {selectedDept}
+                    {selectedDept || "Select Department"}
                   </p>
                   <IoMdArrowDropdown className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500" />
                   {deptDropdownOpen &&
@@ -177,6 +204,7 @@ const AddCoorPopup = props => {
                   <button
                     disabled={loading}
                     className="bg-primary w-full text-white p-3 rounded-lg hover:opacity-85 disabled:opacity-80 text-sm sm:text-base"
+                    onClick={handleSubmit}
                   >
                     {loading ? "Loading..." : "Add"}
                   </button>
