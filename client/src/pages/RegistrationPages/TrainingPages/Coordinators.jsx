@@ -13,6 +13,7 @@ import { Divider } from "@mui/material";
 import AddCoorPopup from "../../../components/RegComponents/ManageTraining/AddCoorPopup";
 import axios from "axios";
 import { MdDelete } from "react-icons/md";
+import nocoor from "../../../assets/nocoor.png";
 
 const Coordinators = () => {
   const { activeMenu } = useStateContext();
@@ -221,86 +222,103 @@ const Coordinators = () => {
                   </div>
                 </div>
               </div>
+              {coordinators.length === 0
+                ? <div className="flex flex-col items-center text-gray-500 mt-8">
+                    <img
+                      src={nocoor}
+                      alt="img"
+                      className="h-72 lg:h-1/3 w-72 lg:w-1/3 object-cover"
+                    />
+                    <p className="text-xl font-semibold">
+                      No Coordinators Assigned Yet
+                    </p>
+                  </div>
+                : <div>
+                    <div className="w-full flex flex-wrap justify-left mt-12 ">
+                      <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
+                        <p className="font-semibold text-lg">Registration</p>
+                        <div className="bg-white  rounded-md drop-shadow-lg p-4 mt-4">
+                          <p className="pb-2">Department In-charge</p>
+                          <Divider />
+                          <div className="mt-2">
+                            {getCoordinatorsByDepartment("Registration")}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
+                        <p className="font-semibold text-lg">Environment</p>
+                        <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
+                          <p className="pb-2">Department In-charge</p>
+                          <Divider />
+                          <div className="mt-2">
+                            {getCoordinatorsByDepartment("Environment")}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
+                        <p className="font-semibold text-lg">Kitchen</p>
+                        <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
+                          <p className="pb-2">Department In-charge</p>
+                          <Divider />
+                          <div className="mt-2">
+                            {getCoordinatorsByDepartment("Kitchen")}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
+                        <p className="font-semibold text-lg">
+                          Living / Accommodation
+                        </p>
+                        <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
+                          <p className="pb-2">Department In-charge</p>
+                          <Divider />
+                          <div className="mt-2">
+                            {getCoordinatorsByDepartment(
+                              "Living / Accommodation"
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
-              <div className="w-full flex flex-wrap justify-left mt-12 ">
-                <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
-                  <p className="font-semibold text-lg">Registration</p>
-                  <div className="bg-white  rounded-md drop-shadow-lg p-4 mt-4">
-                    <p className="pb-2">Department In-charge</p>
-                    <Divider />
-                    <div className="mt-2">
-                      {getCoordinatorsByDepartment("Registration")}
+                    <div className="w-full flex flex-wrap justify-left mt-12 ">
+                      <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
+                        <p className="font-semibold text-lg">Medical</p>
+                        <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
+                          <p className="pb-2">Department In-charge</p>
+                          <Divider />
+                          <div className="mt-2">
+                            {getCoordinatorsByDepartment("Medical")}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
+                        <p className="font-semibold text-lg">Overall</p>
+                        <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
+                          <p className="pb-2">Department In-charge</p>
+                          <Divider />
+                          <div className="mt-2">
+                            {getCoordinatorsByDepartment("Overall")}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
+                        <p className="font-semibold text-lg">
+                          Audio video / Multimedia
+                        </p>
+                        <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
+                          <p className="pb-2">Department In-charge</p>
+                          <Divider />
+                          <div className="mt-2">
+                            {getCoordinatorsByDepartment(
+                              "Audio video / Multimedia"
+                            )}
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
-                  <p className="font-semibold text-lg">Environment</p>
-                  <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
-                    <p className="pb-2">Department In-charge</p>
-                    <Divider />
-                    <div className="mt-2 py-1 text-gray-500">
-                      {getCoordinatorsByDepartment("Environment")}
-                    </div>
-                  </div>
-                </div>
-                <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
-                  <p className="font-semibold text-lg">Kitchen</p>
-                  <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
-                    <p className="pb-2">Department In-charge</p>
-                    <Divider />
-                    <div className="mt-2 py-1 text-gray-500">
-                      {getCoordinatorsByDepartment("Kitchen")}
-                    </div>
-                  </div>
-                </div>
-                <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
-                  <p className="font-semibold text-lg">
-                    Living / Accommodation
-                  </p>
-                  <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
-                    <p className="pb-2">Department In-charge</p>
-                    <Divider />
-                    <div className="mt-2 py-1 text-gray-500">
-                      {getCoordinatorsByDepartment("Living / Accommodation")}
-                    </div>
-                  </div>
-                </div>
-              </div>
+                  </div>}
 
-              <div className="w-full flex flex-wrap justify-left mt-12 ">
-                <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
-                  <p className="font-semibold text-lg">Medical</p>
-                  <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
-                    <p className="pb-2">Department In-charge</p>
-                    <Divider />
-                    <div className="mt-2 py-1 text-gray-500">
-                      {getCoordinatorsByDepartment("Medical")}
-                    </div>
-                  </div>
-                </div>
-                <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
-                  <p className="font-semibold text-lg">Overall</p>
-                  <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
-                    <p className="pb-2">Department In-charge</p>
-                    <Divider />
-                    <div className="mt-2 py-1 text-gray-500">
-                      {getCoordinatorsByDepartment("Overall")}
-                    </div>
-                  </div>
-                </div>
-                <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
-                  <p className="font-semibold text-lg">
-                    Audio video / Multimedia
-                  </p>
-                  <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
-                    <p className="pb-2">Department In-charge</p>
-                    <Divider />
-                    <div className="mt-2 py-1 text-gray-500">
-                      {getCoordinatorsByDepartment("Audio video / Multimedia")}
-                    </div>
-                  </div>
-                </div>
-              </div>
               <AddCoorPopup
                 openAddPopup={openAddPopup}
                 setOpenAddPopup={setOpenAddPopup}

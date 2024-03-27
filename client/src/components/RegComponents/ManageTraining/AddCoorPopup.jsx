@@ -13,11 +13,12 @@ const AddCoorPopup = props => {
   const { openAddPopup, setOpenAddPopup } = props;
   const [formData, setFormData] = useState({
     name: "",
-    department: ""
+    department: "Select Department"
   });
   const [loading, setLoading] = useState(false);
   const [deptDropdownOpen, setDeptDropdownOpen] = useState(false);
-  const [selectedDept, setSelectedDept] = useState(""); // Track selected department
+  const [selectedDept, setSelectedDept] = useState("Select Department");
+  const [resetDeptDropdown, setResetDeptDropdown] = useState(false);
   const regDropdownRef = useRef(null);
 
   const handleClosePopup = () => {
@@ -31,10 +32,19 @@ const AddCoorPopup = props => {
 
   useEffect(
     () => {
-      // Update formData when selectedDept changes
       setFormData({ ...formData, department: selectedDept });
     },
     [selectedDept]
+  );
+
+  useEffect(
+    () => {
+      if (resetDeptDropdown) {
+        setSelectedDept("Select Department");
+        setResetDeptDropdown(false);
+      }
+    },
+    [resetDeptDropdown]
   );
 
   const toggleDropdown = () => {
@@ -57,7 +67,7 @@ const AddCoorPopup = props => {
       setLoading(false);
       return;
     }
-    if (!department.trim()) {
+    if (!department.trim() || department === "Select Department") {
       // Check if department is selected
       toast.error("Please select a department");
       setLoading(false);
@@ -75,8 +85,9 @@ const AddCoorPopup = props => {
       );
       toast.success("Coordinator Added");
       props.onCoorAdded();
-      setFormData({ name: "", department: "" });
+      setFormData({ name: "" });
       setOpenAddPopup(false);
+      setResetDeptDropdown(true); // Set reset status of the department dropdown
     } catch (error) {
       console.error("Error adding coordinator:", error);
       toast.error("Error adding coordinator");
@@ -140,7 +151,7 @@ const AddCoorPopup = props => {
                   onClick={toggleDropdown}
                 >
                   <p>
-                    {selectedDept || "Select Department"}
+                    {selectedDept}
                   </p>
                   <IoMdArrowDropdown className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500" />
                   {deptDropdownOpen &&
