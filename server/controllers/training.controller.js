@@ -56,3 +56,25 @@ export const coordinatorsDisplay = async (req, res) => {
     res.status(500).json({ message: "Error fetching coordinators" });
   }
 };
+
+// Controller for deleting coordinators based on id
+export const coordinatorsDelete = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Check if ID is provided
+    if (!id) {
+      return res.status(400).json({ message: "Coordinator ID is required" });
+    }
+
+    // Find the coordinator by ID and delete it
+    await Coordinators.findByIdAndDelete(id);
+
+    // Send success response
+    res.status(200).json({ message: "Coordinator deleted successfully" });
+  } catch (error) {
+    // Handle errors
+    console.error("Error deleting coordinator:", error);
+    res.status(500).json({ message: "Error deleting coordinator" });
+  }
+};

@@ -120,13 +120,32 @@ const Coordinators = () => {
     fetchLatestData(); // Fetch the latest data
   };
 
+  const handleDeleteCoordinator = async id => {
+    try {
+      await axios.delete(
+        `http://localhost:3000/server/training/coordinators-delete/${id}`
+      );
+      fetchLatestData();
+    } catch (error) {
+      console.error("Error deleting coordinator:", error);
+    }
+  };
+
   const getCoordinatorsByDepartment = department => {
     return coordinators
       .filter(coordinator => coordinator.department === department)
       .map(coordinator =>
-        <p key={coordinator._id}>
-          {coordinator.name}
-        </p>
+        <div className="flex justify-between py-1" key={coordinator._id}>
+          <p className="text-gray-600">
+            {coordinator.name}
+          </p>
+          <p
+            className="self-center text-gray-400 hover:bg-gray-200 cursor-pointer rounded-full p-1 "
+            onClick={() => handleDeleteCoordinator(coordinator._id)}
+          >
+            <MdDelete size={20} />
+          </p>
+        </div>
       );
   };
 
@@ -209,7 +228,7 @@ const Coordinators = () => {
                   <div className="bg-white  rounded-md drop-shadow-lg p-4 mt-4">
                     <p className="pb-2">Department In-charge</p>
                     <Divider />
-                    <div className="mt-2 py-1 text-gray-500">
+                    <div className="mt-2">
                       {getCoordinatorsByDepartment("Registration")}
                     </div>
                   </div>
@@ -220,7 +239,7 @@ const Coordinators = () => {
                     <p className="pb-2">Department In-charge</p>
                     <Divider />
                     <div className="mt-2 py-1 text-gray-500">
-                      {getCoordinatorsByDepartment("Environment")}                   
+                      {getCoordinatorsByDepartment("Environment")}
                     </div>
                   </div>
                 </div>
@@ -229,7 +248,7 @@ const Coordinators = () => {
                   <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
                     <p className="pb-2">Department In-charge</p>
                     <Divider />
-                    <div className="py-1 text-gray-500">
+                    <div className="mt-2 py-1 text-gray-500">
                       {getCoordinatorsByDepartment("Kitchen")}
                     </div>
                   </div>
@@ -274,9 +293,9 @@ const Coordinators = () => {
                     Audio video / Multimedia
                   </p>
                   <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
-                    <p className="mt-2 pb-2">Department In-charge</p>
+                    <p className="pb-2">Department In-charge</p>
                     <Divider />
-                    <div className="py-1 text-gray-500">
+                    <div className="mt-2 py-1 text-gray-500">
                       {getCoordinatorsByDepartment("Audio video / Multimedia")}
                     </div>
                   </div>
