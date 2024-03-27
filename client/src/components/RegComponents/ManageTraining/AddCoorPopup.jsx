@@ -51,9 +51,15 @@ const AddCoorPopup = props => {
     setLoading(true);
 
     const { name, department } = formData;
-    if (!name.trim() || !department) {
+    if (!name.trim()) {
+      // Check if name is filled
+      toast.error("Please fill the name field");
+      setLoading(false);
+      return;
+    }
+    if (!department.trim()) {
       // Check if department is selected
-      toast.error("Please fill all the fields");
+      toast.error("Please select a department");
       setLoading(false);
       return;
     }
@@ -69,6 +75,7 @@ const AddCoorPopup = props => {
       );
       toast.success("Coordinator Added");
       props.onCoorAdded();
+      setFormData({ name: "", department: "" });
       setOpenAddPopup(false);
     } catch (error) {
       console.error("Error adding coordinator:", error);
@@ -76,8 +83,6 @@ const AddCoorPopup = props => {
     }
     setLoading(false);
   };
-
- 
 
   const isMobile = useMediaQuery("(max-width:600px)");
 

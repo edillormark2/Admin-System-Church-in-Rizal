@@ -12,6 +12,7 @@ import { TiUserAdd } from "react-icons/ti";
 import { Divider } from "@mui/material";
 import AddCoorPopup from "../../../components/RegComponents/ManageTraining/AddCoorPopup";
 import axios from "axios";
+import { MdDelete } from "react-icons/md";
 
 const Coordinators = () => {
   const { activeMenu } = useStateContext();
@@ -208,9 +209,9 @@ const Coordinators = () => {
                   <div className="bg-white  rounded-md drop-shadow-lg p-4 mt-4">
                     <p className="pb-2">Department In-charge</p>
                     <Divider />
-                    <p className="mt-2 py-1 text-gray-500">
+                    <div className="mt-2 py-1 text-gray-500">
                       {getCoordinatorsByDepartment("Registration")}
-                    </p>
+                    </div>
                   </div>
                 </div>
                 <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
@@ -218,9 +219,9 @@ const Coordinators = () => {
                   <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
                     <p className="pb-2">Department In-charge</p>
                     <Divider />
-                    <p className="mt-2 py-1 text-gray-500">
-                      {getCoordinatorsByDepartment("Environment")}
-                    </p>
+                    <div className="mt-2 py-1 text-gray-500">
+                      {getCoordinatorsByDepartment("Environment")}                   
+                    </div>
                   </div>
                 </div>
                 <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
@@ -228,9 +229,9 @@ const Coordinators = () => {
                   <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
                     <p className="pb-2">Department In-charge</p>
                     <Divider />
-                    <p className="py-1 text-gray-500">
+                    <div className="py-1 text-gray-500">
                       {getCoordinatorsByDepartment("Kitchen")}
-                    </p>
+                    </div>
                   </div>
                 </div>
                 <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
@@ -240,9 +241,9 @@ const Coordinators = () => {
                   <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
                     <p className="pb-2">Department In-charge</p>
                     <Divider />
-                    <p className="mt-2 py-1 text-gray-500">
+                    <div className="mt-2 py-1 text-gray-500">
                       {getCoordinatorsByDepartment("Living / Accommodation")}
-                    </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -253,9 +254,9 @@ const Coordinators = () => {
                   <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
                     <p className="pb-2">Department In-charge</p>
                     <Divider />
-                    <p className="mt-2 py-1 text-gray-500">
+                    <div className="mt-2 py-1 text-gray-500">
                       {getCoordinatorsByDepartment("Medical")}
-                    </p>
+                    </div>
                   </div>
                 </div>
                 <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
@@ -263,9 +264,9 @@ const Coordinators = () => {
                   <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
                     <p className="pb-2">Department In-charge</p>
                     <Divider />
-                    <p className="mt-2 py-1 text-gray-500">
+                    <div className="mt-2 py-1 text-gray-500">
                       {getCoordinatorsByDepartment("Overall")}
-                    </p>
+                    </div>
                   </div>
                 </div>
                 <div className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 ">
@@ -275,9 +276,9 @@ const Coordinators = () => {
                   <div className="bg-white rounded-md drop-shadow-lg p-4 mt-4">
                     <p className="mt-2 pb-2">Department In-charge</p>
                     <Divider />
-                    <p className="py-1 text-gray-500">
+                    <div className="py-1 text-gray-500">
                       {getCoordinatorsByDepartment("Audio video / Multimedia")}
-                    </p>
+                    </div>
                   </div>
                 </div>
               </div>
