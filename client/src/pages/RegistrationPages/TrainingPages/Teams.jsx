@@ -17,6 +17,8 @@ import EditTeamPopup from "../../../components/RegComponents/ManageTraining/Edit
 import nocoor from "../../../assets/nocoor.png";
 import { ThreeDots } from "react-loader-spinner";
 import { useReactToPrint } from "react-to-print";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Teams = () => {
   const { activeMenu } = useStateContext();
@@ -120,7 +122,16 @@ const Teams = () => {
   };
 
   const handlePrint = useReactToPrint({
-    content: () => teamsContainerRef.current
+    content: () => {
+      // Check if there are any teams available
+      if (teams.length === 0) {
+        // Show toast message
+        toast.error("No data available to print");
+        return null;
+      }
+      return teamsContainerRef.current;
+    },
+    documentTitle: `${selectedTraining} ${selectedYear} Teams`
   });
 
   const breadcrumbLinks = [
@@ -243,8 +254,9 @@ const Teams = () => {
                     ref={teamsContainerRef}
                   >
                     <div className="print-title text-xl font-semibold">
-                      Summer School of Truth 2024
+                      {selectedTraining} {selectedYear}
                     </div>
+
                     <div className="w-full flex flex-wrap mt-4 team-format">
                       {teams.map(team =>
                         <div
@@ -271,7 +283,7 @@ const Teams = () => {
                                 </p>
                               </Tooltip>
                             </div>
-                            <div className="py-2 mt-2 flex flex-col items-center text-gray-500 font-semibold">
+                            <div className="py-2 mt-2 flex flex-col items-center text-gray-600 font-semibold">
                               {team.teamMembers.map((member, index) =>
                                 <p key={index}>
                                   {member}
