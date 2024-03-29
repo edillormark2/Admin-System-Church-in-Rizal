@@ -8,11 +8,15 @@ import YearMenuPicker from "../../../components/YearMenuPicker";
 import TrainingMenuPicker from "../../../components/TrainingMenuPicker";
 import Tooltip from "@mui/material/Tooltip";
 import Fade from "@mui/material/Fade";
-import { IoMdDownload } from "react-icons/io";
+import { MdLocalPrintshop } from "react-icons/md";
 import { MdAdd, MdEdit } from "react-icons/md";
+import { FaUserEdit } from "react-icons/fa";
 import axios from "axios";
 import CreateTeamPopup from "../../../components/RegComponents/ManageTraining/CreateTeamPopup";
 import EditTeamPopup from "../../../components/RegComponents/ManageTraining/EditTeamPopup";
+import nocoor from "../../../assets/nocoor.png";
+import { ThreeDots } from "react-loader-spinner";
+import { useReactToPrint } from "react-to-print";
 
 const Teams = () => {
   const { activeMenu } = useStateContext();
@@ -24,9 +28,11 @@ const Teams = () => {
   const [openEditPopup, setOpenEditPopup] = useState(false);
   const [selectedTeamId, setSelectedTeamId] = useState(null); // State to store selected team ID
   const [teams, setTeams] = useState([]);
+  const [showLoader, setShowLoader] = useState(true);
 
   const regDropdownRef = useRef(null);
   const yearDropdownRef = useRef(null);
+  const teamsContainerRef = useRef(null); // Ref to the teams container
 
   useEffect(() => {
     const storedSelectedTraining = localStorage.getItem("selectedTraining");
@@ -93,8 +99,12 @@ const Teams = () => {
         }
       );
       setTeams(response.data.teams);
+      setTimeout(() => {
+        setShowLoader(false);
+      }, 1000);
     } catch (error) {
       console.error("Error fetching teams", error);
+      setShowLoader(false);
     }
   };
 
@@ -108,6 +118,10 @@ const Teams = () => {
   const handleTeamCreated = async () => {
     fetchTeams();
   };
+
+  const handlePrint = useReactToPrint({
+    content: () => teamsContainerRef.current
+  });
 
   const breadcrumbLinks = [
     { to: "/registration/dashboard", label: "Home" },
@@ -182,13 +196,16 @@ const Teams = () => {
                   <div>
                     <Tooltip
                       arrow
-                      title="Download"
+                      title="Print"
                       placement="bottom"
                       TransitionComponent={Fade}
                     >
-                      <div className=" bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70">
+                      <div
+                        className=" bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70"
+                        onClick={handlePrint}
+                      >
                         <button className="text-white flex items-center">
-                          <IoMdDownload size={22} />
+                          <MdLocalPrintshop size={22} />
                         </button>
                       </div>
                     </Tooltip>
@@ -196,42 +213,78 @@ const Teams = () => {
                 </div>
               </div>
             </div>
-            <div className="w-full flex flex-wrap justify-left mt-4">
-              {teams.map(team =>
-                <div
-                  key={team._id}
-                  className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3"
-                >
-                  <div className="bg-white border border-gray-300 rounded-md drop-shadow-lg mt-4">
-                    <div className="p-3 flex justify-between bg-blue-100 font-semibold ">
-                      <p className="text-gray-700 self-center">
-                        {team.teamName}
-                      </p>
-                      <Tooltip
-                        arrow
-                        title="Edit"
-                        placement="bottom"
-                        TransitionComponent={Fade}
-                      >
-                        <p
-                          onClick={() => handleOpenEdit(team._id)} // Pass team ID to handleOpenEdit
-                          className="text-gray-600 hover:bg-primary bg-opacity-55 hover:text-white  rounded-full p-2 cursor-pointer drop-shadow-md"
-                        >
-                          <MdEdit size={18} />
-                        </p>
-                      </Tooltip>
+            {showLoader
+              ? <div className="p-16 mt-20 flex flex-col items-center">
+                  <ThreeDots
+                    visible={true}
+                    height={80}
+                    width={80}
+                    color="#85929E"
+                    radius={9}
+                    ariaLabel="three-dots-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                  />
+                  <p>Loading</p>
+                </div>
+              : teams.length === 0
+                ? <div className="flex flex-col items-center text-gray-500 mt-8">
+                    <img
+                      src={nocoor}
+                      alt="img"
+                      className="h-72 lg:h-1/3 w-72 lg:w-1/3 object-cover"
+                    />
+                    <p className="text-xl font-semibold">No Teams Created</p>
+                  </div>
+                : //Print section start here
+                  <div
+                    id="team-data-container"
+                    className="team-data-container"
+                    ref={teamsContainerRef}
+                  >
+                    <div className="print-title text-xl font-semibold">
+                      Summer School of Truth 2024
                     </div>
-                    <div className="py-2 mt-2 flex flex-col items-center text-gray-500 font-semibold">
-                      {team.teamMembers.map((member, index) =>
-                        <p key={index}>
-                          {member}
-                        </p>
+                    <div className="w-full flex flex-wrap mt-4 team-format">
+                      {teams.map(team =>
+                        <div
+                          key={team._id}
+                          className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 team-container"
+                        >
+                          <div className="bg-white border border-gray-300 rounded-md drop-shadow-lg mt-4">
+                            <div className="p-3 flex justify-between bg-blue-100 font-semibold print-teamName">
+                              <p className="text-gray-700 self-center  ">
+                                {team.teamName}
+                              </p>
+                              <Tooltip
+                                arrow
+                                title="Edit"
+                                placement="bottom"
+                                TransitionComponent={Fade}
+                                className="print-icon-hidden"
+                              >
+                                <p
+                                  onClick={() => handleOpenEdit(team._id)} // Pass team ID to handleOpenEdit
+                                  className="text-gray-600 hover:bg-gray-200  hover:text-gray-600  rounded-full p-2 cursor-pointer drop-shadow-md"
+                                >
+                                  <FaUserEdit size={20} />
+                                </p>
+                              </Tooltip>
+                            </div>
+                            <div className="py-2 mt-2 flex flex-col items-center text-gray-500 font-semibold">
+                              {team.teamMembers.map((member, index) =>
+                                <p key={index}>
+                                  {member}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        </div>
                       )}
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
+            //The print section end with this
+            }
           </div>
         </div>
         <EditTeamPopup

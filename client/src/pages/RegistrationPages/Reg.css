@@ -29,3 +29,45 @@
   transform: translateY(-50%); /* Center vertically */
   border-radius: 0 3px 3px 0;
 }
+
+.print-title {
+  display: none;
+}
+
+.print-icon-hidden {
+  display: block;
+}
+
+@media print {
+  .team-data-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin-left: 10px; /* Add right margin */
+    width: 100%; /* Ensure the printable section takes full width */
+  }
+  .team-format {
+    display: flex; /* Use Flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+  }
+  .team-container {
+    width: calc(
+      25% - 5px
+    ); /* Adjust width to fit four containers in each row with proper margin */
+    margin-bottom: 18px; /* Add margin between columns */
+  }
+  .print-title {
+    display: block;
+    margin-top: 20px;
+  }
+  .print-icon-hidden {
+    display: none;
+  }
+  .print-teamName {
+    display: flex; /* Use Flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100%; /* Ensures the container takes up full height */
+  }
+}

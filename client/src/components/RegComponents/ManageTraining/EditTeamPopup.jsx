@@ -199,7 +199,7 @@ const EditTeamPopup = props => {
                   disabled={loading}
                   className="bg-primary w-full text-white p-3 rounded-lg hover:opacity-70 disabled:opacity-80 text-sm sm:text-base"
                 >
-                  {loading ? "Loading..." : "Update"}
+                  {loading ? "Loading..." : "Save"}
                 </button>
               </div>
             </form>
