@@ -43,9 +43,9 @@ const ManageTraining = () => {
                   <div className="flex justify-between p-4">
                     <div className="w-3/5">
                       <p className="font-semibold text-xl">Coordinators</p>
-                      <p className="text-gray-500 text-sm mt-6">
-                        Manage coordinators for each department. Assign, update,
-                        or remove coordinators.
+                      <p className="text-gray-500 text-xs sm:text-sm mt-6">
+                        Manage coordinators for each department. Assign or
+                        remove coordinators.
                       </p>
                     </div>
                     <HiUser size={100} className="text-gray-200" />
@@ -73,9 +73,9 @@ const ManageTraining = () => {
                   <div className="flex justify-between p-4">
                     <div className="w-3/5">
                       <p className="font-semibold text-xl">Teams</p>
-                      <p className="text-gray-500 text-sm mt-6 ">
-                        Create and modify teams with ease. Assign team leaders
-                        to facilitate tasks
+                      <p className="text-gray-500 text-xs sm:text-sm mt-6 ">
+                        Manage teams every training. Create, edit, and delete
+                        teams with ease.
                       </p>
                     </div>
                     <FaUsers size={100} className="text-gray-200" />
@@ -103,7 +103,7 @@ const ManageTraining = () => {
                   <div className="flex justify-between p-4">
                     <div className="w-1/2">
                       <p className="font-semibold text-xl">Culminating</p>
-                      <p className="text-gray-500 text-sm mt-10 ">
+                      <p className="text-gray-500 text-xs sm:text-sm mt-10 ">
                         Easily list, modify, and assign awards for trainees.
                       </p>
                     </div>
@@ -132,7 +132,7 @@ const ManageTraining = () => {
                   <div className="flex justify-between p-4">
                     <div className="w-1/2">
                       <p className="font-semibold text-xl">Grading</p>
-                      <p className="text-gray-500 text-sm mt-6 ">
+                      <p className="text-gray-500 text-xs sm:text-sm mt-6 ">
                         Manage merit and demerit for each team. Keep track of
                         services grades.
                       </p>

@@ -283,7 +283,7 @@ const Teams = () => {
                                 </p>
                               </Tooltip>
                             </div>
-                            <div className="py-2 mt-2 flex flex-col items-center text-gray-600 font-semibold">
+                            <div className="py-2 mt-2 flex flex-col items-center text-sm md:text-base text-gray-600 font-semibold">
                               {team.teamMembers.map((member, index) =>
                                 <p key={index}>
                                   {member}
