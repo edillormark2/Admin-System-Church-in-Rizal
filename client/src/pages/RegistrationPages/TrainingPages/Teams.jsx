@@ -19,6 +19,7 @@ import { ThreeDots } from "react-loader-spinner";
 import { useReactToPrint } from "react-to-print";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import select from "../../../assets/select.png";
 
 const Teams = () => {
   const { activeMenu } = useStateContext();
@@ -224,79 +225,87 @@ const Teams = () => {
                 </div>
               </div>
             </div>
-            {showLoader
-              ? <div className="p-16 mt-20 flex flex-col items-center">
-                  <ThreeDots
-                    visible={true}
-                    height={80}
-                    width={80}
-                    color="#85929E"
-                    radius={9}
-                    ariaLabel="three-dots-loading"
-                    wrapperStyle={{}}
-                    wrapperClass=""
-                  />
-                  <p>Loading</p>
-                </div>
-              : teams.length === 0
-                ? <div className="flex flex-col items-center text-gray-500 mt-8">
-                    <img
-                      src={nocoor}
-                      alt="img"
-                      className="h-72 lg:h-1/3 w-72 lg:w-1/3 object-cover"
+            {selectedTraining
+              ? showLoader
+                ? <div className="p-16 mt-20 flex flex-col items-center">
+                    <ThreeDots
+                      visible={true}
+                      height={80}
+                      width={80}
+                      color="#85929E"
+                      radius={9}
+                      ariaLabel="three-dots-loading"
+                      wrapperStyle={{}}
+                      wrapperClass=""
                     />
-                    <p className="text-xl font-semibold">No Teams Created</p>
+                    <p>Loading</p>
                   </div>
-                : //Print section start here
-                  <div
-                    id="team-data-container"
-                    className="team-data-container"
-                    ref={teamsContainerRef}
-                  >
-                    <div className="print-title text-xl font-semibold">
-                      {selectedTraining} {selectedYear}
+                : teams.length === 0
+                  ? <div className="flex flex-col items-center text-gray-500 mt-8">
+                      <img
+                        src={nocoor}
+                        alt="img"
+                        className="h-72 lg:h-1/3 w-72 lg:w-1/3 object-cover"
+                      />
+                      <p className="text-xl font-semibold">No Teams Created</p>
                     </div>
+                  : <div
+                      id="team-data-container"
+                      className="team-data-container"
+                      ref={teamsContainerRef}
+                    >
+                      <div className="print-title text-xl font-semibold">
+                        {selectedTraining} {selectedYear}
+                      </div>
 
-                    <div className="w-full flex flex-wrap mt-4 team-format">
-                      {teams.map(team =>
-                        <div
-                          key={team._id}
-                          className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 team-container"
-                        >
-                          <div className="bg-white border border-gray-300 rounded-md drop-shadow-lg mt-4">
-                            <div className="p-3 flex justify-between bg-blue-100 font-semibold print-teamName">
-                              <p className="text-gray-700 self-center  ">
-                                {team.teamName}
-                              </p>
-                              <Tooltip
-                                arrow
-                                title="Edit"
-                                placement="bottom"
-                                TransitionComponent={Fade}
-                                className="print-icon-hidden"
-                              >
-                                <p
-                                  onClick={() => handleOpenEdit(team._id)} // Pass team ID to handleOpenEdit
-                                  className="text-gray-600 hover:bg-gray-200  hover:text-gray-600  rounded-full p-2 cursor-pointer drop-shadow-md"
+                      <div className="w-full flex flex-wrap mt-4 team-format">
+                        {teams.map(team =>
+                          <div
+                            key={team._id}
+                            className="w-full sm:w-full lg:w-1/2 2xl:w-1/4 pr-3 py-3 team-container"
+                          >
+                            <div className="bg-white border border-gray-300 rounded-md drop-shadow-lg mt-4">
+                              <div className="p-3 flex justify-between bg-blue-100 font-semibold print-teamName">
+                                <p className="text-gray-700 self-center  ">
+                                  {team.teamName}
+                                </p>
+                                <Tooltip
+                                  arrow
+                                  title="Edit"
+                                  placement="bottom"
+                                  TransitionComponent={Fade}
+                                  className="print-icon-hidden"
                                 >
-                                  <FaUserEdit size={20} />
-                                </p>
-                              </Tooltip>
-                            </div>
-                            <div className="py-2 mt-2 flex flex-col items-center text-sm md:text-base text-gray-600 font-semibold">
-                              {team.teamMembers.map((member, index) =>
-                                <p key={index}>
-                                  {member}
-                                </p>
-                              )}
+                                  <p
+                                    onClick={() => handleOpenEdit(team._id)} // Pass team ID to handleOpenEdit
+                                    className="text-gray-600 hover:bg-gray-200  hover:text-gray-600  rounded-full p-2 cursor-pointer drop-shadow-md"
+                                  >
+                                    <FaUserEdit size={20} />
+                                  </p>
+                                </Tooltip>
+                              </div>
+                              <div className="py-2 mt-2 flex flex-col items-center text-sm md:text-base text-gray-600 font-semibold">
+                                {team.teamMembers.map((member, index) =>
+                                  <p key={index}>
+                                    {member}
+                                  </p>
+                                )}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
-                  </div>
-            //The print section end with this
-            }
+              : <div className="flex flex-col items-center justify-center h-full py-4 md:py-8">
+                  <img
+                    src={select}
+                    alt="profile"
+                    className="h-72 lg:h-1/3 w-72 lg:w-1/3 object-cover"
+                  />
+                  <p className="text-gray-500 text-lg font-semibold">
+                    Please select a training type
+                  </p>
+                </div>}
           </div>
         </div>
         <EditTeamPopup
@@ -315,5 +324,4 @@ const Teams = () => {
     </div>
   );
 };
-
 export default Teams;
