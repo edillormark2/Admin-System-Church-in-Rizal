@@ -197,9 +197,9 @@ const Culminating = () => {
                 </div>
               </div>
             </div>
-            <div className="flex flex-row mt-16 gap-4">
+            <div className="flex flex-col md:flex-row mt-16 gap-4">
               <div className="w-full">
-                <div className="m-4">
+                <div className="m-0 md:m-4">
                   <p className="font-semibold text-gray-400 my-2">
                     Individual Awards
                   </p>
@@ -220,7 +220,7 @@ const Culminating = () => {
                     </div>
                   </div>
                 </div>
-                <div className="m-4">
+                <div className="m-0 md:m-4">
                   <p className="font-semibold text-gray-400 my-2">
                     Team Awards
                   </p>
@@ -242,7 +242,7 @@ const Culminating = () => {
                   </div>
                 </div>
               </div>
-              <div className="w-1/2">
+              <div className="w-full md:w-1/2">
                 <div className="bg-white p-4 rounded-lg drop-shadow-lg">
                   <p className="my-2 font-semibold text-gray-400">Add Awards</p>
                   <Divider />
