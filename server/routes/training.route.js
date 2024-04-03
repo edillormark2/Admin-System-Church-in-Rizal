@@ -7,7 +7,12 @@ import {
   teamDisplay,
   teamDisplayByID,
   teamEditByID,
-  teamDeleteByID
+  teamDeleteByID,
+  awardCreate,
+  awardDisplay,
+  awardDeleteByID,
+  awardeeAddByID,
+  awardeeDeleteByID
 } from "../controllers/training.controller.js";
 
 const router = express.Router();
@@ -21,5 +26,11 @@ router.get("/team-display", teamDisplay);
 router.get("/team-display/:id", teamDisplayByID);
 router.put("/team-edit/:id", teamEditByID);
 router.delete("/team-delete/:id", teamDeleteByID);
+
+router.post("/award-create", awardCreate);
+router.get("/award-display", awardDisplay);
+router.delete("/award-delete/:id", awardDeleteByID);
+router.post("/awardee-add/:id", awardeeAddByID);
+router.delete("/awardee-delete/:id", awardeeDeleteByID);
 
 export default router;

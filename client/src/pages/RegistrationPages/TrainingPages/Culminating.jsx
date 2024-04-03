@@ -14,7 +14,11 @@ import { MdAdd } from "react-icons/md";
 import { FaAward } from "react-icons/fa6";
 import { MdLocalPrintshop } from "react-icons/md";
 import { FaMinusCircle } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 import { Divider } from "@mui/material";
+import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Culminating = () => {
   const { activeMenu } = useStateContext();
@@ -23,16 +27,51 @@ const Culminating = () => {
   const [selectedTraining, setSelectedTraining] = useState("");
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [catDropdownOpen, setCatDropdownOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("Individual Awards");
-  const [resetDeptDropdown, setResetDeptDropdown] = useState(false);
+  const [resetCatDropdown, setResetCatDropdown] = useState(false);
+  const [individualAwards, setIndividualAwards] = useState([]);
+  const [teamAwards, setTeamAwards] = useState([]);
+  const [selectedAwardId, setSelectedAwardId] = useState(null);
   const [formData, setFormData] = useState({
     awardName: "",
-    category: ""
+    awardCategory: ""
   });
 
   const regDropdownRef = useRef(null);
   const yearDropdownRef = useRef(null);
   const catDropdownRef = useRef(null);
+  const awardNameInputRef = useRef(null);
+
+  useEffect(
+    () => {
+      fetchAwards("Individual Awards");
+      fetchAwards("Team Awards");
+    },
+    [selectedTraining, selectedYear]
+  );
+
+  const fetchAwards = async category => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/server/training/award-display",
+        {
+          params: {
+            awardCategory: category,
+            trainingType: selectedTraining, // Pass selectedTraining as a parameter
+            yearCreated: selectedYear // Pass selectedYear as a parameter
+          }
+        }
+      );
+      if (category === "Individual Awards") {
+        setIndividualAwards(response.data.awards);
+      } else if (category === "Team Awards") {
+        setTeamAwards(response.data.awards);
+      }
+    } catch (error) {
+      console.error("Error fetching awards:", error);
+    }
+  };
 
   const handleChange = e => {
     const { id, value } = e.target;
@@ -41,20 +80,63 @@ const Culminating = () => {
 
   useEffect(
     () => {
-      setFormData({ ...formData, department: selectedCategory });
+      setFormData({ ...formData, awardCategory: selectedCategory });
     },
     [selectedCategory]
   );
 
   useEffect(
     () => {
-      if (resetDeptDropdown) {
+      if (resetCatDropdown) {
         setSelectedCategory("Individual Awards");
-        setResetDeptDropdown(false);
+        setResetCatDropdown(false);
       }
     },
-    [resetDeptDropdown]
+    [resetCatDropdown]
   );
+
+  const handleAddAward = async e => {
+    e.preventDefault();
+    setLoading(true);
+    const { awardName, awardCategory } = formData;
+
+    if (!awardName.trim()) {
+      toast.error("Award name cannot be empty");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const trainingType = localStorage.getItem("selectedTraining");
+      await axios.post("http://localhost:3000/server/training/award-create", {
+        awardName,
+        awardCategory,
+        trainingType
+      });
+      await fetchAwards(awardCategory);
+      toast.success("Award Added");
+      setFormData({ ...formData, awardName: "" }); // Clear the awardName field
+      awardNameInputRef.current.value = "";
+      setResetCatDropdown(true);
+    } catch (error) {
+      toast.error("Error adding award:", error);
+    }
+    setLoading(false);
+  };
+
+  const handleDeleteAward = async id => {
+    try {
+      await axios.delete(
+        `http://localhost:3000/server/training/award-delete/${id}`
+      );
+      toast.success("Award deleted");
+      await fetchAwards("Individual Awards");
+      await fetchAwards("Team Awards");
+    } catch (error) {
+      console.error("Error deleting award:", error);
+      toast.error("Error deleting award");
+    }
+  };
 
   const toggleDropdown = () => {
     setCatDropdownOpen(!catDropdownOpen);
@@ -91,13 +173,6 @@ const Culminating = () => {
     };
   }, []);
 
-  useEffect(
-    () => {
-      localStorage.setItem("selectedTraining", selectedTraining);
-    },
-    [selectedTraining]
-  );
-
   const handleRegItemClick = item => {
     setSelectedTraining(item);
     setRegDropdownOpen(false);
@@ -113,11 +188,56 @@ const Culminating = () => {
     setCatDropdownOpen(false);
   };
 
+  const handleClick = awardId => {
+    setSelectedAwardId(awardId);
+  };
+
+  const handleAddAwardee = async awardId => {
+    try {
+      const awardeeName = formData.awardName;
+      await axios.post(
+        `http://localhost:3000/server/training/awardee-add/${awardId}`,
+        { awardeeName }
+      );
+      toast.success("Awardee added");
+      setFormData({ ...formData, awardName: "" }); // Clear the awardName field
+      awardNameInputRef.current.value = "";
+      setSelectedAwardId(null); // Reset selectedAwardId
+      await fetchAwards("Individual Awards");
+      await fetchAwards("Team Awards");
+    } catch (error) {
+      console.error("Error adding awardee:", error);
+      toast.error("Error adding awardee");
+    }
+  };
+
+  const handleDeleteAwardee = async (awardId, awardeeName) => {
+    try {
+      await axios.delete(
+        `http://localhost:3000/server/training/awardee-delete/${awardId}`,
+        { data: { awardeeName } } // Pass the awardeeName as data
+      );
+      toast.success("Awardee deleted");
+      await fetchAwards("Individual Awards");
+      await fetchAwards("Team Awards");
+    } catch (error) {
+      console.error("Error deleting awardee:", error);
+      toast.error("Error deleting awardee");
+    }
+  };
+
   const breadcrumbLinks = [
     { to: "/registration/dashboard", label: "Home" },
     { to: "/registration/manage-training", label: "Manage Training" },
     { to: "", label: "Culminating" }
   ];
+
+  useEffect(
+    () => {
+      localStorage.setItem("selectedTraining", selectedTraining);
+    },
+    [selectedTraining]
+  );
 
   return (
     <div className="bg-gray-200 min-h-screen">
@@ -166,20 +286,7 @@ const Culminating = () => {
                       yearDropdownRef={yearDropdownRef}
                     />
                   </div>
-                  <div>
-                    <Tooltip
-                      arrow
-                      title="Create Teams"
-                      placement="bottom"
-                      TransitionComponent={Fade}
-                    >
-                      <div className=" bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70">
-                        <button className="text-white flex items-center">
-                          <MdAdd size={22} />
-                        </button>
-                      </div>
-                    </Tooltip>
-                  </div>
+
                   <div>
                     <Tooltip
                       arrow
@@ -197,27 +304,70 @@ const Culminating = () => {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col md:flex-row mt-16 gap-4">
+            <div className="flex flex-col md:flex-row mt-10 gap-4">
               <div className="w-full">
-                <div className="m-0 md:m-4">
+                <div className="mx-0 md:mx-4">
                   <p className="font-semibold text-gray-400 my-2">
                     Individual Awards
                   </p>
                   <Divider />
-                  <div className="mt-4">
-                    <div className="bg-white p-3 rounded-md shadow-md ">
-                      <div className="flex justify-between text-primary font-semibold">
-                        Best Trainee
-                        <BsPersonFillAdd
-                          size={23}
-                          className="self-center text-gray-500 cursor-pointer"
-                        />
+                  <div className="mt-4 ">
+                    {individualAwards.map((award, index) =>
+                      <div
+                        key={index}
+                        className="bg-white rounded-md shadow-md mb-2 border border-gray-100"
+                      >
+                        <div className="flex justify-between text-primary font-semibold bg-blue-50 p-3">
+                          {award.awardName}
+
+                          <div className="flex gap-1">
+                            <BsPersonFillAdd
+                              size={23}
+                              className="self-center text-gray-500 cursor-pointer"
+                              onClick={() => handleClick(award._id)}
+                            />
+                            <MdDelete
+                              size={23}
+                              className="self-center text-gray-500 cursor-pointer"
+                              onClick={() => handleDeleteAward(award._id)}
+                            />
+                          </div>
+                        </div>
+                        <div className="mt-4 px-3 pb-2">
+                          {award.awardee.map((awardee, awardeeIndex) =>
+                            <li
+                              key={awardeeIndex}
+                              className="text-gray-600 flex justify-between"
+                            >
+                              {awardee}
+                              <FaMinusCircle
+                                size={15}
+                                className="text-gray-400 cursor-pointer hover:text-gray-600"
+                                onClick={() =>
+                                  handleDeleteAwardee(award._id, awardee)}
+                              />
+                            </li>
+                          )}
+                        </div>
+                        {selectedAwardId === award._id &&
+                          <div className="flex items-center mt-4 px-3 pb-3">
+                            <input
+                              type="text"
+                              placeholder="Enter awardee name"
+                              id="awardName"
+                              onChange={handleChange}
+                              autoComplete="off"
+                              className="form-control bg-white p-2 rounded-lg border border-gray-300 text-sm sm:text-base mr-2"
+                            />
+                            <button
+                              className="bg-primary text-white py-2 px-4 rounded-md hover:opacity-70"
+                              onClick={() => handleAddAwardee(award._id)}
+                            >
+                              <MdAdd size={22} />
+                            </button>
+                          </div>}
                       </div>
-                      <p className="mt-4 mb-2 text-gray-600 text-sm flex justify-between">
-                        Mark Daniel
-                        <FaMinusCircle className="self-center text-gray-500 cursor-pointer" />
-                      </p>
-                    </div>
+                    )}
                   </div>
                 </div>
                 <div className="m-0 md:m-4">
@@ -226,33 +376,77 @@ const Culminating = () => {
                   </p>
                   <Divider />
                   <div className="mt-4">
-                    <div className="bg-white p-3 rounded-md shadow-md ">
-                      <div className="flex justify-between text-primary font-semibold">
-                        Best Meal Service
-                        <BsPersonFillAdd
-                          size={23}
-                          className="self-center text-gray-500 cursor-pointer"
-                        />
+                    {teamAwards.map((award, index) =>
+                      <div
+                        key={index}
+                        className="bg-white rounded-md shadow-md mb-2 border border-gray-100"
+                      >
+                        <div className="flex justify-between text-primary font-semibold bg-blue-50 p-3">
+                          {award.awardName}
+
+                          <div className="flex gap-1">
+                            <BsPersonFillAdd
+                              size={23}
+                              className="self-center text-gray-500 cursor-pointer"
+                              onClick={() => handleClick(award._id)}
+                            />
+                            <MdDelete
+                              size={23}
+                              className="self-center text-gray-500 cursor-pointer"
+                              onClick={() => handleDeleteAward(award._id)}
+                            />
+                          </div>
+                        </div>
+                        <div className="mt-4 px-3 pb-2">
+                          {award.awardee.map((awardee, index) =>
+                            <li
+                              key={index}
+                              className="text-gray-600 flex justify-between"
+                            >
+                              {awardee}
+                              <FaMinusCircle
+                                size={15}
+                                className="text-gray-400 cursor-pointer hover:text-gray-600"
+                                onClick={() =>
+                                  handleDeleteAwardee(award._id, awardee)}
+                              />
+                            </li>
+                          )}
+                        </div>
+                        {selectedAwardId === award._id &&
+                          <div className="flex items-center mt-4 px-3 pb-3">
+                            <input
+                              type="text"
+                              placeholder="Enter awardee name"
+                              id="awardName"
+                              onChange={handleChange}
+                              autoComplete="off"
+                              className="form-control bg-white p-2 rounded-lg border border-gray-300 text-sm sm:text-base mr-2"
+                            />
+                            <button
+                              className="bg-primary text-white py-2 px-4 rounded-md hover:opacity-70"
+                              onClick={() => handleAddAwardee(award._id)}
+                            >
+                              <MdAdd size={22} />
+                            </button>
+                          </div>}
                       </div>
-                      <p className="mt-4 mb-2 text-gray-600 text-sm flex justify-between">
-                        Team 4
-                        <FaMinusCircle className="self-center text-gray-500 cursor-pointer" />
-                      </p>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
               <div className="w-full md:w-1/2">
-                <div className="bg-white p-4 rounded-lg drop-shadow-lg">
+                <div className="bg-white p-4 rounded-lg drop-shadow-lg mt-8">
                   <p className="my-2 font-semibold text-gray-400">Add Awards</p>
                   <Divider />
-                  <p className="text-sm font-semibold mt-4 mb-2">Name</p>
+                  <p className="text-sm font-semibold mt-4 mb-2">Award Name</p>
                   <input
                     type="text"
                     placeholder=""
-                    id="name"
+                    id="awardName"
                     onChange={handleChange}
                     autoComplete="off"
+                    ref={awardNameInputRef}
                     className="form-control bg-white p-2 rounded-lg border border-gray-300 text-sm sm:text-base "
                   />
                   <p className="text-sm font-semibold mt-4 mb-2">Category</p>
@@ -289,7 +483,11 @@ const Culminating = () => {
                         </button>
                       </div>}
                   </div>
-                  <div className="bg-primary p-4 rounded-md shadow-lg text-white hover:opacity-70 cursor-pointer mt-8 ">
+                  <div
+                    className="bg-primary p-4 rounded-md shadow-lg text-white hover:opacity-70 cursor-pointer mt-8 "
+                    onClick={handleAddAward}
+                    type="submit"
+                  >
                     <p className="flex justify-center">
                       <FaAward className="self-center mr-2" size={20} />Add
                       Awards

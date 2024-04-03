@@ -1,5 +1,6 @@
 import Coordinators from "../models/TrainingModel/coordinators.model.js";
 import Teams from "../models/TrainingModel/teams.model.js";
+import Culminating from "../models/TrainingModel/culminating.model.js";
 
 // Controller for adding coordinator
 export const coordinatorsAdd = async (req, res) => {
@@ -188,5 +189,187 @@ export const teamDeleteByID = async (req, res) => {
   } catch (error) {
     console.error("Error deleting team:", error);
     res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+// Controller for creating award
+export const awardCreate = async (req, res) => {
+  try {
+    const { awardName, awardCategory, trainingType } = req.body;
+
+    // Check if required fields are provided
+    if (!awardName || !awardCategory || !trainingType) {
+      return res.status(400).json({
+        message: "Award Name and Award Category are required fields"
+      });
+    }
+
+    // Create a new award instance
+    const newAward = new Culminating({
+      awardName,
+      awardCategory,
+      trainingType
+    });
+
+    // Save the award to the database
+    await newAward.save();
+
+    // Send success response
+    res.status(201).json({
+      message: "Award added successfully",
+      award: newAward
+    });
+  } catch (error) {
+    // Handle errors
+    console.error("Error adding award:", error);
+    res.status(500).json({ message: "Error adding award" });
+  }
+};
+
+// Controller for displaying awards
+export const awardDisplay = async (req, res) => {
+  try {
+    const { awardCategory, trainingType, yearCreated } = req.query;
+
+    // Check if category, trainingType, and yearCreated are provided
+    if (!awardCategory || !trainingType || !yearCreated) {
+      return res.status(400).json({
+        message: "Award Category, Training Type, and Year Created are required"
+      });
+    }
+
+    // Fetch awards from the database based on the category, trainingType, and yearCreated
+    const awards = await Culminating.find({
+      awardCategory,
+      trainingType,
+      yearCreated
+    });
+
+    // Send success response with the fetched awards
+    res.status(200).json({
+      message: "Awards retrieved successfully",
+      awards
+    });
+  } catch (error) {
+    // Handle errors
+    console.error("Error retrieving awards:", error);
+    res.status(500).json({ message: "Error retrieving awards" });
+  }
+};
+
+// Controller for delete award based on id
+export const awardDeleteByID = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Check if ID is provided
+    if (!id) {
+      return res.status(400).json({
+        message: "Award ID is required"
+      });
+    }
+
+    // Find and delete the award by ID
+    await Culminating.findByIdAndDelete(id);
+
+    // Send success response
+    res.status(200).json({
+      message: "Award deleted successfully"
+    });
+  } catch (error) {
+    // Handle errors
+    console.error("Error deleting award:", error);
+    res.status(500).json({ message: "Error deleting award" });
+  }
+};
+
+// Controller for add awardee based on id
+export const awardeeAddByID = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { awardeeName } = req.body;
+
+    // Check if ID and awardee name are provided
+    if (!id || !awardeeName) {
+      return res.status(400).json({
+        message: "Award ID and awardee name are required"
+      });
+    }
+
+    // Find the award by ID
+    const award = await Culminating.findById(id);
+
+    // Check if the award exists
+    if (!award) {
+      return res.status(404).json({
+        message: "Award not found"
+      });
+    }
+
+    // Add the awardee name to the award's awardee array
+    award.awardee.push(awardeeName);
+
+    // Save the updated award
+    await award.save();
+
+    // Send success response
+    res.status(200).json({
+      message: "Awardee added successfully",
+      award: award // Optionally, you can send the updated award object in the response
+    });
+  } catch (error) {
+    // Handle errors
+    console.error("Error adding awardee:", error);
+    res.status(500).json({ message: "Error adding awardee" });
+  }
+};
+
+// Controller for delete awardee name based on id
+export const awardeeDeleteByID = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { awardeeName } = req.body;
+
+    // Check if ID and awardee name are provided
+    if (!id || !awardeeName) {
+      return res.status(400).json({
+        message: "Award ID and awardee name are required"
+      });
+    }
+
+    // Find the award by ID
+    const award = await Culminating.findById(id);
+
+    // Check if the award exists
+    if (!award) {
+      return res.status(404).json({
+        message: "Award not found"
+      });
+    }
+
+    // Find the index of the awardee name in the awardee array
+    const index = award.awardee.indexOf(awardeeName);
+
+    // If the awardee name exists in the array, remove it
+    if (index !== -1) {
+      award.awardee.splice(index, 1);
+    } else {
+      return res.status(404).json({
+        message: "Awardee not found in the award"
+      });
+    }
+
+    // Save the updated award
+    await award.save();
+
+    // Send success response
+    res.status(200).json({
+      message: "Awardee deleted successfully",
+      award: award // Optionally, you can send the updated award object in the response
+    });
+  } catch (error) {
+    // Handle errors
+    console.error("Error deleting awardee:", error);
+    res.status(500).json({ message: "Error deleting awardee" });
   }
 };
