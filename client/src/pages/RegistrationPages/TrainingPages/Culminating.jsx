@@ -320,17 +320,65 @@ const Culminating = () => {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col md:flex-row mt-10 gap-4">
-              {/*printable section starts here */}
-              <div className="w-full print-margin" ref={awardsContainerRef}>
-                <div>
-                  <div className="print-title text-2xl font-semibold">
-                    Culminating Awardees
-                  </div>
-                  <div className="print-title text-base text-gray-500">
-                    {selectedTraining} {selectedYear}
-                  </div>
+
+            {/*printable section starts here */}
+            <div
+              className="print-margin show-on-print-only"
+              ref={awardsContainerRef}
+            >
+              <div>
+                <div className="print-title text-2xl font-semibold">
+                  Culminating Awardees
                 </div>
+                <div className="print-title text-base text-gray-500">
+                  {selectedTraining} {selectedYear}
+                </div>
+              </div>
+
+              <p className="font-semibold text-gray-400 my-2">
+                Individual Awards
+              </p>
+              <Divider />
+              <div className="mt-4 ">
+                {individualAwards.map((award, index) =>
+                  <div key={index} className="p-1">
+                    <div className="flex justify-between text-primary font-semibold">
+                      {award.awardName}
+                    </div>
+                    <div className="mt-2 ml-4">
+                      {award.awardee.map((awardee, awardeeIndex) =>
+                        <li key={awardeeIndex} className="text-gray-600">
+                          {awardee}
+                        </li>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <p className="font-semibold text-gray-400 mt-8">Team Awards</p>
+              <Divider />
+              <div className="mt-4 ">
+                {teamAwards.map((award, index) =>
+                  <div key={index} className="p-1">
+                    <div className="flex justify-between text-primary font-semibold">
+                      {award.awardName}
+                    </div>
+                    <div className="mt-2 ml-4">
+                      {award.awardee.map((awardee, awardeeIndex) =>
+                        <li key={awardeeIndex} className="text-gray-600">
+                          {awardee}
+                        </li>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            {/*printable section ends here */}
+
+            <div className="flex flex-col md:flex-row mt-10 gap-4">
+              <div className="w-full">
                 <div className="mx-0 md:mx-4">
                   <p className="font-semibold text-gray-400 my-2">
                     Individual Awards
@@ -352,7 +400,7 @@ const Culminating = () => {
                               placement="top"
                               TransitionComponent={Fade}
                             >
-                              <div className="hide-on-print ">
+                              <div>
                                 <BsPersonFillAdd
                                   size={23}
                                   className="self-center text-gray-500 cursor-pointer"
@@ -366,7 +414,7 @@ const Culminating = () => {
                               placement="top"
                               TransitionComponent={Fade}
                             >
-                              <div className="hide-on-print ">
+                              <div>
                                 <MdDelete
                                   size={23}
                                   className="self-center text-gray-500 cursor-pointer"
@@ -389,7 +437,7 @@ const Culminating = () => {
                                 placement="right"
                                 TransitionComponent={Fade}
                               >
-                                <div className="hide-on-print ">
+                                <div>
                                   <FaMinusCircle
                                     size={15}
                                     className="text-gray-400 cursor-pointer hover:text-gray-600"
@@ -443,7 +491,7 @@ const Culminating = () => {
                               placement="top"
                               TransitionComponent={Fade}
                             >
-                              <div className="hide-on-print ">
+                              <div>
                                 <BsPersonFillAdd
                                   size={23}
                                   className="self-center text-gray-500 cursor-pointer"
@@ -457,7 +505,7 @@ const Culminating = () => {
                               placement="top"
                               TransitionComponent={Fade}
                             >
-                              <div className="hide-on-print ">
+                              <div>
                                 <MdDelete
                                   size={23}
                                   className="self-center text-gray-500 cursor-pointer"
@@ -480,7 +528,7 @@ const Culminating = () => {
                                 placement="right"
                                 TransitionComponent={Fade}
                               >
-                                <div className="hide-on-print ">
+                                <div>
                                   <FaMinusCircle
                                     size={15}
                                     className="text-gray-400 cursor-pointer hover:text-gray-600"
@@ -514,7 +562,7 @@ const Culminating = () => {
                   </div>
                 </div>
               </div>
-              {/*printable section ends here */}
+
               <div className="w-full md:w-1/2">
                 <div className="bg-white p-4 rounded-lg drop-shadow-lg mt-8">
                   <p className="my-2 font-semibold text-gray-400">Add Awards</p>

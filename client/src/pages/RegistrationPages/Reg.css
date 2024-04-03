@@ -34,21 +34,24 @@
   display: none;
 }
 
+.show-on-print-only {
+  display: none;
+}
+
 .print-icon-hidden {
   display: block;
 }
 
 @media print {
-  .bg-white,
-  .bg-blue-50 {
-    background-color: transparent !important;
-  }
-
   .hide-on-print {
     display: none !important;
   }
+  .show-on-print-only {
+    display: block;
+  }
+
   .print-margin {
-    margin: 15px;
+    margin: 40px;
   }
 
   .team-data-container {
