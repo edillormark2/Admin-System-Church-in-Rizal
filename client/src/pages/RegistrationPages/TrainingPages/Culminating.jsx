@@ -19,6 +19,7 @@ import { Divider } from "@mui/material";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useReactToPrint } from "react-to-print";
 
 const Culminating = () => {
   const { activeMenu } = useStateContext();
@@ -42,6 +43,7 @@ const Culminating = () => {
   const yearDropdownRef = useRef(null);
   const catDropdownRef = useRef(null);
   const awardNameInputRef = useRef(null);
+  const awardsContainerRef = useRef(null);
 
   useEffect(
     () => {
@@ -226,11 +228,16 @@ const Culminating = () => {
     }
   };
 
-  const breadcrumbLinks = [
-    { to: "/registration/dashboard", label: "Home" },
-    { to: "/registration/manage-training", label: "Manage Training" },
-    { to: "", label: "Culminating" }
-  ];
+  const handlePrint = useReactToPrint({
+    content: () => {
+      if (teamAwards.length === 0 && individualAwards.length === 0) {
+        toast.error("No data available to print");
+        return null;
+      }
+      return awardsContainerRef.current;
+    },
+    documentTitle: `${selectedTraining} ${selectedYear} culminating awardees`
+  });
 
   useEffect(
     () => {
@@ -238,6 +245,12 @@ const Culminating = () => {
     },
     [selectedTraining]
   );
+
+  const breadcrumbLinks = [
+    { to: "/registration/dashboard", label: "Home" },
+    { to: "/registration/manage-training", label: "Manage Training" },
+    { to: "", label: "Culminating" }
+  ];
 
   return (
     <div className="bg-gray-200 min-h-screen">
@@ -294,7 +307,10 @@ const Culminating = () => {
                       placement="bottom"
                       TransitionComponent={Fade}
                     >
-                      <div className=" bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70">
+                      <div
+                        className=" bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70"
+                        onClick={handlePrint}
+                      >
                         <button className="text-white flex items-center">
                           <MdLocalPrintshop size={22} />
                         </button>
@@ -305,7 +321,16 @@ const Culminating = () => {
               </div>
             </div>
             <div className="flex flex-col md:flex-row mt-10 gap-4">
-              <div className="w-full">
+              {/*printable section starts here */}
+              <div className="w-full print-margin" ref={awardsContainerRef}>
+                <div>
+                  <div className="print-title text-2xl font-semibold">
+                    Culminating Awardees
+                  </div>
+                  <div className="print-title text-base text-gray-500">
+                    {selectedTraining} {selectedYear}
+                  </div>
+                </div>
                 <div className="mx-0 md:mx-4">
                   <p className="font-semibold text-gray-400 my-2">
                     Individual Awards
@@ -327,7 +352,7 @@ const Culminating = () => {
                               placement="top"
                               TransitionComponent={Fade}
                             >
-                              <div>
+                              <div className="hide-on-print ">
                                 <BsPersonFillAdd
                                   size={23}
                                   className="self-center text-gray-500 cursor-pointer"
@@ -341,7 +366,7 @@ const Culminating = () => {
                               placement="top"
                               TransitionComponent={Fade}
                             >
-                              <div>
+                              <div className="hide-on-print ">
                                 <MdDelete
                                   size={23}
                                   className="self-center text-gray-500 cursor-pointer"
@@ -364,7 +389,7 @@ const Culminating = () => {
                                 placement="right"
                                 TransitionComponent={Fade}
                               >
-                                <div>
+                                <div className="hide-on-print ">
                                   <FaMinusCircle
                                     size={15}
                                     className="text-gray-400 cursor-pointer hover:text-gray-600"
@@ -418,7 +443,7 @@ const Culminating = () => {
                               placement="top"
                               TransitionComponent={Fade}
                             >
-                              <div>
+                              <div className="hide-on-print ">
                                 <BsPersonFillAdd
                                   size={23}
                                   className="self-center text-gray-500 cursor-pointer"
@@ -432,7 +457,7 @@ const Culminating = () => {
                               placement="top"
                               TransitionComponent={Fade}
                             >
-                              <div>
+                              <div className="hide-on-print ">
                                 <MdDelete
                                   size={23}
                                   className="self-center text-gray-500 cursor-pointer"
@@ -455,7 +480,7 @@ const Culminating = () => {
                                 placement="right"
                                 TransitionComponent={Fade}
                               >
-                                <div>
+                                <div className="hide-on-print ">
                                   <FaMinusCircle
                                     size={15}
                                     className="text-gray-400 cursor-pointer hover:text-gray-600"
@@ -489,6 +514,7 @@ const Culminating = () => {
                   </div>
                 </div>
               </div>
+              {/*printable section ends here */}
               <div className="w-full md:w-1/2">
                 <div className="bg-white p-4 rounded-lg drop-shadow-lg mt-8">
                   <p className="my-2 font-semibold text-gray-400">Add Awards</p>

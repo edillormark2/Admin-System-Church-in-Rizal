@@ -254,7 +254,7 @@ const Teams = () => {
                       className="team-data-container"
                       ref={teamsContainerRef}
                     >
-                      <div className="print-title text-xl font-semibold">
+                      <div className="print-title text-xl font-semibold print-margin">
                         {selectedTraining} {selectedYear}
                       </div>
 
