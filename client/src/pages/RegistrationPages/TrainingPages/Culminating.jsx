@@ -261,7 +261,7 @@ const Culminating = () => {
             <h1 className="text-2xl font-semibold mb-2 ">Culminating</h1>
             <Breadcrumbs links={breadcrumbLinks} />
             <div className="relative my-4 p-0 flex flex-col">
-              <p className="absolute right-11/12 md:right-72 mr-14  top-0 text-sm text-gray-400">
+              <p className="absolute right-11/12 md:right-72 mr-2  top-0 text-sm text-gray-400">
                 Select training type
               </p>
               <div className="flex flex-col md:flex-row justify-end gap-2 mt-6">
@@ -321,16 +321,34 @@ const Culminating = () => {
                           {award.awardName}
 
                           <div className="flex gap-1">
-                            <BsPersonFillAdd
-                              size={23}
-                              className="self-center text-gray-500 cursor-pointer"
-                              onClick={() => handleClick(award._id)}
-                            />
-                            <MdDelete
-                              size={23}
-                              className="self-center text-gray-500 cursor-pointer"
-                              onClick={() => handleDeleteAward(award._id)}
-                            />
+                            <Tooltip
+                              arrow
+                              title="Add"
+                              placement="top"
+                              TransitionComponent={Fade}
+                            >
+                              <div>
+                                <BsPersonFillAdd
+                                  size={23}
+                                  className="self-center text-gray-500 cursor-pointer"
+                                  onClick={() => handleClick(award._id)}
+                                />
+                              </div>
+                            </Tooltip>
+                            <Tooltip
+                              arrow
+                              title="Delete"
+                              placement="top"
+                              TransitionComponent={Fade}
+                            >
+                              <div>
+                                <MdDelete
+                                  size={23}
+                                  className="self-center text-gray-500 cursor-pointer"
+                                  onClick={() => handleDeleteAward(award._id)}
+                                />
+                              </div>
+                            </Tooltip>
                           </div>
                         </div>
                         <div className="mt-4 px-3 pb-2">
@@ -340,12 +358,21 @@ const Culminating = () => {
                               className="text-gray-600 flex justify-between"
                             >
                               {awardee}
-                              <FaMinusCircle
-                                size={15}
-                                className="text-gray-400 cursor-pointer hover:text-gray-600"
-                                onClick={() =>
-                                  handleDeleteAwardee(award._id, awardee)}
-                              />
+                              <Tooltip
+                                arrow
+                                title="Remove"
+                                placement="right"
+                                TransitionComponent={Fade}
+                              >
+                                <div>
+                                  <FaMinusCircle
+                                    size={15}
+                                    className="text-gray-400 cursor-pointer hover:text-gray-600"
+                                    onClick={() =>
+                                      handleDeleteAwardee(award._id, awardee)}
+                                  />
+                                </div>
+                              </Tooltip>
                             </li>
                           )}
                         </div>
@@ -385,16 +412,34 @@ const Culminating = () => {
                           {award.awardName}
 
                           <div className="flex gap-1">
-                            <BsPersonFillAdd
-                              size={23}
-                              className="self-center text-gray-500 cursor-pointer"
-                              onClick={() => handleClick(award._id)}
-                            />
-                            <MdDelete
-                              size={23}
-                              className="self-center text-gray-500 cursor-pointer"
-                              onClick={() => handleDeleteAward(award._id)}
-                            />
+                            <Tooltip
+                              arrow
+                              title="Add"
+                              placement="top"
+                              TransitionComponent={Fade}
+                            >
+                              <div>
+                                <BsPersonFillAdd
+                                  size={23}
+                                  className="self-center text-gray-500 cursor-pointer"
+                                  onClick={() => handleClick(award._id)}
+                                />
+                              </div>
+                            </Tooltip>
+                            <Tooltip
+                              arrow
+                              title="Delete"
+                              placement="top"
+                              TransitionComponent={Fade}
+                            >
+                              <div>
+                                <MdDelete
+                                  size={23}
+                                  className="self-center text-gray-500 cursor-pointer"
+                                  onClick={() => handleDeleteAward(award._id)}
+                                />
+                              </div>
+                            </Tooltip>
                           </div>
                         </div>
                         <div className="mt-4 px-3 pb-2">
@@ -404,12 +449,21 @@ const Culminating = () => {
                               className="text-gray-600 flex justify-between"
                             >
                               {awardee}
-                              <FaMinusCircle
-                                size={15}
-                                className="text-gray-400 cursor-pointer hover:text-gray-600"
-                                onClick={() =>
-                                  handleDeleteAwardee(award._id, awardee)}
-                              />
+                              <Tooltip
+                                arrow
+                                title="Remove"
+                                placement="right"
+                                TransitionComponent={Fade}
+                              >
+                                <div>
+                                  <FaMinusCircle
+                                    size={15}
+                                    className="text-gray-400 cursor-pointer hover:text-gray-600"
+                                    onClick={() =>
+                                      handleDeleteAwardee(award._id, awardee)}
+                                  />
+                                </div>
+                              </Tooltip>
                             </li>
                           )}
                         </div>
