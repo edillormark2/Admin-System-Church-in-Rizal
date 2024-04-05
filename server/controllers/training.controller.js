@@ -231,13 +231,6 @@ export const awardDisplay = async (req, res) => {
   try {
     const { awardCategory, trainingType, yearCreated } = req.query;
 
-    // Check if category, trainingType, and yearCreated are provided
-    if (!awardCategory || !trainingType || !yearCreated) {
-      return res.status(400).json({
-        message: "Award Category, Training Type, and Year Created are required"
-      });
-    }
-
     // Fetch awards from the database based on the category, trainingType, and yearCreated
     const awards = await Culminating.find({
       awardCategory,

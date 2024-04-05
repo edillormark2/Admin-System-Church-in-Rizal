@@ -60,8 +60,8 @@ const Culminating = () => {
         {
           params: {
             awardCategory: category,
-            trainingType: selectedTraining, // Pass selectedTraining as a parameter
-            yearCreated: selectedYear // Pass selectedYear as a parameter
+            trainingType: selectedTraining || "", // Ensure selectedTraining is not null or undefined
+            yearCreated: selectedYear
           }
         }
       );
@@ -388,7 +388,7 @@ const Culminating = () => {
                     {individualAwards.map((award, index) =>
                       <div
                         key={index}
-                        className="bg-white rounded-md shadow-md mb-2 border border-gray-100"
+                        className="bg-white rounded-md  mb-2 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]"
                       >
                         <div className="flex justify-between text-primary font-semibold bg-blue-50 p-3">
                           {award.awardName}
@@ -479,7 +479,7 @@ const Culminating = () => {
                     {teamAwards.map((award, index) =>
                       <div
                         key={index}
-                        className="bg-white rounded-md shadow-md mb-2 border border-gray-100"
+                        className="bg-white rounded-md  mb-2 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]"
                       >
                         <div className="flex justify-between text-primary font-semibold bg-blue-50 p-3">
                           {award.awardName}
@@ -564,7 +564,7 @@ const Culminating = () => {
               </div>
 
               <div className="w-full md:w-1/2">
-                <div className="bg-white p-4 rounded-lg drop-shadow-lg mt-8">
+                <div className="bg-white p-4 rounded-lg shadow-[0_8px_30px_rgb(0,0,0,0.12)] mt-8">
                   <p className="my-2 font-semibold text-gray-400">Add Awards</p>
                   <Divider />
                   <p className="text-sm font-semibold mt-4 mb-2">Award Name</p>
