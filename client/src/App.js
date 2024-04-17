@@ -48,6 +48,7 @@ import Coordinators from "./pages/RegistrationPages/TrainingPages/Coordinators";
 import Teams from "./pages/RegistrationPages/TrainingPages/Teams";
 import Culminating from "./pages/RegistrationPages/TrainingPages/Culminating";
 import Grading from "./pages/RegistrationPages/TrainingPages/Grading";
+import ManageEvents from "./pages/RegistrationPages/ManageEvents";
 
 const customToastStyle = {
   position: "top-right",
@@ -142,6 +143,7 @@ const App = () => {
                   element={<EditRegDetails />}
                 />
                 <Route path="check-in-out" element={<CheckInOut />} />
+                <Route path="manage-events" element={<ManageEvents />} />
                 {/* Training pages routes */}
                 <Route path="manage-training" element={<ManageTraining />} />
                 <Route

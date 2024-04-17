@@ -4,6 +4,7 @@ import { GrAnnounce } from "react-icons/gr";
 import { LuClipboardList } from "react-icons/lu";
 import { TbMapPinCheck } from "react-icons/tb";
 import { MdToday } from "react-icons/md";
+import { MdOutlineViewKanban } from "react-icons/md";
 
 export const links = [
   {
@@ -37,6 +38,11 @@ export const links = [
       {
         name: "Manage Training",
         url: "/registration/manage-training",
+        icon: <MdOutlineViewKanban size={20} />
+      },
+      {
+        name: "Manage Events",
+        url: "/registration/manage-events",
         icon: <MdToday size={20} />
       }
     ]
