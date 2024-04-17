@@ -3,10 +3,21 @@ import Navbar from "../../components/RegComponents/Navbar";
 import Sidebar from "../../components/RegComponents/Sidebar";
 import { Calendar } from "react-calendar";
 import { useStateContext } from "../../redux/ContextProvider";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 const ManageEvents = () => {
   const { activeMenu } = useStateContext();
   const [date, setDate] = useState(new Date());
+
+  const handlePrevMonth = () => {
+    const prevMonth = new Date(date.getFullYear(), date.getMonth() - 1, 1);
+    setDate(prevMonth);
+  };
+
+  const handleNextMonth = () => {
+    const nextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+    setDate(nextMonth);
+  };
 
   const isSameDay = (date1, date2) =>
     date1.getDate() === date2.getDate() &&
@@ -48,15 +59,41 @@ const ManageEvents = () => {
           <div className="my-10 md:my-16 mx-6 md:mx-16">
             <h1 className="text-2xl font-semibold mb-2">Manage Events</h1>
             <div className="w-full bg-white p-4 rounded-lg drop-shadow-xl">
-              <div className="w-full flex justify-center ">
-                <p className="mr-3 text-2xl font-semibold uppercase">
-                  {date.toLocaleString("default", { month: "long" })}
-                </p>
-                <p className="text-2xl font-semibold">
-                  {date.getFullYear()}
-                </p>
+              <div className="flex justify-between items-center mb-4">
+                <div className="flex gap-2">
+                  <div
+                    className="p-1 border border-blue-200 rounded-md cursor-pointer hover:bg-primary hover:text-white"
+                    onClick={handlePrevMonth}
+                  >
+                    <MdKeyboardArrowLeft size={22} />
+                  </div>
+                  <div
+                    className="p-1 border border-blue-200 rounded-md cursor-pointer hover:bg-primary hover:text-white"
+                    onClick={handleNextMonth}
+                  >
+                    <MdKeyboardArrowRight size={22} />
+                  </div>
+                </div>
+                <div className="flex flex-grow justify-center">
+                  <p className="text-2xl font-semibold uppercase">
+                    {date.toLocaleString("default", { month: "long" })}
+                  </p>
+                  <p className="text-2xl font-semibold ml-3">
+                    {date.getFullYear()}
+                  </p>
+                </div>
+                <div className="flex gap-1">
+                  <div className="p-1 border border-blue-200 rounded-md cursor-pointer hover:bg-primary hover:text-white">
+                    Month
+                  </div>
+                  <div className="p-1 border border-blue-200 rounded-md cursor-pointer hover:bg-primary hover:text-white">
+                    Week
+                  </div>
+                  <div className="p-1 border border-blue-200 rounded-md cursor-pointer hover:bg-primary hover:text-white">
+                    Day
+                  </div>
+                </div>
               </div>
-
               <div className="w-full mt-4 flex justify-center text-sm">
                 <div className="w-full h-full">
                   {/* Custom grid-style calendar */}
@@ -84,7 +121,6 @@ const ManageEvents = () => {
                           : "bg-gray-100" // Default background color
                         }`}
                       >
-                       
                         {day}
                       </div>
                     )}
