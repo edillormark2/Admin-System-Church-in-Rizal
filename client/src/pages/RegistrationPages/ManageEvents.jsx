@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "../../components/RegComponents/Navbar";
 import Sidebar from "../../components/RegComponents/Sidebar";
-import { Calendar } from "react-calendar";
 import { useStateContext } from "../../redux/ContextProvider";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
@@ -19,22 +18,27 @@ const ManageEvents = () => {
     setDate(nextMonth);
   };
 
-  const isSameDay = (date1, date2) =>
-    date1.getDate() === date2.getDate() &&
-    date1.getMonth() === date2.getMonth() &&
-    date1.getFullYear() === date2.getFullYear();
-
   const getCurrentMonthDays = () => {
     const currentMonthDays = [];
+    const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
     const daysInMonth = new Date(
       date.getFullYear(),
       date.getMonth() + 1,
       0
     ).getDate();
-    for (let i = 1; i <= daysInMonth; i++) {
-      const currentDate = new Date(date.getFullYear(), date.getMonth(), i);
-      currentMonthDays.push(currentDate);
+
+    // Fill in the days of the previous month
+    for (let i = firstDayOfMonth.getDay(); i > 0; i--) {
+      const day = new Date(date.getFullYear(), date.getMonth(), 1 - i);
+      currentMonthDays.push({ date: day, isCurrentMonth: false });
     }
+
+    // Fill in the days of the current month
+    for (let i = 1; i <= daysInMonth; i++) {
+      const day = new Date(date.getFullYear(), date.getMonth(), i);
+      currentMonthDays.push({ date: day, isCurrentMonth: true });
+    }
+
     return currentMonthDays;
   };
 
@@ -96,7 +100,6 @@ const ManageEvents = () => {
               </div>
               <div className="w-full mt-4 flex justify-center text-sm">
                 <div className="w-full h-full">
-                  {/* Custom grid-style calendar */}
                   <div className="grid grid-cols-7">
                     {[
                       "Sun",
@@ -109,35 +112,37 @@ const ManageEvents = () => {
                     ].map((day, index) =>
                       <div
                         key={index}
-                        className={`p-2 text-center font-semibold text-gray-600 ${isSameDay(
-                          new Date(),
-                          new Date(
-                            date.getFullYear(),
-                            date.getMonth(),
-                            index + 1
-                          )
-                        )
-                          ? "bg-gray-200" // Background color for the current day
-                          : "bg-gray-100" // Default background color
-                        }`}
+                        className="p-2 text-center font-semibold text-gray-600 bg-gray-100"
                       >
                         {day}
                       </div>
                     )}
-                    {/* Dummy elements to fill the grid */}
                     {getCurrentMonthDays().map((day, index) =>
                       <div
                         key={index}
-                        className={`p-2 text-center border border-gray-100 ${isSameDay(
-                          day,
-                          new Date()
-                        )
-                          ? "bg-blue-100"
-                          : ""}`}
-                        style={{ height: "80px", position: "relative" }} // Adjusting height and position
+                        className={`p-2 text-center border ${day.isCurrentMonth
+                          ? "border-gray-100"
+                          : "border-transparent"} ${day.isCurrentMonth &&
+                        day.date.getDate() === new Date().getDate() &&
+                        day.date.getMonth() === new Date().getMonth() &&
+                        day.date.getFullYear() === new Date().getFullYear()
+                          ? "bg-blue-100 border border-blue-200"
+                          : "hover:bg-gray-100"}`}
+                        style={{ height: "80px", position: "relative" }}
                       >
-                        <div className="absolute top-2 right-0 text-sm text-gray-600 mt-1 mr-1">
-                          {day.getDate()}
+                        <div
+                          className={`absolute top-2 right-0 text-sm text-gray-600 mt-1 mr-2 ${day.isCurrentMonth
+                            ? ""
+                            : "opacity-50"}`}
+                        >
+                          {day.date.getDate()}
+                          {day.isCurrentMonth && day.date.getDate() === 1
+                            ? <div className="absolute top-0 right-4 text-sm text-gray-600 ">
+                                {date.toLocaleString("default", {
+                                  month: "long"
+                                })}
+                              </div>
+                            : null}
                         </div>
                       </div>
                     )}
