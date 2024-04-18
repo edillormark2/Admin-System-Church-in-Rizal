@@ -1,14 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Navbar from "../../components/RegComponents/Navbar";
 import Sidebar from "../../components/RegComponents/Sidebar";
 import { useStateContext } from "../../redux/ContextProvider";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import { Divider } from "@mui/material";
+import YearMenuPicker from "../../components/YearMenuPicker";
+import { MdLocalPrintshop } from "react-icons/md";
+import Tooltip from "@mui/material/Tooltip";
+import Fade from "@mui/material/Fade";
+import { FaCalendarPlus } from "react-icons/fa6";
+import CreateEventPopup from "../../components/RegComponents/ManageEvents/CreateEventPopup";
 
 const ManageEvents = () => {
   const { activeMenu } = useStateContext();
   const [date, setDate] = useState(new Date());
+  const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [openCreatePopup, setOpenCreatePopup] = useState(false);
+
+  const yearDropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleOutsideClick = event => {
+      if (
+        yearDropdownRef.current &&
+        !yearDropdownRef.current.contains(event.target) &&
+        !event.target.closest(".year-dropdown-button")
+      ) {
+        setYearDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
+  const handleYearItemClick = year => {
+    setSelectedYear(year);
+    setYearDropdownOpen(false);
+  };
+
+  const handleOpenCreate = () => {
+    setOpenCreatePopup(true);
+  };
 
   const handlePrevMonth = () => {
     const prevMonth = new Date(date.getFullYear(), date.getMonth() - 1, 1);
@@ -64,43 +102,68 @@ const ManageEvents = () => {
           </div>
           <div className="my-10 md:my-16 mx-6 md:mx-16">
             <h1 className="text-2xl font-semibold mb-2">Manage Events</h1>
-            <div className="flex flex-col md:flex-row mt-10 gap-4">
-              <div className="w-full bg-white p-4 rounded-lg drop-shadow-xl">
-                <div className="flex justify-between items-center mb-4">
-                  <div className="flex gap-2">
-                    <div
-                      className="p-1 border border-blue-200 rounded-md cursor-pointer hover:bg-primary hover:text-white"
-                      onClick={handlePrevMonth}
-                    >
-                      <MdKeyboardArrowLeft size={22} />
-                    </div>
-                    <div
-                      className="p-1 border border-blue-200 rounded-md cursor-pointer hover:bg-primary hover:text-white"
-                      onClick={handleNextMonth}
-                    >
-                      <MdKeyboardArrowRight size={22} />
-                    </div>
-                  </div>
-
-                  <div className="flex flex-grow justify-center">
-                    <p className="flex text-xl font-semibold uppercase hover:bg-gray-100 py-1 px-2 rounded-lg">
-                      {date.toLocaleString("default", { month: "long" })}{" "}
-                      {date.getFullYear()}{" "}
+            <div className="relative my-4 p-0 flex flex-col">
+              <div className="flex flex-col md:flex-row justify-end gap-2 mt-6">
+                <Tooltip
+                  arrow
+                  title="Create Event"
+                  placement="bottom"
+                  TransitionComponent={Fade}
+                >
+                  <div
+                    className=" bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70"
+                    onClick={handleOpenCreate}
+                  >
+                    <p className="text-white flex items-center">
+                      <FaCalendarPlus size={22} />
                     </p>
                   </div>
+                </Tooltip>
+                <Tooltip
+                  arrow
+                  title="Print"
+                  placement="bottom"
+                  TransitionComponent={Fade}
+                >
+                  <div className=" bg-primary p-2 rounded-md drop-shadow-lg cursor-pointer hover:opacity-70">
+                    <button className="text-white flex items-center">
+                      <MdLocalPrintshop size={22} />
+                    </button>
+                  </div>
+                </Tooltip>
+              </div>
+            </div>
 
-                  <div className="flex border border-blue-100 rounded-md">
-                    <div className="py-1 px-2 cursor-pointer   hover:bg-blue-100 ">
-                      Month
+            <div className="flex flex-col md:flex-row mt-10 gap-4">
+              <div className="w-full bg-white p-4 rounded-lg drop-shadow-xl">
+                <div className="flex justify-between items-center mb-6">
+                  <div className="text-lg font-semibold text-gray-600">
+                    Events Calendar
+                  </div>
+                  <div className="flex gap-2">
+                    <div className="flex">
+                      <p className="flex text-lg bg-gray-100 p-2 rounded-lg">
+                        {date.toLocaleString("default", { month: "long" })}{" "}
+                        {date.getFullYear()}{" "}
+                      </p>
                     </div>
-                    <div className="py-1 px-2 cursor-pointer    hover:bg-blue-100 ">
-                      Week
-                    </div>
-                    <div className="py-1 px-2 cursor-pointer  hover:bg-blue-100 ">
-                      Day
+                    <div className="flex gap-2">
+                      <div
+                        className="p-2 self-center border border-blue-200 rounded-md cursor-pointer hover:bg-primary hover:text-white"
+                        onClick={handlePrevMonth}
+                      >
+                        <MdKeyboardArrowLeft size={22} />
+                      </div>
+                      <div
+                        className="p-2 self-center border border-blue-200 rounded-md cursor-pointer hover:bg-primary hover:text-white"
+                        onClick={handleNextMonth}
+                      >
+                        <MdKeyboardArrowRight size={22} />
+                      </div>
                     </div>
                   </div>
                 </div>
+
                 <div className="w-full mt-4 flex justify-center text-sm">
                   <div className="w-full h-full">
                     <div className="grid grid-cols-7">
@@ -153,19 +216,46 @@ const ManageEvents = () => {
                   </div>
                 </div>
               </div>
-              <div className="w-full md:w-1/2">
+              <div className="w-full md:w-8/12">
                 <div className="bg-white rounded-lg drop-shadow-lg p-4">
-                  <p className="font-semibold text-xl text-gray-600 mb-2">
-                    Event List
-                  </p>
+                  <div className="flex justify-between mb-4">
+                    <p className="font-semibold text-lg text-gray-600 self-end">
+                      Event Schedule
+                    </p>
+                    <YearMenuPicker
+                      selectedYear={selectedYear}
+                      handleYearItemClick={handleYearItemClick}
+                      yearDropdownOpen={yearDropdownOpen}
+                      setYearDropdownOpen={setYearDropdownOpen}
+                      yearDropdownRef={yearDropdownRef}
+                    />
+                  </div>
+
                   <Divider />
-                  Events
+                  <div className="mt-4 flex">
+                    <div className="w-1/5 text-center">
+                      <p className="font-semibold text-base text-gray-500">
+                        JUNE
+                      </p>
+                      <p className="font-bold text-2xl">2</p>
+                    </div>
+                    <div className="w-5/6 self-center border-l-4 border-blue-500 pl-4">
+                      <p className="font-semibold text-gray-700">
+                        FACE-TO-FACE COMBINED YP MEETING
+                      </p>
+                      <p className="text-sm text-gray-500">Antipolo, Rizal</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <CreateEventPopup
+        openCreatePopup={openCreatePopup}
+        setOpenCreatePopup={setOpenCreatePopup}
+      />
     </div>
   );
 };
