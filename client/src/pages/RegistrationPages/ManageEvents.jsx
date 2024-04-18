@@ -298,7 +298,7 @@ const ManageEvents = () => {
                                   return (
                                     <div
                                       key={event._id}
-                                      className={`relative w-full h-6 mt-2 bg-${event.color}-500 opacity-80`}
+                                      className={`relative w-full h-6 mt-2 bg-${event.color}-500`}
                                       title={event.title}
                                     >
                                       <span
@@ -321,7 +321,7 @@ const ManageEvents = () => {
                                   return (
                                     <div
                                       key={event._id}
-                                      className={`relative w-full h-6 mt-2 bg-${event.color}-500 opacity-80`}
+                                      className={`relative w-full h-6 mt-2 bg-${event.color}-500`}
                                       title={event.title}
                                     >
                                       <span
