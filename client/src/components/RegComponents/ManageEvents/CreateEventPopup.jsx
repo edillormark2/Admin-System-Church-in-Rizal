@@ -8,8 +8,6 @@ import { useMediaQuery } from "@mui/material";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { MdAddCircleOutline } from "react-icons/md";
-import { MdClose } from "react-icons/md"; // Import MdClose icon
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
