@@ -11,6 +11,9 @@ import Tooltip from "@mui/material/Tooltip";
 import Fade from "@mui/material/Fade";
 import { FaCalendarPlus } from "react-icons/fa6";
 import CreateEventPopup from "../../components/RegComponents/ManageEvents/CreateEventPopup";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 const ManageEvents = () => {
   const { activeMenu } = useStateContext();
@@ -18,6 +21,7 @@ const ManageEvents = () => {
   const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [openCreatePopup, setOpenCreatePopup] = useState(false);
+  const [events, setEvents] = useState([]);
 
   const yearDropdownRef = useRef(null);
 
@@ -38,6 +42,64 @@ const ManageEvents = () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
+
+  useEffect(
+    () => {
+      fetchEvents();
+    },
+    [selectedYear]
+  );
+
+  const fetchEvents = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/server/event/event-display",
+        {
+          params: {
+            yearCreated: selectedYear
+          }
+        }
+      );
+      setEvents(response.data);
+    } catch (error) {
+      toast.error("Error fetching events:", error);
+    }
+  };
+
+  const handleEventCreated = async () => {
+    fetchEvents();
+  };
+
+  const getMonthAbbreviation = fullMonthName => {
+    switch (fullMonthName) {
+      case "January":
+        return "Jan";
+      case "February":
+        return "Feb";
+      case "March":
+        return "March";
+      case "April":
+        return "April";
+      case "May":
+        return "May";
+      case "June":
+        return "June";
+      case "July":
+        return "July";
+      case "August":
+        return "Aug";
+      case "September":
+        return "Sept";
+      case "October":
+        return "Oct";
+      case "November":
+        return "Nov";
+      case "December":
+        return "Dec";
+      default:
+        return fullMonthName;
+    }
+  };
 
   const handleYearItemClick = year => {
     setSelectedYear(year);
@@ -135,7 +197,8 @@ const ManageEvents = () => {
             </div>
 
             <div className="flex flex-col md:flex-row mt-10 gap-4">
-              <div className="w-full bg-white p-4 rounded-lg drop-shadow-xl">
+              {/*Calendar component */}
+              <div className="w-full bg-white p-4 rounded-lg drop-shadow-xl max-h-[600px]">
                 <div className="flex justify-between items-center mb-6">
                   <div className="text-lg font-semibold text-gray-600">
                     Events Calendar
@@ -203,12 +266,79 @@ const ManageEvents = () => {
                           >
                             {day.date.getDate()}
                             {day.isCurrentMonth && day.date.getDate() === 1
-                              ? <div className="absolute top-0 right-4 text-sm text-gray-600 ">
+                              ? <div className="absolute top-0 right-4 text-sm text-gray-700">
                                   {date.toLocaleString("default", {
                                     month: "long"
                                   })}
                                 </div>
                               : null}
+                          </div>
+                          {/* Add color labels */}
+                          <div className="absolute inset-0 flex flex-wrap justify-center items-center">
+                            {events.map(event => {
+                              const eventStartDate = new Date(event.startDate);
+                              const eventEndDate = new Date(event.endDate);
+                              if (
+                                day.date >= eventStartDate &&
+                                day.date <= eventEndDate &&
+                                day.date.getMonth() ===
+                                  eventStartDate.getMonth() &&
+                                day.date.getFullYear() ===
+                                  eventStartDate.getFullYear()
+                              ) {
+                                // Check if the current day is the start date
+                                if (
+                                  day.date.getDate() ===
+                                  eventStartDate.getDate()
+                                ) {
+                                  const truncatedTitle =
+                                    event.title.length > 12
+                                      ? `${event.title.slice(0, 12)}...`
+                                      : event.title;
+                                  return (
+                                    <div
+                                      key={event._id}
+                                      className={`relative w-full h-6 mt-2 bg-${event.color}-500 opacity-80`}
+                                      title={event.title}
+                                    >
+                                      <span
+                                        className={`absolute inset-0 flex items-center justify-start ml-1 text-xs text-white overflow-hidden`}
+                                        style={{
+                                          whiteSpace: "nowrap",
+                                          textOverflow: "ellipsis"
+                                        }}
+                                      >
+                                        {truncatedTitle}
+                                      </span>
+                                    </div>
+                                  );
+                                } else {
+                                  // Render color labels for the rest of the days in the event duration
+                                  const truncatedTitle =
+                                    event.title.length > 12
+                                      ? `${event.title.slice(0, 12)}...`
+                                      : event.title;
+                                  return (
+                                    <div
+                                      key={event._id}
+                                      className={`relative w-full h-6 mt-2 bg-${event.color}-500 opacity-80`}
+                                      title={event.title}
+                                    >
+                                      <span
+                                        className={`absolute inset-0 flex items-center justify-start ml-1 text-xs text-white overflow-hidden`}
+                                        style={{
+                                          whiteSpace: "nowrap",
+                                          textOverflow: "ellipsis"
+                                        }}
+                                      >
+                                        {truncatedTitle}
+                                      </span>
+                                    </div>
+                                  );
+                                }
+                              }
+                              return null;
+                            })}
                           </div>
                         </div>
                       )}
@@ -216,6 +346,8 @@ const ManageEvents = () => {
                   </div>
                 </div>
               </div>
+              {/*Calendar component end here*/}
+
               <div className="w-full md:w-8/12">
                 <div className="bg-white rounded-lg drop-shadow-lg p-4">
                   <div className="flex justify-between mb-4">
@@ -232,19 +364,49 @@ const ManageEvents = () => {
                   </div>
 
                   <Divider />
-                  <div className="mt-4 flex">
-                    <div className="w-1/5 text-center">
-                      <p className="font-semibold text-base text-gray-500">
-                        JUNE
-                      </p>
-                      <p className="font-bold text-2xl">2</p>
-                    </div>
-                    <div className="w-5/6 self-center border-l-4 border-blue-500 pl-4">
-                      <p className="font-semibold text-gray-700">
-                        FACE-TO-FACE COMBINED YP MEETING
-                      </p>
-                      <p className="text-sm text-gray-500">Antipolo, Rizal</p>
-                    </div>
+                  <div className="mt-4">
+                    {events.map((event, index) => {
+                      const startDate = new Date(event.startDate);
+                      const endDate = new Date(event.endDate);
+
+                      // Get month abbreviations
+                      const startMonthAbbr = getMonthAbbreviation(
+                        startDate.toLocaleString("default", { month: "long" })
+                      );
+                      const endMonthAbbr = getMonthAbbreviation(
+                        endDate.toLocaleString("default", { month: "long" })
+                      );
+
+                      return (
+                        <div key={index} className="flex mb-4">
+                          <div
+                            className={`w-1/5 text-center bg-gradient-to-r from-${event.color}-100 to-white rounded-lg mx-2 `}
+                          >
+                            <p className="font-semibold text-base">
+                              {startMonthAbbr}
+                            </p>
+                            <p className="font-bold text-2xl">
+                              {startDate.getDate()}
+                            </p>
+                          </div>
+                          <div
+                            className={`w-full border-l-4 pl-4 border-${event.color}-500`}
+                          >
+                            <p className="font-semibold text-gray-700">
+                              {event.title}
+                            </p>
+                            <p className="flex text-sm text-gray-500">
+                              {event.location}
+                            </p>
+                            <p className="flex text-sm text-gray-500">
+                              {startMonthAbbr} {startDate.getDate()},{" "}
+                              {startDate.getFullYear()} - {endMonthAbbr}{" "}
+                              {endDate.getDate()}, {endDate.getFullYear()}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -255,6 +417,7 @@ const ManageEvents = () => {
       <CreateEventPopup
         openCreatePopup={openCreatePopup}
         setOpenCreatePopup={setOpenCreatePopup}
+        onEventCreated={handleEventCreated}
       />
     </div>
   );

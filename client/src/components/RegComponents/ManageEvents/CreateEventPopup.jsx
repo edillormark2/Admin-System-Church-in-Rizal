@@ -20,7 +20,9 @@ const CreateEventPopup = props => {
   const [formData, setFormData] = useState({
     title: "",
     location: "",
-    color: "bg-blue-500"
+    color: "blue",
+    startDate: currentDate.format("MMMM D, YYYY"),
+    endDate: currentDate.format("MMMM D, YYYY")
   });
   const [loading, setLoading] = useState(false);
   const handleClosePopup = () => {
@@ -32,8 +34,52 @@ const CreateEventPopup = props => {
     setFormData({ ...formData, [id]: value });
   };
 
+  const handleDateChange = (date, type) => {
+    const formattedDate = date.format("MMMM D, YYYY");
+    setFormData({ ...formData, [type]: formattedDate });
+  };
+
   const handleColorChange = color => {
-    setFormData({ ...formData, color });
+    const colorName = color.split("-")[0]; // Extract the color name (e.g., "blue", "green", etc.)
+    setFormData({ ...formData, color: colorName });
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    const { title, location, color, startDate, endDate } = formData;
+
+    if (!title.trim()) {
+      toast.error("Please fill the title field");
+      setLoading(false);
+      return;
+    }
+    if (!location.trim()) {
+      toast.error("Please fill the location field");
+      setLoading(false);
+      return;
+    }
+    try {
+      await axios.post("http://localhost:3000/server/event/event-create", {
+        title,
+        location,
+        color,
+        startDate,
+        endDate
+      });
+      toast.success("Event created");
+      setFormData({
+        title: "",
+        location: "",
+        color: "blue",
+        startDate: currentDate.format("MMMM D, YYYY"),
+        endDate: currentDate.format("MMMM D, YYYY")
+      });
+      handleClosePopup();
+      props.onEventCreated();
+    } catch (error) {
+      toast.error("Error creating event", error);
+    }
   };
 
   const isMobile = useMediaQuery("(max-width:600px)");
@@ -79,11 +125,11 @@ const CreateEventPopup = props => {
                     <input
                       type="text"
                       placeholder=""
-                      id="Title"
+                      id="title"
                       maxLength={30}
                       autoComplete="off"
                       onChange={handleChange}
-                      value={formData.location}
+                      value={formData.title}
                       className="form-control bg-white p-3 mt-2 rounded-lg border border-gray-300 text-sm sm:text-base "
                     />
                   </div>
@@ -96,7 +142,7 @@ const CreateEventPopup = props => {
                       autoComplete="off"
                       maxLength={20}
                       onChange={handleChange}
-                      value={formData.price}
+                      value={formData.location}
                       className="form-control bg-white p-3 mt-2 rounded-lg border border-gray-300 text-sm sm:text-base "
                     />
                   </div>
@@ -107,14 +153,16 @@ const CreateEventPopup = props => {
                       <div className="w-full">
                         <p className="text-sm font-semibold mb-2">Start Date</p>
                         <DatePicker
-                          defaultValue={currentDate}
+                          value={dayjs(formData.startDate)}
+                          onChange={date => handleDateChange(date, "startDate")}
                           className="w-full"
                         />
                       </div>
                       <div className="w-full">
                         <p className="text-sm font-semibold mb-2">End Date</p>
                         <DatePicker
-                          defaultValue={currentDate}
+                          value={dayjs(formData.endDate)}
+                          onChange={date => handleDateChange(date, "endDate")}
                           className="w-full"
                         />
                       </div>
@@ -126,16 +174,16 @@ const CreateEventPopup = props => {
                   <p className="text-sm font-semibold mb-2">Color Label</p>
                   <div className="w-full flex gap-2">
                     {[
-                      "bg-blue-500",
-                      "bg-green-500",
-                      "bg-yellow-500",
-                      "bg-orange-500",
-                      "bg-red-500",
-                      "bg-violet-500"
+                      "blue",
+                      "green",
+                      "yellow",
+                      "orange",
+                      "red",
+                      "violet"
                     ].map((color, index) =>
                       <div
                         key={index}
-                        className={`relative p-4 rounded-full ${color} w-10 h-10 cursor-pointer hover:opacity-80 ${formData.color ===
+                        className={`relative p-4 rounded-full bg-${color}-500 w-10 h-10 cursor-pointer hover:opacity-80 ${formData.color ===
                         color
                           ? "ring-offset-2 ring"
                           : ""}`}
@@ -151,6 +199,7 @@ const CreateEventPopup = props => {
                 <div className="flex justify-end gap-2 mt-8">
                   <button
                     disabled={loading}
+                    onClick={handleSubmit}
                     className="bg-primary w-24 text-white p-3 rounded-lg hover:opacity-70 disabled:opacity-80 text-sm sm:text-base"
                   >
                     {loading ? "Loading..." : "Save"}
