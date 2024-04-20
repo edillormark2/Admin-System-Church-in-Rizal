@@ -183,7 +183,7 @@ const CreateEventPopup = props => {
                     ].map((color, index) =>
                       <div
                         key={index}
-                        className={`relative p-4 rounded-full bg-${color}-500 w-10 h-10 cursor-pointer hover:opacity-80 ${formData.color ===
+                        className={`relative p-4 rounded-full bg-${color}-500 w-8 md:w-10 h-8 md:h-10 cursor-pointer hover:opacity-80 ${formData.color ===
                         color
                           ? "ring-offset-2 ring"
                           : ""}`}

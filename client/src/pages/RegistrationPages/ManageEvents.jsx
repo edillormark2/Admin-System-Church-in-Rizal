@@ -193,10 +193,10 @@ const ManageEvents = () => {
           <div className="fixed md:static navbar w-full md:w-11/12 mx-auto rounded-md">
             <Navbar />
           </div>
-          <div className="my-10 md:my-16 mx-6 md:mx-16">
+          <div className="my-24 md:my-16 mx-5 md:mx-16">
             <h1 className="text-2xl font-semibold mb-2">Manage Events</h1>
             <div className="relative my-4 p-0 flex flex-col">
-              <div className="flex flex-col md:flex-row justify-end gap-2 mt-6">
+              <div className="flex  justify-end gap-2 mt-6">
                 <Tooltip
                   arrow
                   title="Create Event"
@@ -229,14 +229,14 @@ const ManageEvents = () => {
 
             <div className="flex flex-col md:flex-row mt-10 gap-4">
               {/*Calendar component */}
-              <div className="w-full bg-white p-4 rounded-lg drop-shadow-xl max-h-[600px]">
+              <div className="w-full bg-white p-2 md:p-4 rounded-lg drop-shadow-xl max-h-[600px]">
                 <div className="flex justify-between items-center mb-6">
-                  <div className="text-lg font-semibold text-gray-600">
+                  <div className="text-sm md:text-lg font-semibold text-gray-600">
                     Events Calendar
                   </div>
                   <div className="flex gap-2">
                     <div className="flex">
-                      <p className="flex text-lg bg-gray-100 p-2 rounded-lg">
+                      <p className="flex text-sm md:text-lg bg-gray-100 p-2 rounded-lg">
                         {date.toLocaleString("default", {
                           month: "long"
                         })}{" "}
@@ -245,13 +245,13 @@ const ManageEvents = () => {
                     </div>
                     <div className="flex gap-2">
                       <div
-                        className="p-2 self-center border border-blue-200 rounded-md cursor-pointer hover:bg-primary hover:text-white"
+                        className="p-1 md:p-2 self-center border border-blue-200 rounded-md cursor-pointer hover:bg-primary hover:text-white"
                         onClick={handlePrevMonth}
                       >
                         <MdKeyboardArrowLeft size={22} />
                       </div>
                       <div
-                        className="p-2 self-center border border-blue-200 rounded-md cursor-pointer hover:bg-primary hover:text-white"
+                        className="p-1 md:p-2 self-center border border-blue-200 rounded-md cursor-pointer hover:bg-primary hover:text-white"
                         onClick={handleNextMonth}
                       >
                         <MdKeyboardArrowRight size={22} />
@@ -274,7 +274,7 @@ const ManageEvents = () => {
                       ].map((day, index) =>
                         <div
                           key={index}
-                          className="p-2 text-center font-semibold text-gray-600 bg-gray-100"
+                          className="p-2 text-xs md:text-sm text-center font-semibold text-gray-600 bg-gray-100"
                         >
                           {day}
                         </div>
@@ -293,13 +293,13 @@ const ManageEvents = () => {
                           style={{ height: "80px", position: "relative" }}
                         >
                           <div
-                            className={`absolute top-2 right-0 text-sm text-gray-600 mt-1 mr-2 ${day.isCurrentMonth
+                            className={`absolute top-2 right-0 text-sm  text-gray-600 mt-1 mr-2 ${day.isCurrentMonth
                               ? ""
                               : "opacity-50"}`}
                           >
                             {day.date.getDate()}
                             {day.isCurrentMonth && day.date.getDate() === 1
-                              ? <div className="absolute top-0 right-4 text-sm text-gray-700">
+                              ? <div className="absolute  top-0 right-4 hidden md:block text-sm text-gray-700">
                                   {date.toLocaleString("default", {
                                     month: "long"
                                   })}
@@ -307,7 +307,7 @@ const ManageEvents = () => {
                               : null}
                           </div>
                           {/* Add color labels */}
-                          <div className="absolute inset-0 flex flex-wrap justify-center items-center">
+                          <div className="absolute mt-0 md:mt-1 inset-0 flex flex-wrap justify-center items-center cursor-pointer hover:opacity-75">
                             {events.map(event => {
                               const eventStartDate = new Date(event.startDate);
                               const eventEndDate = new Date(event.endDate);
@@ -331,7 +331,7 @@ const ManageEvents = () => {
                                   return (
                                     <div
                                       key={event._id}
-                                      className={`relative w-full h-6 mt-2 bg-${event.color}-500`}
+                                      className={`relative w-full h-4 md:h-5 mt-1 bg-${event.color}-500`}
                                       title={event.title}
                                     >
                                       <span
@@ -354,7 +354,7 @@ const ManageEvents = () => {
                                   return (
                                     <div
                                       key={event._id}
-                                      className={`relative w-full h-6 mt-2 bg-${event.color}-500`}
+                                      className={`relative w-full h-4 md:h-5 mt-1 bg-${event.color}-500`}
                                       title={event.title}
                                     >
                                       <span
@@ -382,18 +382,20 @@ const ManageEvents = () => {
               {/*Calendar component end here*/}
 
               <div className="w-full md:w-8/12">
-                <div className="bg-white rounded-lg drop-shadow-lg p-4">
-                  <div className="flex justify-between mb-4">
-                    <p className="font-semibold text-lg text-gray-600 self-end">
+                <div className="bg-white rounded-lg drop-shadow-lg p-1 md:p-4 ">
+                  <div className="flex justify-between mb-4 mt-2 md:mt-0 p-2 md:p-0">
+                    <p className="font-semibold text-base md:text-lg text-gray-600 self-center md:self-end">
                       Event Schedule
                     </p>
-                    <YearMenuPicker
-                      selectedYear={selectedYear}
-                      handleYearItemClick={handleYearItemClick}
-                      yearDropdownOpen={yearDropdownOpen}
-                      setYearDropdownOpen={setYearDropdownOpen}
-                      yearDropdownRef={yearDropdownRef}
-                    />
+                    <div className="w-1/2 md:w-auto">
+                      <YearMenuPicker
+                        selectedYear={selectedYear}
+                        handleYearItemClick={handleYearItemClick}
+                        yearDropdownOpen={yearDropdownOpen}
+                        setYearDropdownOpen={setYearDropdownOpen}
+                        yearDropdownRef={yearDropdownRef}
+                      />
+                    </div>
                   </div>
 
                   <Divider />
@@ -434,39 +436,39 @@ const ManageEvents = () => {
                             >
                               {hoveredEvent === index &&
                                 <div
-                                  className="absolute top-0 right-0 m-2 cursor-pointer text-gray-600  hover:bg-gray-200 rounded-full p-2"
+                                  className="absolute top-0 right-0 m-0 md:m-2 cursor-pointer text-gray-600  hover:bg-gray-200 rounded-full p-2"
                                   title="Edit"
                                 >
                                   <MdEdit size={19} />
                                 </div>}
                               {hoveredEvent === index &&
                                 <div
-                                  className="absolute top-8 right-0 m-2 cursor-pointer text-gray-600  hover:bg-gray-200 rounded-full p-2"
+                                  className="absolute top-8 right-0 m-0 md:m-2 cursor-pointer text-gray-600  hover:bg-gray-200 rounded-full p-2"
                                   title="Delete"
                                 >
                                   <MdDelete size={19} />
                                 </div>}
 
                               <div
-                                className={`w-1/5 text-center bg-gradient-to-r from-${event.color}-100 to-white rounded-lg mx-2`}
+                                className={`w-1/4 md:w-1/5 text-center bg-gradient-to-r from-${event.color}-100 to-white rounded-lg mx-0 md:mx-2`}
                               >
-                                <p className="font-semibold text-base">
+                                <p className="font-semibold text-sm md:text-base">
                                   {startMonthAbbr}
                                 </p>
-                                <p className="font-bold text-2xl">
+                                <p className="font-bold text-lg md:text-2xl">
                                   {startDate.getDate()}
                                 </p>
                               </div>
                               <div
                                 className={`w-full border-l-4 pl-4 border-${event.color}-500`}
                               >
-                                <p className="font-semibold text-gray-700">
+                                <p className="font-semibold text-sm md:text-base text-gray-700">
                                   {event.title}
                                 </p>
-                                <p className="flex text-sm text-gray-500">
+                                <p className="flex text-xs md:text-sm text-gray-500">
                                   {event.location}
                                 </p>
-                                <p className="flex text-sm text-gray-500">
+                                <p className="flex text-xs md:text-sm text-gray-500">
                                   {startMonthAbbr} {startDate.getDate()},{" "}
                                   {startDate.getFullYear()} - {endMonthAbbr}{" "}
                                   {endDate.getDate()}, {endDate.getFullYear()}
