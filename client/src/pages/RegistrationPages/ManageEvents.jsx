@@ -14,6 +14,7 @@ import CreateEventPopup from "../../components/RegComponents/ManageEvents/Create
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import noevent from "../../assets/noevent.png";
 import { MdDelete } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 
@@ -397,68 +398,83 @@ const ManageEvents = () => {
 
                   <Divider />
                   <div className="mt-4">
-                    {eventsForSchedule.map((event, index) => {
-                      const startDate = new Date(event.startDate);
-                      const endDate = new Date(event.endDate);
-
-                      // Get month abbreviations
-                      const startMonthAbbr = getMonthAbbreviation(
-                        startDate.toLocaleString("default", { month: "long" })
-                      );
-                      const endMonthAbbr = getMonthAbbreviation(
-                        endDate.toLocaleString("default", { month: "long" })
-                      );
-
-                      return (
-                        <div
-                          key={index}
-                          className="flex mb-4 relative hover:bg-gray-100 rounded-md py-2 px-1"
-                          onMouseEnter={() => handleEventHover(index)}
-                          onMouseLeave={handleEventLeave}
-                        >
-                          {hoveredEvent === index &&
-                            <div
-                              className="absolute top-0 right-0 m-2 cursor-pointer text-gray-600  hover:bg-gray-200 rounded-full p-2"
-                              title="Edit"
-                            >
-                              <MdEdit size={19} />
-                            </div>}
-                          {hoveredEvent === index &&
-                            <div
-                              className="absolute top-8 right-0 m-2 cursor-pointer text-gray-600  hover:bg-gray-200 rounded-full p-2"
-                              title="Delete"
-                            >
-                              <MdDelete size={19} />
-                            </div>}
-
-                          <div
-                            className={`w-1/5 text-center bg-gradient-to-r from-${event.color}-100 to-white rounded-lg mx-2 `}
-                          >
-                            <p className="font-semibold text-base">
-                              {startMonthAbbr}
-                            </p>
-                            <p className="font-bold text-2xl">
-                              {startDate.getDate()}
-                            </p>
-                          </div>
-                          <div
-                            className={`w-full border-l-4 pl-4 border-${event.color}-500`}
-                          >
-                            <p className="font-semibold text-gray-700">
-                              {event.title}
-                            </p>
-                            <p className="flex text-sm text-gray-500">
-                              {event.location}
-                            </p>
-                            <p className="flex text-sm text-gray-500">
-                              {startMonthAbbr} {startDate.getDate()},{" "}
-                              {startDate.getFullYear()} - {endMonthAbbr}{" "}
-                              {endDate.getDate()}, {endDate.getFullYear()}
-                            </p>
-                          </div>
+                    {/* Check if there are events for the selected year */}
+                    {eventsForSchedule.length === 0
+                      ? <div>
+                          <img
+                            src={noevent}
+                            alt="img"
+                            className="mx-auto w-64 object-cover"
+                          />
+                          <p className="text-gray-600 text-center">
+                            There are no events scheduled for the year{" "}
+                            {selectedYear}
+                          </p>
                         </div>
-                      );
-                    })}
+                      : eventsForSchedule.map((event, index) => {
+                          const startDate = new Date(event.startDate);
+                          const endDate = new Date(event.endDate);
+
+                          // Get month abbreviations
+                          const startMonthAbbr = getMonthAbbreviation(
+                            startDate.toLocaleString("default", {
+                              month: "long"
+                            })
+                          );
+                          const endMonthAbbr = getMonthAbbreviation(
+                            endDate.toLocaleString("default", { month: "long" })
+                          );
+
+                          return (
+                            <div
+                              key={index}
+                              className="flex mb-4 relative hover:bg-gray-100 rounded-md py-2 px-1"
+                              onMouseEnter={() => handleEventHover(index)}
+                              onMouseLeave={handleEventLeave}
+                            >
+                              {hoveredEvent === index &&
+                                <div
+                                  className="absolute top-0 right-0 m-2 cursor-pointer text-gray-600  hover:bg-gray-200 rounded-full p-2"
+                                  title="Edit"
+                                >
+                                  <MdEdit size={19} />
+                                </div>}
+                              {hoveredEvent === index &&
+                                <div
+                                  className="absolute top-8 right-0 m-2 cursor-pointer text-gray-600  hover:bg-gray-200 rounded-full p-2"
+                                  title="Delete"
+                                >
+                                  <MdDelete size={19} />
+                                </div>}
+
+                              <div
+                                className={`w-1/5 text-center bg-gradient-to-r from-${event.color}-100 to-white rounded-lg mx-2`}
+                              >
+                                <p className="font-semibold text-base">
+                                  {startMonthAbbr}
+                                </p>
+                                <p className="font-bold text-2xl">
+                                  {startDate.getDate()}
+                                </p>
+                              </div>
+                              <div
+                                className={`w-full border-l-4 pl-4 border-${event.color}-500`}
+                              >
+                                <p className="font-semibold text-gray-700">
+                                  {event.title}
+                                </p>
+                                <p className="flex text-sm text-gray-500">
+                                  {event.location}
+                                </p>
+                                <p className="flex text-sm text-gray-500">
+                                  {startMonthAbbr} {startDate.getDate()},{" "}
+                                  {startDate.getFullYear()} - {endMonthAbbr}{" "}
+                                  {endDate.getDate()}, {endDate.getFullYear()}
+                                </p>
+                              </div>
+                            </div>
+                          );
+                        })}
                   </div>
                 </div>
               </div>
