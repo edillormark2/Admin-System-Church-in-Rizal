@@ -34,14 +34,26 @@ export const eventCreate = async (req, res) => {
   }
 };
 
+// Controller for displaying events based on selected year
+
+export const eventDisplayByYear = async (req, res) => {
+  try {
+    const selectedYear = req.query.selectedYear || new Date().getFullYear();
+    const events = await Event.find({
+      startDate: { $regex: new RegExp(selectedYear), $options: "i" } // Using regex to filter by year
+    });
+
+    res.status(200).json(events);
+  } catch (error) {
+    console.error("Error fetching events:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 // Controller for displaying events
 export const eventDisplay = async (req, res) => {
   try {
-    // Extract the year from the query parameters
-    const { yearCreated } = req.query;
-
-    // Fetch events from the database based on the selected year
-    const events = await Event.find({ yearCreated });
+    const events = await Event.find(); // Fetch all events without filtering by year
 
     res.status(200).json(events);
   } catch (error) {

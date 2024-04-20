@@ -22,6 +22,7 @@ const ManageEvents = () => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [openCreatePopup, setOpenCreatePopup] = useState(false);
   const [events, setEvents] = useState([]);
+  const [eventsForSchedule, setEventsForSchedule] = useState([]);
 
   const yearDropdownRef = useRef(null);
 
@@ -45,20 +46,35 @@ const ManageEvents = () => {
 
   useEffect(
     () => {
-      fetchEvents();
+      fetchEventsByYear();
     },
     [selectedYear]
   );
 
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  const fetchEventsByYear = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/server/event/event-display-year",
+        {
+          params: {
+            selectedYear: selectedYear // Send selectedYear as a query parameter
+          }
+        }
+      );
+      setEventsForSchedule(response.data);
+    } catch (error) {
+      toast.error("Error fetching events:", error);
+    }
+  };
+
   const fetchEvents = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/server/event/event-display",
-        {
-          params: {
-            yearCreated: selectedYear
-          }
-        }
+        "http://localhost:3000/server/event/event-display"
       );
       setEvents(response.data);
     } catch (error) {
@@ -67,6 +83,7 @@ const ManageEvents = () => {
   };
 
   const handleEventCreated = async () => {
+    fetchEventsByYear();
     fetchEvents();
   };
 
@@ -206,7 +223,9 @@ const ManageEvents = () => {
                   <div className="flex gap-2">
                     <div className="flex">
                       <p className="flex text-lg bg-gray-100 p-2 rounded-lg">
-                        {date.toLocaleString("default", { month: "long" })}{" "}
+                        {date.toLocaleString("default", {
+                          month: "long"
+                        })}{" "}
                         {date.getFullYear()}{" "}
                       </p>
                     </div>
@@ -365,7 +384,7 @@ const ManageEvents = () => {
 
                   <Divider />
                   <div className="mt-4">
-                    {events.map((event, index) => {
+                    {eventsForSchedule.map((event, index) => {
                       const startDate = new Date(event.startDate);
                       const endDate = new Date(event.endDate);
 
