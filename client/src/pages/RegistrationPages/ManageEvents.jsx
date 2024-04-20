@@ -14,6 +14,8 @@ import CreateEventPopup from "../../components/RegComponents/ManageEvents/Create
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { MdDelete } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
 
 const ManageEvents = () => {
   const { activeMenu } = useStateContext();
@@ -23,6 +25,7 @@ const ManageEvents = () => {
   const [openCreatePopup, setOpenCreatePopup] = useState(false);
   const [events, setEvents] = useState([]);
   const [eventsForSchedule, setEventsForSchedule] = useState([]);
+  const [hoveredEvent, setHoveredEvent] = useState(null);
 
   const yearDropdownRef = useRef(null);
 
@@ -159,6 +162,16 @@ const ManageEvents = () => {
     }
 
     return currentMonthDays;
+  };
+
+  // Function to handle hovering over an event
+  const handleEventHover = index => {
+    setHoveredEvent(index);
+  };
+
+  // Function to handle mouse leaving an event
+  const handleEventLeave = () => {
+    setHoveredEvent(null);
   };
 
   return (
@@ -397,7 +410,27 @@ const ManageEvents = () => {
                       );
 
                       return (
-                        <div key={index} className="flex mb-4">
+                        <div
+                          key={index}
+                          className="flex mb-4 relative hover:bg-gray-100 rounded-md py-2 px-1"
+                          onMouseEnter={() => handleEventHover(index)}
+                          onMouseLeave={handleEventLeave}
+                        >
+                          {hoveredEvent === index &&
+                            <div
+                              className="absolute top-0 right-0 m-2 cursor-pointer text-gray-600  hover:bg-gray-200 rounded-full p-2"
+                              title="Edit"
+                            >
+                              <MdEdit size={19} />
+                            </div>}
+                          {hoveredEvent === index &&
+                            <div
+                              className="absolute top-8 right-0 m-2 cursor-pointer text-gray-600  hover:bg-gray-200 rounded-full p-2"
+                              title="Delete"
+                            >
+                              <MdDelete size={19} />
+                            </div>}
+
                           <div
                             className={`w-1/5 text-center bg-gradient-to-r from-${event.color}-100 to-white rounded-lg mx-2 `}
                           >
