@@ -17,6 +17,8 @@ import axios from "axios";
 import noevent from "../../assets/noevent.png";
 import { MdDelete } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
+import EditEventPopup from "../../components/RegComponents/ManageEvents/EditEventPopup";
+import DeleteEventPopup from "../../components/RegComponents/ManageEvents/DeleteEventPopup";
 
 const ManageEvents = () => {
   const { activeMenu } = useStateContext();
@@ -24,6 +26,8 @@ const ManageEvents = () => {
   const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [openCreatePopup, setOpenCreatePopup] = useState(false);
+  const [openEditPopup, setOpenEditPopup] = useState(false);
+  const [openDeletePopup, setOpenDeletePopup] = useState(false);
   const [events, setEvents] = useState([]);
   const [eventsForSchedule, setEventsForSchedule] = useState([]);
   const [hoveredEvent, setHoveredEvent] = useState(null);
@@ -129,6 +133,14 @@ const ManageEvents = () => {
 
   const handleOpenCreate = () => {
     setOpenCreatePopup(true);
+  };
+
+  const handleOpenEdit = () => {
+    setOpenEditPopup(true);
+  };
+
+  const handleOpenDelete = () => {
+    setOpenDeletePopup(true);
   };
 
   const handlePrevMonth = () => {
@@ -438,6 +450,7 @@ const ManageEvents = () => {
                                 <div
                                   className="absolute top-0 right-0 m-0 md:m-2 cursor-pointer text-gray-600  hover:bg-gray-200 rounded-full p-2"
                                   title="Edit"
+                                  onClick={handleOpenEdit}
                                 >
                                   <MdEdit size={19} />
                                 </div>}
@@ -445,6 +458,7 @@ const ManageEvents = () => {
                                 <div
                                   className="absolute top-8 right-0 m-0 md:m-2 cursor-pointer text-gray-600  hover:bg-gray-200 rounded-full p-2"
                                   title="Delete"
+                                  onClick={handleOpenDelete}
                                 >
                                   <MdDelete size={19} />
                                 </div>}
@@ -488,6 +502,14 @@ const ManageEvents = () => {
         openCreatePopup={openCreatePopup}
         setOpenCreatePopup={setOpenCreatePopup}
         onEventCreated={handleEventCreated}
+      />
+      <EditEventPopup
+        openEditPopup={openEditPopup}
+        setOpenEditPopup={setOpenEditPopup}
+      />
+      <DeleteEventPopup
+        openDeletePopup={openDeletePopup}
+        setOpenDeletePopup={setOpenDeletePopup}
       />
     </div>
   );
