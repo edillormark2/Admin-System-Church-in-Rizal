@@ -31,6 +31,7 @@ const ManageEvents = () => {
   const [events, setEvents] = useState([]);
   const [eventsForSchedule, setEventsForSchedule] = useState([]);
   const [hoveredEvent, setHoveredEvent] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   const yearDropdownRef = useRef(null);
 
@@ -95,6 +96,10 @@ const ManageEvents = () => {
     fetchEvents();
   };
 
+  const handleDeleteEvent = async () => {
+    fetchEventsByYear();
+    fetchEvents();
+  };
   const getMonthAbbreviation = fullMonthName => {
     switch (fullMonthName) {
       case "January":
@@ -139,7 +144,8 @@ const ManageEvents = () => {
     setOpenEditPopup(true);
   };
 
-  const handleOpenDelete = () => {
+  const handleOpenDelete = event => {
+    setSelectedEvent(event);
     setOpenDeletePopup(true);
   };
 
@@ -458,7 +464,7 @@ const ManageEvents = () => {
                                 <div
                                   className="absolute top-8 right-0 m-0 md:m-2 cursor-pointer text-gray-600  hover:bg-gray-200 rounded-full p-2"
                                   title="Delete"
-                                  onClick={handleOpenDelete}
+                                  onClick={() => handleOpenDelete(event)}
                                 >
                                   <MdDelete size={19} />
                                 </div>}
@@ -510,6 +516,8 @@ const ManageEvents = () => {
       <DeleteEventPopup
         openDeletePopup={openDeletePopup}
         setOpenDeletePopup={setOpenDeletePopup}
+        selectedEvent={selectedEvent}
+        onDeleteEvent={handleDeleteEvent}
       />
     </div>
   );

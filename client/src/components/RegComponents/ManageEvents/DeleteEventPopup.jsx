@@ -15,12 +15,35 @@ const DeleteEventPopup = ({
   openDeletePopup,
   setOpenDeletePopup,
   selectedEvent,
+  onDeleteEvent
 }) => {
   const handleClosePopup = () => {
     setOpenDeletePopup(false);
   };
 
-  const handleDeleteRegistrant = async () => {};
+  const handleDeleteEvent = async () => {
+    try {
+      // Extract the _id field from the selected event
+      const eventId = selectedEvent._id;
+
+      // Make a DELETE request to delete the event using its ID
+      await axios.delete(
+        `http://localhost:3000/server/event/event-delete/${eventId}`
+      );
+
+      // Call the onDeleteEvent function passed from the parent component
+      onDeleteEvent();
+
+      // Close the delete popup
+      setOpenDeletePopup(false);
+
+      // Show success message
+      toast.success("Event deleted successfully");
+    } catch (error) {
+      console.error("Error deleting event:", error);
+      toast.error("Error deleting event");
+    }
+  };
 
   return (
     <div className="bg-white">
@@ -41,7 +64,7 @@ const DeleteEventPopup = ({
                 backgroundColor: "#DE3163",
                 color: "white"
               }}
-              onClick={handleDeleteRegistrant}
+              onClick={handleDeleteEvent}
             >
               Delete
             </Button>
