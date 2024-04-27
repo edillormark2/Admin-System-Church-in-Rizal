@@ -356,6 +356,7 @@ const ManageEvents = () => {
                                       key={event._id}
                                       className={`relative w-full h-4 md:h-5 mt-1 bg-${event.color}-500`}
                                       title={event.title}
+                                      onClick={() => handleOpenEdit(event)}
                                     >
                                       <span
                                         className={`absolute inset-0 flex items-center justify-start ml-1 text-xs text-white overflow-hidden`}
@@ -379,6 +380,7 @@ const ManageEvents = () => {
                                       key={event._id}
                                       className={`relative w-full h-4 md:h-5 mt-1 bg-${event.color}-500`}
                                       title={event.title}
+                                      onClick={() => handleOpenEdit(event)}
                                     >
                                       <span
                                         className={`absolute inset-0 flex items-center justify-start ml-1 text-xs text-white overflow-hidden`}
