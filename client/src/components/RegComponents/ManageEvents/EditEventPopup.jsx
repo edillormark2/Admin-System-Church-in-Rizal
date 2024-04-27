@@ -15,7 +15,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { FaCheck } from "react-icons/fa"; // Import FaCheck icon
 
 const EditEventPopup = props => {
-  const { openEditPopup, setOpenEditPopup } = props;
+  const { openEditPopup, setOpenEditPopup, selectedEvent, onEditEvent } = props;
   const currentDate = dayjs();
   const [formData, setFormData] = useState({
     title: "",
@@ -25,6 +25,23 @@ const EditEventPopup = props => {
     endDate: currentDate.format("MMMM D, YYYY")
   });
   const [loading, setLoading] = useState(false);
+
+  // Fetch selected event data from backend based on ID
+  useEffect(
+    () => {
+      if (selectedEvent) {
+        setFormData({
+          title: selectedEvent.title,
+          location: selectedEvent.location,
+          color: selectedEvent.color,
+          startDate: selectedEvent.startDate,
+          endDate: selectedEvent.endDate
+        });
+      }
+    },
+    [selectedEvent]
+  );
+
   const handleClosePopup = () => {
     setOpenEditPopup(false);
   };
@@ -40,45 +57,23 @@ const EditEventPopup = props => {
   };
 
   const handleColorChange = color => {
-    const colorName = color.split("-")[0]; // Extract the color name (e.g., "blue", "green", etc.)
-    setFormData({ ...formData, color: colorName });
+    setFormData({ ...formData, color });
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
-
-    const { title, location, color, startDate, endDate } = formData;
-
-    if (!title.trim()) {
-      toast.error("Please fill the title field");
-      setLoading(false);
-      return;
-    }
-    if (!location.trim()) {
-      toast.error("Please fill the location field");
-      setLoading(false);
-      return;
-    }
     try {
-      await axios.post("http://localhost:3000/server/event/event-create", {
-        title,
-        location,
-        color,
-        startDate,
-        endDate
-      });
-      toast.success("Event created");
-      setFormData({
-        title: "",
-        location: "",
-        color: "blue",
-        startDate: currentDate.format("MMMM D, YYYY"),
-        endDate: currentDate.format("MMMM D, YYYY")
-      });
-      handleClosePopup();
-      props.onEventCreated();
+      const response = await axios.put(
+        `http://localhost:3000/server/event/event-update/${selectedEvent._id}`,
+        formData
+      );
+      toast.success("Event updated");
+      setLoading(false);
+      setOpenEditPopup(false);
+      onEditEvent();
     } catch (error) {
-      toast.error("Error creating event", error);
+      toast.error("Error updating event:", error);
+      setLoading(false);
     }
   };
 

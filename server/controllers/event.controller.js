@@ -76,3 +76,20 @@ export const eventDeleteByID = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+// Controller for updating event details
+export const updateEventByID = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedEvent = req.body; // Updated event details
+    const event = await Event.findByIdAndUpdate(id, updatedEvent, {
+      new: true
+    });
+    res.status(200).json(event);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error updating event", error: error.message });
+  }
+};
+

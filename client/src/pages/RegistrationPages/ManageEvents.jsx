@@ -100,6 +100,10 @@ const ManageEvents = () => {
     fetchEventsByYear();
     fetchEvents();
   };
+  const handleEditEvent = async () => {
+    fetchEventsByYear();
+    fetchEvents();
+  };
   const getMonthAbbreviation = fullMonthName => {
     switch (fullMonthName) {
       case "January":
@@ -140,7 +144,8 @@ const ManageEvents = () => {
     setOpenCreatePopup(true);
   };
 
-  const handleOpenEdit = () => {
+  const handleOpenEdit = event => {
+    setSelectedEvent(event);
     setOpenEditPopup(true);
   };
 
@@ -456,7 +461,7 @@ const ManageEvents = () => {
                                 <div
                                   className="absolute top-0 right-0 m-0 md:m-2 cursor-pointer text-gray-600  hover:bg-gray-200 rounded-full p-2"
                                   title="Edit"
-                                  onClick={handleOpenEdit}
+                                  onClick={() => handleOpenEdit(event)}
                                 >
                                   <MdEdit size={19} />
                                 </div>}
@@ -512,6 +517,8 @@ const ManageEvents = () => {
       <EditEventPopup
         openEditPopup={openEditPopup}
         setOpenEditPopup={setOpenEditPopup}
+        selectedEvent={selectedEvent}
+        onEditEvent={handleEditEvent}
       />
       <DeleteEventPopup
         openDeletePopup={openDeletePopup}
