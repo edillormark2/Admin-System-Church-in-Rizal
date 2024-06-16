@@ -126,7 +126,7 @@ const CreateEventPopup = props => {
                       type="text"
                       placeholder=""
                       id="title"
-                      maxLength={30}
+                      maxLength={40}
                       autoComplete="off"
                       onChange={handleChange}
                       value={formData.title}
